@@ -54,7 +54,7 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
   - *Commit*: `feat(auth): implement register, login, forgot password otp, refresh token and logout apis`
 - [x] **T2.4** 🔴 `[KHÓ — ⚠️ Đề xuất Model Mạnh/Pro]`: Xây dựng `GoogleOAuth2Verifier` và API `POST /api/v1/auth/google` xác thực Google `idToken` dùng chung cho cả Web React và Android Native (tự động tạo user + `oauth_accounts` + khởi tạo bảng `user_streaks` ở lần đầu đăng nhập).
   - *Commit*: `feat(auth): implement unified google id-token authentication for web and android`
-- [ ] **T2.5** 🟡 `[VỪA — Medium]`: Xây dựng API Hồ sơ cá nhân & **Quyền xem Trang cá nhân**: cập nhật thông tin, upload avatar, đổi mật khẩu, chỉnh `profile_visibility` và `profile_privacy_config` (`JSONB` bật/tắt hiển thị từng tab *Bộ thẻ, Thư mục, Lớp học, Thành tựu*) + API xem trang cá nhân `/api/v1/users/profile/{username}` lọc dữ liệu theo đúng quyền riêng tư.
+- [x] **T2.5** 🟡 `[VỪA — Medium]`: Xây dựng API Hồ sơ cá nhân & **Quyền xem Trang cá nhân**: cập nhật thông tin, upload avatar, đổi mật khẩu, chỉnh `profile_visibility` và `profile_privacy_config` (`JSONB` bật/tắt hiển thị từng tab *Bộ thẻ, Thư mục, Lớp học, Thành tựu*) + API xem trang cá nhân `/api/v1/users/profile/{username}` lọc dữ liệu theo đúng quyền riêng tư.
   - *Commit*: `feat(user): implement profile management and granular tab privacy visibility`
 - [ ] **T2.6** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `LoginPage`, `RegisterPage` (tích hợp nút *Continue with Google*), `ProtectedRoute` theo 4 vai trò và lưu trạng thái đăng nhập vào `useAuthStore`.
   - *Commit*: `feat(web-auth): build login, register pages with google sign-in and role guards`
