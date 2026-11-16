@@ -70,7 +70,7 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
 ## Phase 3: CRUD Bộ thẻ Flashcard, Phân quyền Xem, OCR & Ảnh Minh họa AI
 - [x] **T3.1** 🟢 `[DỄ — Flash]`: Tạo JPA Entities & Repositories cho `FlashcardSet`, `Flashcard`, `UserSetInteraction`, `StarredCard`, `Folder`, `StudyGroup`, `StudyGroupMember`.
   - *Commit*: `feat(flashcard): create entities and repositories for sets, cards, interactions, folders and groups`
-- [ ] **T3.2** 🟡 `[VỪA — Medium]`: Xây dựng API CRUD Bộ thẻ (`POST/PUT/DELETE /api/v1/flashcard-sets`) xử lý lưu đồng bộ danh sách thẻ con, tự sinh `share_token` (NanoID) và kiểm tra chặt chẽ 3 mức quyền xem (`PUBLIC`, `PRIVATE`, `LINK_ONLY`).
+- [x] **T3.2** 🟡 `[VỪA — Medium]`: Xây dựng API CRUD Bộ thẻ (`POST/PUT/DELETE /api/v1/flashcard-sets`) xử lý lưu đồng bộ danh sách thẻ con, tự sinh `share_token` (NanoID) và kiểm tra chặt chẽ 3 mức quyền xem (`PUBLIC`, `PRIVATE`, `LINK_ONLY`).
   - *Commit*: `feat(flashcard): implement flashcard set CRUD and visibility access control`
 - [ ] **T3.3** 🟡 `[VỪA — Medium]`: Xây dựng API Tìm kiếm & Khám phá bộ thẻ `PUBLIC`, API **Clone (Nhân bản)** bộ thẻ, API **Tương tác Bộ thẻ (`user_set_interactions`: Lưu bộ thẻ yêu thích, Học gần đây Recents, Đánh giá 1–5★, Lưu vị trí học dở `resume_state_json`)** và API gắn dấu sao thẻ khó (`starred_cards`).
   - *Commit*: `feat(flashcard): implement search, clone set, saved/recents/rating interactions and starred card apis`
