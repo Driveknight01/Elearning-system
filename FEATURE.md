@@ -35,9 +35,9 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
   - *Commit*: `feat(db): add V3 flyway migration for gamification, ai chat, admin suite and indexes`
 - [x] **T1.6** 🟢 `[DỄ — Flash]`: Xây dựng gói `common` trong Spring Boot: `BaseEntity`, chuẩn hóa wrapper `ApiResponse<T>`, `PageResponse<T>`, `ErrorCode`, `AppException` và `GlobalExceptionHandler` + cấu hình phục vụ file ảnh tĩnh `/uploads/**`.
   - *Commit*: `feat(be-common): implement standard ApiResponse, exception handler and local storage config`
-- [ ] **T1.7** 🟢 `[DỄ — Flash]`: Khởi tạo khung project `ai-ml-service` (Python FastAPI, `requirements.txt`, cấu trúc module `dkt/`, `ocr/`, `chatbot/`, endpoint `/health` và CORS).
+- [x] **T1.7** 🟢 `[DỄ — Flash]`: Khởi tạo khung project `ai-ml-service` (Python FastAPI, `requirements.txt`, cấu trúc module `dkt/`, `ocr/`, `chatbot/`, endpoint `/health` và CORS).
   - *Commit*: `chore(ai): initialize fastapi microservice skeleton`
-- [ ] **T1.8** 🟢 `[DỄ — Flash]`: Khởi tạo khung project `frontend-web` (React + Vite + TailwindCSS, cấu hình `axiosClient.js`, React Router, Zustand store cơ bản và bộ màu/font chuẩn Quizlet).
+- [x] **T1.8** 🟢 `[DỄ — Flash]`: Khởi tạo khung project `frontend-web` (React + Vite + TailwindCSS, cấu hình `axiosClient.js`, React Router, Zustand store cơ bản và bộ màu/font chuẩn Quizlet).
   - *Commit*: `chore(web): initialize react vite tailwindcss project and core routing`
 - [ ] **T1.9** 🟢 `[DỄ — Flash]`: Khởi tạo khung project `mobile-android` (Android Native Java, Empty Views Activity, `build.gradle` với Material 3, Retrofit2, Gson, Glide, RoomDB, CameraX và cấu trúc package MVVM).
   - *Commit*: `chore(android): initialize android native java project with mvvm packages`

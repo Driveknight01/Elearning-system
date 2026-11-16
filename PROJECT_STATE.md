@@ -31,22 +31,28 @@
   - Tạo [V3__init_gamification_chat_admin_and_indexes.sql](file:///D:/Elearning-system/backend-springboot/src/main/resources/db/migration/V3__init_gamification_chat_admin_and_indexes.sql) (17 bảng: Nhóm học, Streak/Thành tựu, AI Chat, 8 bảng Admin Suite & toàn bộ Performance Indexes).
 - **T1.6 — Hoàn thành gói `common` & Cấu hình Local Storage `/uploads/**` (`backend-springboot`)**:
   - Tạo [BaseEntity.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/common/entity/BaseEntity.java), [ApiResponse.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/common/dto/ApiResponse.java), [PageResponse.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/common/dto/PageResponse.java), [ErrorCode.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/common/exception/ErrorCode.java), [AppException.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/common/exception/AppException.java), [GlobalExceptionHandler.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/common/exception/GlobalExceptionHandler.java) và [WebMvcConfig.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/config/WebMvcConfig.java).
+- **T1.7 — Hoàn thành Khung Microservice `ai-ml-service` (Python FastAPI)**:
+  - Tạo [requirements.txt](file:///D:/Elearning-system/ai-ml-service/requirements.txt), [.env.example](file:///D:/Elearning-system/ai-ml-service/.env.example), [main.py](file:///D:/Elearning-system/ai-ml-service/main.py), [app/core/config.py](file:///D:/Elearning-system/ai-ml-service/app/core/config.py), các module router [app/dkt/router.py](file:///D:/Elearning-system/ai-ml-service/app/dkt/router.py), [app/ocr/router.py](file:///D:/Elearning-system/ai-ml-service/app/ocr/router.py), [app/chatbot/router.py](file:///D:/Elearning-system/ai-ml-service/app/chatbot/router.py) và bộ test [test_main.py](file:///D:/Elearning-system/ai-ml-service/test_main.py).
+- **T1.8 — Hoàn thành Khung `frontend-web` (React + Vite + TailwindCSS)**:
+  - Cài đặt đầy đủ 163 packages (`npm install`) và kiểm chứng `npm run build` thành công (`built in 3.75s`).
 
 ### 🔄 Đang thực hiện (In Progress)
-- Đang triển khai **Phase 1**: Hoàn thiện các khung dự án còn lại (`T1.7` → `T1.9`).
+- Đang triển khai **Phase 1**: Hoàn thiện khung dự án cuối cùng (`T1.9`).
 
 ### ⏭️ Kế tiếp (Next Up)
-- [ ] **T1.7** 🟢 `[DỄ — Flash]`: Khởi tạo khung project `ai-ml-service` (Python FastAPI).
-- [ ] **T1.8** 🟢 `[DỄ — Flash]`: Khởi tạo khung project `frontend-web` (React + Vite + TailwindCSS).
 - [ ] **T1.9** 🟢 `[DỄ — Flash]`: Bổ sung dependencies và cấu trúc package MVVM cho `mobile-android`.
-> 🌿 **Nhắc nhở Nhánh Git**: Phase 1 tiếp tục commit trên `main`. Khi hoàn thành T1.9 và chuyển sang Phase 2 (`T2.1`), cần tạo nhánh mới: `git checkout -b feat/phase-2-auth`.
+> 🌿 **Nhắc nhở Nhánh Git**: Phase 1 tiếp tục commit trên `main`/`master`. Khi hoàn thành T1.9 và chuyển sang Phase 2 (`T2.1`), cần tạo nhánh mới: `git checkout -b feat/phase-2-auth`.
 
 ---
 
 ## 3. CHANGELOG (Nhật ký theo từng buổi làm việc)
 
-### [2026-11-16] — Buổi 3: Hoàn thành T1.6 (Gói `common`, Chuẩn hóa `ApiResponse`, Exception Handler & Local `/uploads/**`)
-- Triển khai `BaseEntity`, `ApiResponse<T>`, `PageResponse<T>`, `ErrorCode`, `AppException`, `GlobalExceptionHandler`, `WebMvcConfig` phục vụ file tĩnh `/uploads/**` và unit test `GlobalExceptionHandlerTest`.
+### [2026-11-16] — Buổi 2 (Cập nhật): Hoàn thành T1.8 (Khởi tạo & Build thành công `frontend-web`)
+- Cài đặt dependencies `frontend-web` (`npm install`) và verify `vite build` thành công (`dist/` built in 3.75s).
+
+### [2026-11-16] — Buổi 3: Hoàn thành T1.6 & T1.7 (Gói `common` Spring Boot & Khung FastAPI Microservice)
+- Hoàn thành **T1.6**: Triển khai `BaseEntity`, `ApiResponse<T>`, `PageResponse<T>`, `ErrorCode`, `AppException`, `GlobalExceptionHandler`, `WebMvcConfig` phục vụ file tĩnh `/uploads/**` và unit test `GlobalExceptionHandlerTest`.
+- Hoàn thành **T1.7**: Khởi tạo khung microservice `ai-ml-service` với Python FastAPI, `requirements.txt`, cấu trúc module `app/dkt/`, `app/ocr/`, `app/chatbot/`, `app/core/config.py`, endpoint `/health`, CORS cho Spring Boot/Web và `test_main.py`.
 
 ### [2026-11-16] — Buổi 2 (Cập nhật): Hoàn thành T1.3, T1.4, T1.5 (Flyway Migration 42 Bảng PostgreSQL)
 - Tạo 3 file Flyway SQL (`V1`, `V2`, `V3`) trong `backend-springboot/src/main/resources/db/migration/` khởi tạo đầy đủ 42 bảng, khóa ngoại (`fk_*`), ràng buộc duy nhất và toàn bộ `CREATE INDEX` (`GIN`, B-Tree kép cho FSRS/DKT, Leaderboard, Moderation).
