@@ -46,7 +46,7 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
 
 ## Phase 2: Xác thực (JWT + Google OAuth2), RBAC 4 Vai trò & Quyền riêng tư Trang cá nhân
 > 🌿 **Quy tắc Nhánh Git**: Bắt đầu Phase 2, hãy tạo và chuyển sang nhánh: `git checkout -b feat/phase-2-auth`. Sau khi hoàn thành và test xong toàn bộ từ `T2.1` đến `T2.9`, merge về `main`: `git checkout main && git merge feat/phase-2-auth`.
-- [ ] **T2.1** 🟢 `[DỄ — Flash]`: Tạo JPA Entities & Repositories cho `User`, `OAuthAccount`, `RefreshToken`, `VerificationToken` và Enum `Role` (`USER`, `TEACHER`, `ADMIN`), `UserStatus`, `ProfileVisibility`.
+- [x] **T2.1** 🟢 `[DỄ — Flash]`: Tạo JPA Entities & Repositories cho `User`, `OAuthAccount`, `RefreshToken`, `VerificationToken` và Enum `Role` (`USER`, `TEACHER`, `ADMIN`), `UserStatus`, `ProfileVisibility`.
   - *Commit*: `feat(auth): create user, oauth, refresh and verification token entities and repositories`
 - [ ] **T2.2** 🟡 `[VỪA — Medium]`: Cấu hình Spring Security 6, `JwtTokenProvider`, `JwtAuthenticationFilter` và `CustomUserDetailsService` hỗ trợ phân quyền theo Role và cho phép Guest truy cập các public endpoints.
   - *Commit*: `feat(security): configure spring security 6 and jwt authentication filter`

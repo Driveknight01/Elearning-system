@@ -37,17 +37,22 @@
   - Cài đặt đầy đủ 163 packages (`npm install`) và kiểm chứng `npm run build` thành công (`built in 3.75s`).
 - **T1.9 — Hoàn thành Khung `mobile-android` (Android Native Java + MVVM)**:
   - Tạo [settings.gradle](file:///D:/Elearning-system/mobile-android/settings.gradle), [build.gradle](file:///D:/Elearning-system/mobile-android/build.gradle), [app/build.gradle](file:///D:/Elearning-system/mobile-android/app/build.gradle) (Material 3, Retrofit2, Gson, Glide, RoomDB, WorkManager, CameraX, ML Kit Text Recognition), [AndroidManifest.xml](file:///D:/Elearning-system/mobile-android/app/src/main/AndroidManifest.xml), [SmartFlashApp.java](file:///D:/Elearning-system/mobile-android/app/src/main/java/com/elearning/smartflash/SmartFlashApp.java), [MainActivity.java](file:///D:/Elearning-system/mobile-android/app/src/main/java/com/elearning/smartflash/ui/main/MainActivity.java), [activity_main.xml](file:///D:/Elearning-system/mobile-android/app/src/main/res/layout/activity_main.xml) và cấu trúc package MVVM (`data/`, `domain/`, `ui/`, `worker/`, `util/`).
+- **T2.1 — Hoàn thành Auth/User JPA Entities, Enums & Repositories (`backend-springboot`)**:
+  - Tạo Enums [Role.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/user/entity/Role.java), [UserStatus.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/user/entity/UserStatus.java), [ProfileVisibility.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/user/entity/ProfileVisibility.java), [OAuthProvider.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/entity/OAuthProvider.java), [PlatformType.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/entity/PlatformType.java), [TokenType.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/entity/TokenType.java).
+  - Tạo Entities [User.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/user/entity/User.java), [ProfilePrivacyConfig.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/user/entity/ProfilePrivacyConfig.java), [OAuthAccount.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/entity/OAuthAccount.java), [RefreshToken.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/entity/RefreshToken.java), [VerificationToken.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/entity/VerificationToken.java) và 4 Repositories (`UserRepository`, `OAuthAccountRepository`, `RefreshTokenRepository`, `VerificationTokenRepository`).
 
 ### 🔄 Đang thực hiện (In Progress)
-- Đã hoàn tất **100% Phase 1 (`T1.1` → `T1.9`)**. Sẵn sàng chuyển sang **Phase 2: Xác thực (JWT + Google OAuth2), RBAC 4 Vai trò & Quyền riêng tư Trang cá nhân**.
+- Đang triển khai **Phase 2: Xác thực (JWT + Google OAuth2), RBAC 4 Vai trò & Quyền riêng tư Trang cá nhân** trên nhánh `feat/phase-2-auth` (đã xong `T2.1`).
 
 ### ⏭️ Kế tiếp (Next Up)
-- [ ] **T2.1** 🟢 `[DỄ — Flash]`: Tạo JPA Entities & Repositories cho `User`, `OAuthAccount`, `RefreshToken`, `VerificationToken` và Enum `Role`, `UserStatus`, `ProfileVisibility`.
-> 🌿 **Nhắc nhở Nhánh Git**: Đã kết thúc Phase 1! Trước khi bắt đầu `T2.1`, hãy tạo và chuyển sang nhánh Phase 2: `git checkout -b feat/phase-2-auth`.
+- [ ] **T2.2** 🟡 `[VỪA — Medium]`: Cấu hình Spring Security 6, `JwtTokenProvider`, `JwtAuthenticationFilter` và `CustomUserDetailsService` hỗ trợ phân quyền theo Role và cho phép Guest truy cập các public endpoints.
 
 ---
 
 ## 3. CHANGELOG (Nhật ký theo từng buổi làm việc)
+
+### [2026-11-16] — Buổi 4: Hoàn thành T2.1 (Auth & User Entities, Enums & Repositories)
+- Hoàn thành **T2.1** trên nhánh `feat/phase-2-auth`: Khởi tạo đầy đủ JPA Entities (`User`, `ProfilePrivacyConfig` JSONB, `OAuthAccount`, `RefreshToken`, `VerificationToken`), Enums (`Role`, `UserStatus`, `ProfileVisibility`, `OAuthProvider`, `PlatformType`, `TokenType`) và 4 Spring Data JPA Repositories khớp schema PostgreSQL `V1__init_core_users_and_cards.sql`.
 
 ### [2026-11-16] — Buổi 3 (Cập nhật): Hoàn thành T1.9 & Kết thúc Phase 1
 - Hoàn thành **T1.9**: Khởi tạo khung project Android Native Java (`mobile-android`) với Gradle 8.7 / AGP 8.5.2, Material 3, Retrofit2, Gson, Glide, RoomDB, WorkManager, CameraX + ML Kit OCR, `MainActivity` (ViewBinding) và đầy đủ package MVVM.
