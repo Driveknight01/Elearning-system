@@ -39,7 +39,7 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
   - *Commit*: `chore(ai): initialize fastapi microservice skeleton`
 - [x] **T1.8** 🟢 `[DỄ — Flash]`: Khởi tạo khung project `frontend-web` (React + Vite + TailwindCSS, cấu hình `axiosClient.js`, React Router, Zustand store cơ bản và bộ màu/font chuẩn Quizlet).
   - *Commit*: `chore(web): initialize react vite tailwindcss project and core routing`
-- [ ] **T1.9** 🟢 `[DỄ — Flash]`: Khởi tạo khung project `mobile-android` (Android Native Java, Empty Views Activity, `build.gradle` với Material 3, Retrofit2, Gson, Glide, RoomDB, CameraX và cấu trúc package MVVM).
+- [x] **T1.9** 🟢 `[DỄ — Flash]`: Khởi tạo khung project `mobile-android` (Android Native Java, Empty Views Activity, `build.gradle` với Material 3, Retrofit2, Gson, Glide, RoomDB, CameraX và cấu trúc package MVVM).
   - *Commit*: `chore(android): initialize android native java project with mvvm packages`
 
 ---

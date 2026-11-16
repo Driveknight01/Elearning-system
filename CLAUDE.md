@@ -35,17 +35,22 @@
   - Tạo [requirements.txt](file:///D:/Elearning-system/ai-ml-service/requirements.txt), [.env.example](file:///D:/Elearning-system/ai-ml-service/.env.example), [main.py](file:///D:/Elearning-system/ai-ml-service/main.py), [app/core/config.py](file:///D:/Elearning-system/ai-ml-service/app/core/config.py), các module router [app/dkt/router.py](file:///D:/Elearning-system/ai-ml-service/app/dkt/router.py), [app/ocr/router.py](file:///D:/Elearning-system/ai-ml-service/app/ocr/router.py), [app/chatbot/router.py](file:///D:/Elearning-system/ai-ml-service/app/chatbot/router.py) và bộ test [test_main.py](file:///D:/Elearning-system/ai-ml-service/test_main.py).
 - **T1.8 — Hoàn thành Khung `frontend-web` (React + Vite + TailwindCSS)**:
   - Cài đặt đầy đủ 163 packages (`npm install`) và kiểm chứng `npm run build` thành công (`built in 3.75s`).
+- **T1.9 — Hoàn thành Khung `mobile-android` (Android Native Java + MVVM)**:
+  - Tạo [settings.gradle](file:///D:/Elearning-system/mobile-android/settings.gradle), [build.gradle](file:///D:/Elearning-system/mobile-android/build.gradle), [app/build.gradle](file:///D:/Elearning-system/mobile-android/app/build.gradle) (Material 3, Retrofit2, Gson, Glide, RoomDB, WorkManager, CameraX, ML Kit Text Recognition), [AndroidManifest.xml](file:///D:/Elearning-system/mobile-android/app/src/main/AndroidManifest.xml), [SmartFlashApp.java](file:///D:/Elearning-system/mobile-android/app/src/main/java/com/elearning/smartflash/SmartFlashApp.java), [MainActivity.java](file:///D:/Elearning-system/mobile-android/app/src/main/java/com/elearning/smartflash/ui/main/MainActivity.java), [activity_main.xml](file:///D:/Elearning-system/mobile-android/app/src/main/res/layout/activity_main.xml) và cấu trúc package MVVM (`data/`, `domain/`, `ui/`, `worker/`, `util/`).
 
 ### 🔄 Đang thực hiện (In Progress)
-- Đang triển khai **Phase 1**: Hoàn thiện khung dự án cuối cùng (`T1.9`).
+- Đã hoàn tất **100% Phase 1 (`T1.1` → `T1.9`)**. Sẵn sàng chuyển sang **Phase 2: Xác thực (JWT + Google OAuth2), RBAC 4 Vai trò & Quyền riêng tư Trang cá nhân**.
 
 ### ⏭️ Kế tiếp (Next Up)
-- [ ] **T1.9** 🟢 `[DỄ — Flash]`: Bổ sung dependencies và cấu trúc package MVVM cho `mobile-android`.
-> 🌿 **Nhắc nhở Nhánh Git**: Phase 1 tiếp tục commit trên `main`/`master`. Khi hoàn thành T1.9 và chuyển sang Phase 2 (`T2.1`), cần tạo nhánh mới: `git checkout -b feat/phase-2-auth`.
+- [ ] **T2.1** 🟢 `[DỄ — Flash]`: Tạo JPA Entities & Repositories cho `User`, `OAuthAccount`, `RefreshToken`, `VerificationToken` và Enum `Role`, `UserStatus`, `ProfileVisibility`.
+> 🌿 **Nhắc nhở Nhánh Git**: Đã kết thúc Phase 1! Trước khi bắt đầu `T2.1`, hãy tạo và chuyển sang nhánh Phase 2: `git checkout -b feat/phase-2-auth`.
 
 ---
 
 ## 3. CHANGELOG (Nhật ký theo từng buổi làm việc)
+
+### [2026-11-16] — Buổi 3 (Cập nhật): Hoàn thành T1.9 & Kết thúc Phase 1
+- Hoàn thành **T1.9**: Khởi tạo khung project Android Native Java (`mobile-android`) với Gradle 8.7 / AGP 8.5.2, Material 3, Retrofit2, Gson, Glide, RoomDB, WorkManager, CameraX + ML Kit OCR, `MainActivity` (ViewBinding) và đầy đủ package MVVM.
 
 ### [2026-11-16] — Buổi 2 (Cập nhật): Hoàn thành T1.8 (Khởi tạo & Build thành công `frontend-web`)
 - Cài đặt dependencies `frontend-web` (`npm install`) và verify `vite build` thành công (`dist/` built in 3.75s).

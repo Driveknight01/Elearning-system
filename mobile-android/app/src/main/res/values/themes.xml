@@ -1,0 +1,9 @@
+<resources>
+    <style name="Theme.SmartFlash" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/quizlet_blue</item>
+        <item name="colorOnPrimary">@color/quizlet_card</item>
+        <item name="android:colorBackground">@color/quizlet_bg</item>
+        <item name="colorSurface">@color/quizlet_card</item>
+        <item name="android:statusBarColor">@color/quizlet_blue</item>
+    </style>
+</resources>
