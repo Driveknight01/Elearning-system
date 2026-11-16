@@ -1,32 +1,21 @@
-from fastapi import APIRouter, UploadFile, File
-from pydantic import BaseModel, Field
-from typing import List
+from typing import Optional
+
+from fastapi import APIRouter, File, Form, UploadFile
+
+from app.ocr.schemas import OcrExtractResponse
+from app.ocr.service import process_ocr_extraction
 
 router = APIRouter(prefix="/ocr", tags=["OCR Extraction"])
 
 
-class ExtractedCard(BaseModel):
-    term: str
-    definition: str
-
-
-class OcrExtractResponse(BaseModel):
-    success: bool = True
-    raw_text: str = ""
-    cards: List[ExtractedCard] = Field(default_factory=list)
-
-
 @router.post("/extract", response_model=OcrExtractResponse)
-async def extract_flashcards_from_image(file: UploadFile = File(...)):
+async def extract_flashcards_from_image(
+    file: UploadFile = File(..., description="Ảnh chụp tài liệu / sách / bảng từ vựng"),
+    source_lang: Optional[str] = Form(default=None, description="Ngôn ngữ thuật ngữ (tùy chọn)"),
+    target_lang: Optional[str] = Form(default=None, description="Ngôn ngữ định nghĩa (tùy chọn)"),
+):
     """
-    Endpoint nhận file ảnh tài liệu và trích xuất danh sách cặp thuật ngữ - định nghĩa.
-    Sẽ được hoàn thiện ở task T3.5.
+    Nhận file ảnh tài liệu (multipart/form-data), trích xuất văn bản bằng Vision LLM hoặc OCR cục bộ
+    và phân tích thành mảng cặp thuật ngữ - định nghĩa `[{term, definition}]`.
     """
-    return OcrExtractResponse(
-        success=True,
-        raw_text=f"Skeleton OCR extracted from: {file.filename}",
-        cards=[
-            ExtractedCard(term="Sample Term 1", definition="Sample Definition 1"),
-            ExtractedCard(term="Sample Term 2", definition="Sample Definition 2"),
-        ],
-    )
+    return await process_ocr_extraction(file=file, source_lang=source_lang, target_lang=target_lang)

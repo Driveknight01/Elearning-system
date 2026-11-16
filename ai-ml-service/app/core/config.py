@@ -20,10 +20,13 @@ class Settings(BaseSettings):
 
     # OCR Config
     TESSERACT_CMD: str = "tesseract"
+    OCR_MAX_IMAGE_BYTES: int = 10 * 1024 * 1024  # 10 MB
 
     # LLM Config
     GEMINI_API_KEY: str = ""
+    GEMINI_MODEL: str = "gemini-2.0-flash"
     OPENAI_API_KEY: str = ""
+    OPENAI_MODEL: str = "gpt-4o-mini"
 
     model_config = SettingsConfigDict(
         env_file=".env",
