@@ -18,6 +18,13 @@ Tài liệu này là **Hiến pháp Kỹ thuật** của dự án **Hệ thống
 >    - **Phase 1 (`T1.1` → `T1.9`)**: Được phép commit trực tiếp trên nhánh `main` vì là thiết lập khung sườn chung.
 >    - **Từ Phase 2 trở đi**: Khi bắt đầu một Phase mới (ví dụ `T2.1`, `T3.1`, `T4.1`...), Agent **BẮT BUỘC** phải chủ động nhắc người dùng tạo và chuyển sang nhánh riêng của Phase đó theo mẫu `feat/phase-<số_phase>-<tên_phase>` (ví dụ: `git checkout -b feat/phase-2-auth`). Khi hoàn tất toàn bộ Phase và kiểm thử xanh mới nhắc merge về `main`.
 >    - **Khi thử nghiệm kỹ thuật rủi ro/khó**: Nhắc người dùng tách nhánh `exp/<tên-tính-năng>` để giữ an toàn cho code chính.
+> 6. **CẤM TỰ Ý THAY ĐỔI KIẾN TRÚC & QUY TRÌNH THAM VẤN BẮT BUỘC (ARCHITECTURAL INTEGRITY PROTOCOL)**:
+>    - Agent **TUYỆT ĐỐI KHÔNG ĐƯỢC TỰ Ý THAY ĐỔI** bất kỳ yếu tố kiến trúc nào đã thống nhất (ví dụ: đổi thư viện cốt lõi, đổi công nghệ, đổi cấu trúc CSDL/quan hệ bảng, thay đổi luồng giao tiếp giữa các service BE - AI - Web - Android, bỏ qua các tầng thiết kế, tự ý thêm công nghệ mới ngoài stack).
+>    - Khi phát sinh vấn đề kỹ thuật, xung đột công nghệ, hoặc nhận thấy giải pháp tốt hơn, Agent **BẮT BUỘC** phải:
+>      1. **Phân tích nguyên nhân & bản chất vấn đề**.
+>      2. **Giải thích chi tiết các phương án (ưu điểm, nhược điểm, tác động tới các thành phần khác)**.
+>      3. **Đưa ra đề xuất kèm lý do kỹ thuật rõ ràng và HỎI Ý KIẾN NGƯỜI DÙNG**.
+>      4. **CHỈ ĐƯỢC PHÉP THỰC HIỆN KHI NGƯỜI DÙNG ĐỒNG Ý / PHÊ DUYỆT**.
 
 ---
 
@@ -106,3 +113,8 @@ Máy phát triển đã cài đặt sẵn **IntelliJ IDEA**, **PostgreSQL Native
    - **AI Service Python**: Kiểm tra endpoint bằng Swagger (`/docs`) hoặc `pytest`.
    - **Frontend Web**: Đảm bảo `npm run build` không phát sinh lỗi cú pháp hoặc thiếu import.
    - **Android Java**: Đảm bảo `./gradlew assembleDebug` biên dịch thành công, không thiếu khai báo Activity trong `AndroidManifest.xml`.
+3. **Quy tắc Quản lý Nhánh Git (Branching Protocol)**:
+   - Nhánh `main`: Chỉ chứa code đã kiểm thử pass, luôn ở trạng thái chạy được.
+   - Khi hết Phase 1 (kết thúc `T1.9`), từ task `T2.1` trở đi, mỗi Phase code trên 1 nhánh tính năng riêng: `git checkout -b feat/phase-<số_phase>-<tên_phase>`.
+   - Mỗi task nhỏ vẫn là một commit độc lập trên nhánh tính năng.
+   - Khi hoàn thành tất cả task trong Phase và test pass toàn bộ mới merge nhánh tính năng về `main`: `git checkout main && git merge feat/phase-...`.

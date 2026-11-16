@@ -1,6 +1,6 @@
 # CLAUDE.md / PROJECT_STATE.md — Trạng thái Dự án & Nhật ký Phát triển
 
-> **LƯU Ý CHO AI AGENT**: Hãy đọc [AGENTS.md](file:///D:/Elearning-system/AGENTS.md) trước khi viết bất kỳ dòng code nào. Sau mỗi task hoàn thành trong [FEATURE.md](file:///D:/Elearning-system/FEATURE.md), bạn **BẮT BUỘC** phải cập nhật mục **Trạng thái hiện tại**, **CHANGELOG** trong file này (đồng bộ với [PROJECT_STATE.md](file:///D:/Elearning-system/PROJECT_STATE.md)) và nhắc người dùng chuyển đổi mô hình AI (`🟢 Flash` / `🟡 Medium` / `🔴 Pro`) cho task kế tiếp.
+> **LƯU Ý CHO AI AGENT**: Hãy đọc [AGENTS.md](file:///D:/Elearning-system/AGENTS.md) trước khi viết bất kỳ dòng code nào. Sau mỗi task hoàn thành trong [FEATURE.md](file:///D:/Elearning-system/FEATURE.md), bạn **BẮT BUỘC** phải cập nhật mục **Trạng thái hiện tại**, **CHANGELOG** trong file này (đồng bộ với [PROJECT_STATE.md](file:///D:/Elearning-system/PROJECT_STATE.md)) và nhắc người dùng chuyển đổi mô hình AI (`🟢 Flash` / `🟡 Medium` / `🔴 Pro`) cho task kế tiếp. **ĐẶC BIỆT**: Mọi quyết định thay đổi kiến trúc/công nghệ/CSDL đều **BẮT BUỘC** phải giải thích, phân tích ưu-nhược điểm và hỏi ý kiến người dùng, tuyệt đối không tự ý quyết định.
 
 ---
 
@@ -39,6 +39,7 @@
 - [ ] **T1.7** 🟢 `[DỄ — Flash]`: Khởi tạo khung project `ai-ml-service` (Python FastAPI).
 - [ ] **T1.8** 🟢 `[DỄ — Flash]`: Khởi tạo khung project `frontend-web` (React + Vite + TailwindCSS).
 - [ ] **T1.9** 🟢 `[DỄ — Flash]`: Bổ sung dependencies và cấu trúc package MVVM cho `mobile-android`.
+> 🌿 **Nhắc nhở Nhánh Git**: Phase 1 tiếp tục commit trên `main`. Khi hoàn thành T1.9 và chuyển sang Phase 2 (`T2.1`), cần tạo nhánh mới: `git checkout -b feat/phase-2-auth`.
 
 ---
 
