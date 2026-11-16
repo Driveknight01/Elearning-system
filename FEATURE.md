@@ -33,7 +33,7 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
   - *Commit*: `feat(db): add V2 flyway migration for fsrs, dkt, games and teacher activities`
 - [x] **T1.5** 🟡 `[VỪA — Medium]`: Viết migration Flyway `V3__init_gamification_chat_admin_and_indexes.sql` cho nhóm bảng Nhóm học, Streak, Thành tựu, AI Chat (`ai_chat_sessions`, `ai_chat_messages`), 8 bảng Quản trị & Kiểm duyệt (`teacher_verification_requests`, `content_reports`, `sensitive_keywords`, `ai_usage_logs`, `system_settings`, `system_announcements`, `user_notifications`, `admin_audit_logs`) và toàn bộ các `CREATE INDEX`.
   - *Commit*: `feat(db): add V3 flyway migration for gamification, ai chat, admin suite and indexes`
-- [ ] **T1.6** 🟢 `[DỄ — Flash]`: Xây dựng gói `common` trong Spring Boot: `BaseEntity`, chuẩn hóa wrapper `ApiResponse<T>`, `PageResponse<T>`, `ErrorCode`, `AppException` và `GlobalExceptionHandler` + cấu hình phục vụ file ảnh tĩnh `/uploads/**`.
+- [x] **T1.6** 🟢 `[DỄ — Flash]`: Xây dựng gói `common` trong Spring Boot: `BaseEntity`, chuẩn hóa wrapper `ApiResponse<T>`, `PageResponse<T>`, `ErrorCode`, `AppException` và `GlobalExceptionHandler` + cấu hình phục vụ file ảnh tĩnh `/uploads/**`.
   - *Commit*: `feat(be-common): implement standard ApiResponse, exception handler and local storage config`
 - [ ] **T1.7** 🟢 `[DỄ — Flash]`: Khởi tạo khung project `ai-ml-service` (Python FastAPI, `requirements.txt`, cấu trúc module `dkt/`, `ocr/`, `chatbot/`, endpoint `/health` và CORS).
   - *Commit*: `chore(ai): initialize fastapi microservice skeleton`

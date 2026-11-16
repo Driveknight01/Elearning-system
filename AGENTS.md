@@ -14,6 +14,10 @@ Tài liệu này là **Hiến pháp Kỹ thuật** của dự án **Hệ thống
 >    - Đánh dấu `[x]` vào mã Task tương ứng (ví dụ `T1.1`, `T2.1`...) trong file [FEATURE.md](file:///D:/Elearning-system/FEATURE.md).
 >    - Cập nhật mục **Trạng thái hiện tại (Đã xong / Đang dở / Kế tiếp)** và ghi thêm 1 dòng vào **CHANGELOG** trong cả [CLAUDE.md](file:///D:/Elearning-system/CLAUDE.md) và [PROJECT_STATE.md](file:///D:/Elearning-system/PROJECT_STATE.md).
 > 4. **Nhắc nhở Chuyển đổi Mô hình AI (Model Switching Reminder)**: Khi kết thúc một task và giới thiệu task kế tiếp trong [FEATURE.md](file:///D:/Elearning-system/FEATURE.md), Agent phải kiểm tra nhãn độ khó của task kế tiếp (`🟢 [DỄ — Flash]`, `🟡 [VỪA — Medium]`, hoặc `🔴 [KHÓ — ⚠️ Đề xuất Model Mạnh/Pro]`) để **chủ động nhắc người dùng** chuyển sang mô hình phù hợp trước khi chạy task tiếp theo.
+> 5. **Nhắc nhở Chiến lược Tạo Nhánh Git (Git Branching Strategy Reminder)**:
+>    - **Phase 1 (`T1.1` → `T1.9`)**: Được phép commit trực tiếp trên nhánh `main` vì là thiết lập khung sườn chung.
+>    - **Từ Phase 2 trở đi**: Khi bắt đầu một Phase mới (ví dụ `T2.1`, `T3.1`, `T4.1`...), Agent **BẮT BUỘC** phải chủ động nhắc người dùng tạo và chuyển sang nhánh riêng của Phase đó theo mẫu `feat/phase-<số_phase>-<tên_phase>` (ví dụ: `git checkout -b feat/phase-2-auth`). Khi hoàn tất toàn bộ Phase và kiểm thử xanh mới nhắc merge về `main`.
+>    - **Khi thử nghiệm kỹ thuật rủi ro/khó**: Nhắc người dùng tách nhánh `exp/<tên-tính-năng>` để giữ an toàn cho code chính.
 
 ---
 

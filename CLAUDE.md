@@ -29,12 +29,13 @@
   - Tạo [V1__init_core_users_and_cards.sql](file:///D:/Elearning-system/backend-springboot/src/main/resources/db/migration/V1__init_core_users_and_cards.sql) (11 bảng: Danh mục, Người dùng, Auth, Bộ thẻ, Thư mục).
   - Tạo [V2__init_study_and_activities.sql](file:///D:/Elearning-system/backend-springboot/src/main/resources/db/migration/V2__init_study_and_activities.sql) (14 bảng: FSRS/DKT, Kiểm tra, Minigames, Live Rooms, Lớp học & Hoạt động Giáo viên).
   - Tạo [V3__init_gamification_chat_admin_and_indexes.sql](file:///D:/Elearning-system/backend-springboot/src/main/resources/db/migration/V3__init_gamification_chat_admin_and_indexes.sql) (17 bảng: Nhóm học, Streak/Thành tựu, AI Chat, 8 bảng Admin Suite & toàn bộ Performance Indexes).
+- **T1.6 — Hoàn thành gói `common` & Cấu hình Local Storage `/uploads/**` (`backend-springboot`)**:
+  - Tạo [BaseEntity.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/common/entity/BaseEntity.java), [ApiResponse.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/common/dto/ApiResponse.java), [PageResponse.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/common/dto/PageResponse.java), [ErrorCode.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/common/exception/ErrorCode.java), [AppException.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/common/exception/AppException.java), [GlobalExceptionHandler.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/common/exception/GlobalExceptionHandler.java) và [WebMvcConfig.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/config/WebMvcConfig.java).
 
 ### 🔄 Đang thực hiện (In Progress)
-- Đang triển khai **Phase 1**: Hoàn thiện gói `common` Spring Boot và các khung dự án còn lại (`T1.6` → `T1.9`).
+- Đang triển khai **Phase 1**: Hoàn thiện các khung dự án còn lại (`T1.7` → `T1.9`).
 
 ### ⏭️ Kế tiếp (Next Up)
-- [ ] **T1.6** 🟢 `[DỄ — Flash]`: Xây dựng gói `common` trong Spring Boot (`BaseEntity`, `ApiResponse<T>`, `PageResponse<T>`, `ErrorCode`, `AppException`, `GlobalExceptionHandler` và cấu hình `/uploads/**`).
 - [ ] **T1.7** 🟢 `[DỄ — Flash]`: Khởi tạo khung project `ai-ml-service` (Python FastAPI).
 - [ ] **T1.8** 🟢 `[DỄ — Flash]`: Khởi tạo khung project `frontend-web` (React + Vite + TailwindCSS).
 - [ ] **T1.9** 🟢 `[DỄ — Flash]`: Bổ sung dependencies và cấu trúc package MVVM cho `mobile-android`.
@@ -42,6 +43,9 @@
 ---
 
 ## 3. CHANGELOG (Nhật ký theo từng buổi làm việc)
+
+### [2026-11-16] — Buổi 3: Hoàn thành T1.6 (Gói `common`, Chuẩn hóa `ApiResponse`, Exception Handler & Local `/uploads/**`)
+- Triển khai `BaseEntity`, `ApiResponse<T>`, `PageResponse<T>`, `ErrorCode`, `AppException`, `GlobalExceptionHandler`, `WebMvcConfig` phục vụ file tĩnh `/uploads/**` và unit test `GlobalExceptionHandlerTest`.
 
 ### [2026-11-16] — Buổi 2 (Cập nhật): Hoàn thành T1.3, T1.4, T1.5 (Flyway Migration 42 Bảng PostgreSQL)
 - Tạo 3 file Flyway SQL (`V1`, `V2`, `V3`) trong `backend-springboot/src/main/resources/db/migration/` khởi tạo đầy đủ 42 bảng, khóa ngoại (`fk_*`), ràng buộc duy nhất và toàn bộ `CREATE INDEX` (`GIN`, B-Tree kép cho FSRS/DKT, Leaderboard, Moderation).

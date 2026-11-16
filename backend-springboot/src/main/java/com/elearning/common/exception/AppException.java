@@ -1,0 +1,27 @@
+package com.elearning.common.exception;
+
+import lombok.Getter;
+
+/**
+ * Domain-specific runtime exception carrying an {@link ErrorCode}.
+ */
+@Getter
+public class AppException extends RuntimeException {
+
+    private final ErrorCode errorCode;
+
+    public AppException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
+    }
+
+    public AppException(ErrorCode errorCode, String customMessage) {
+        super(customMessage);
+        this.errorCode = errorCode;
+    }
+
+    public AppException(ErrorCode errorCode, String customMessage, Throwable cause) {
+        super(customMessage, cause);
+        this.errorCode = errorCode;
+    }
+}
