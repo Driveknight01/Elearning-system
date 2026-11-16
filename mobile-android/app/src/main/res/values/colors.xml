@@ -10,6 +10,8 @@
     <color name="quizlet_text_dark">#1A1D28</color>
     <color name="quizlet_text_muted">#586380</color>
     <color name="quizlet_yellow">#FFCD1F</color>
+    <color name="quizlet_yellow_light">#FFFBEB</color>
+    <color name="quizlet_amber_dark">#B45309</color>
     <color name="quizlet_green">#23B26D</color>
     <color name="quizlet_green_light">#ECFDF5</color>
     <color name="quizlet_red">#FF725B</color>

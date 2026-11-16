@@ -1,28 +1,35 @@
 package com.elearning.smartflash.ui.main;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Toast;
 
+import androidx.annotation.IdRes;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.elearning.smartflash.R;
-import com.elearning.smartflash.data.local.prefs.TokenManager;
-import com.elearning.smartflash.data.remote.dto.UserSummaryDto;
-import com.elearning.smartflash.data.repository.AuthRepository;
 import com.elearning.smartflash.databinding.ActivityMainBinding;
-import com.elearning.smartflash.ui.auth.GoogleSignInHelper;
-import com.elearning.smartflash.ui.auth.LoginActivity;
+import com.elearning.smartflash.ui.home.HomeFragment;
+import com.elearning.smartflash.ui.library.LibraryFragment;
+import com.elearning.smartflash.ui.profile.ProfileFragment;
+import com.elearning.smartflash.ui.search.SearchFragment;
 
 /**
- * Main entry activity (Empty Views Activity with ViewBinding).
- * Will host BottomNavigationView and ProfileFragment in T2.9.
+ * Main application host featuring BottomNavigationView with 4 tabs:
+ * Trang chủ (Home), Tìm kiếm (Search), Thư viện (Library), and Cá nhân (Profile).
  */
 public class MainActivity extends AppCompatActivity {
 
+    private static final String STATE_SELECTED_TAB = "selected_tab_id";
+    private static final String TAG_HOME = "tab_home";
+    private static final String TAG_SEARCH = "tab_search";
+    private static final String TAG_LIBRARY = "tab_library";
+    private static final String TAG_PROFILE = "tab_profile";
+
     private ActivityMainBinding binding;
-    private TokenManager tokenManager;
-    private AuthRepository authRepository;
+    private int currentTabId = R.id.nav_home;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,48 +37,84 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        tokenManager = TokenManager.getInstance(this);
-        authRepository = new AuthRepository(this);
+        if (savedInstanceState != null) {
+            currentTabId = savedInstanceState.getInt(STATE_SELECTED_TAB, R.id.nav_home);
+        }
 
-        renderSessionSummary();
-
-        binding.btnGetStarted.setOnClickListener(v ->
-                Toast.makeText(this, "SmartFlash Android sẵn sàng (BottomNavigationView sẽ mở ở T2.9)!", Toast.LENGTH_SHORT).show()
-        );
-    }
-
-    private void renderSessionSummary() {
-        UserSummaryDto user = tokenManager.getUser();
-        if (tokenManager.isLoggedIn() && user != null) {
-            String displayName = user.getFullName() != null ? user.getFullName() : user.getUsername();
-            binding.tvSubtitle.setText(
-                    "Xin chào " + displayName + " (@" + user.getUsername() + " • " + user.getRole() + ")"
-            );
-            binding.btnAuthAction.setText(R.string.action_logout);
-            binding.btnAuthAction.setOnClickListener(v -> performLogout());
+        setupBottomNavigation();
+        if (savedInstanceState == null) {
+            switchToTab(currentTabId);
         } else {
-            binding.tvSubtitle.setText("Đang trải nghiệm với tư cách Khách (Guest)");
-            binding.btnAuthAction.setText(R.string.action_login);
-            binding.btnAuthAction.setOnClickListener(v -> {
-                tokenManager.setGuestMode(false);
-                navigateToLogin();
-            });
+            binding.bottomNav.setSelectedItemId(currentTabId);
         }
     }
 
-    private void performLogout() {
-        binding.btnAuthAction.setEnabled(false);
-        GoogleSignInHelper.signOutSilent(this);
-        authRepository.logout(() -> runOnUiThread(() -> {
-            Toast.makeText(this, "Đã đăng xuất.", Toast.LENGTH_SHORT).show();
-            navigateToLogin();
-        }));
+    private void setupBottomNavigation() {
+        binding.bottomNav.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            switchToTab(itemId);
+            return true;
+        });
     }
 
-    private void navigateToLogin() {
-        Intent intent = new Intent(this, LoginActivity.class);
-        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-        startActivity(intent);
-        finish();
+    public void navigateToTab(@IdRes int tabId) {
+        if (binding != null && binding.bottomNav.getSelectedItemId() != tabId) {
+            binding.bottomNav.setSelectedItemId(tabId);
+        }
+    }
+
+    private void switchToTab(@IdRes int tabId) {
+        currentTabId = tabId;
+        String targetTag = getTagForTab(tabId);
+
+        FragmentManager fm = getSupportFragmentManager();
+        FragmentTransaction tx = fm.beginTransaction();
+
+        for (Fragment existing : fm.getFragments()) {
+            if (existing != null && existing.isAdded()) {
+                tx.hide(existing);
+            }
+        }
+
+        Fragment target = fm.findFragmentByTag(targetTag);
+        if (target == null) {
+            target = createFragmentForTab(tabId);
+            tx.add(R.id.fragment_container, target, targetTag);
+        } else {
+            tx.show(target);
+        }
+        tx.commit();
+    }
+
+    private String getTagForTab(@IdRes int tabId) {
+        if (tabId == R.id.nav_search) {
+            return TAG_SEARCH;
+        }
+        if (tabId == R.id.nav_library) {
+            return TAG_LIBRARY;
+        }
+        if (tabId == R.id.nav_profile) {
+            return TAG_PROFILE;
+        }
+        return TAG_HOME;
+    }
+
+    private Fragment createFragmentForTab(@IdRes int tabId) {
+        if (tabId == R.id.nav_search) {
+            return new SearchFragment();
+        }
+        if (tabId == R.id.nav_library) {
+            return new LibraryFragment();
+        }
+        if (tabId == R.id.nav_profile) {
+            return new ProfileFragment();
+        }
+        return new HomeFragment();
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(STATE_SELECTED_TAB, currentTabId);
     }
 }

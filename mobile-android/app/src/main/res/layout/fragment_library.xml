@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/quizlet_bg"
+    android:orientation="vertical"
+    android:padding="20dp">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Thư viện của bạn"
+        android:textColor="@color/quizlet_text_dark"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tab_library_sections"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:background="@color/quizlet_card"
+        app:tabIndicatorColor="@color/quizlet_blue"
+        app:tabSelectedTextColor="@color/quizlet_blue"
+        app:tabTextColor="@color/quizlet_text_muted">
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bộ thẻ" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Thư mục" />
+
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Lớp học" />
+    </com.google.android.material.tabs.TabLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:cardBackgroundColor="@color/quizlet_card"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="0dp"
+        app:strokeColor="@color/quizlet_border"
+        app:strokeWidth="1dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="20dp">
+
+            <TextView
+                android:id="@+id/tv_library_section_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Bộ thẻ của bạn"
+                android:textColor="@color/quizlet_text_dark"
+                android:textSize="16sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_library_section_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Danh sách bộ thẻ đã tạo, bộ thẻ đã lưu và bộ thẻ học gần đây sẽ hiển thị tại đây sau khi hoàn tất Task T3.10."
+                android:textColor="@color/quizlet_text_muted"
+                android:textSize="13sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_library_login"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginTop="14dp"
+                android:backgroundTint="@color/quizlet_blue"
+                android:text="@string/action_login"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:cornerRadius="12dp" />
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

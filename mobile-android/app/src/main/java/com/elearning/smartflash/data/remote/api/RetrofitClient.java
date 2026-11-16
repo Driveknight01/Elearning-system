@@ -24,6 +24,7 @@ public class RetrofitClient {
 
     private final Retrofit retrofit;
     private final AuthApiService authApiService;
+    private final UserApiService userApiService;
 
     private RetrofitClient(Context context) {
         TokenManager tokenManager = TokenManager.getInstance(context);
@@ -68,6 +69,7 @@ public class RetrofitClient {
                 .build();
 
         this.authApiService = this.retrofit.create(AuthApiService.class);
+        this.userApiService = this.retrofit.create(UserApiService.class);
     }
 
     public static RetrofitClient getInstance(Context context) {
@@ -83,6 +85,10 @@ public class RetrofitClient {
 
     public AuthApiService getAuthApi() {
         return authApiService;
+    }
+
+    public UserApiService getUserApi() {
+        return userApiService;
     }
 
     public <T> T createService(Class<T> serviceClass) {

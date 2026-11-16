@@ -62,7 +62,7 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
   - *Commit*: `feat(web-profile): build main layout, user profile page and privacy settings modal`
 - [x] **T2.8** 🟡 `[VỪA — Medium]`: [Android] Xây dựng `TokenManager` (`SharedPreferences`), `RetrofitClient` (kèm `AuthInterceptor` tự gắn Bearer JWT) và màn hình `SplashActivity`, `LoginActivity`, `RegisterActivity` (có Google Sign-In).
   - *Commit*: `feat(android-auth): implement retrofit jwt interceptor and login/register activities`
-- [ ] **T2.9** 🟡 `[VỪA — Medium]`: [Android] Xây dựng `MainActivity` với `BottomNavigationView` (4 tabs: *Trang chủ, Tìm kiếm, Thư viện, Cá nhân*) và `ProfileFragment` kèm Dialog chỉnh quyền riêng tư trang cá nhân.
+- [x] **T2.9** 🟡 `[VỪA — Medium]`: [Android] Xây dựng `MainActivity` với `BottomNavigationView` (4 tabs: *Trang chủ, Tìm kiếm, Thư viện, Cá nhân*) và `ProfileFragment` kèm Dialog chỉnh quyền riêng tư trang cá nhân.
   - *Commit*: `feat(android-main): implement MainActivity bottom navigation and ProfileFragment`
 
 ---

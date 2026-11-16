@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/profile_privacy_subtitle"
+            android:textColor="@color/quizlet_text_muted"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/tv_privacy_status"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:textSize="12sp"
+            android:textStyle="bold"
+            android:visibility="gone" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="1. Ai có thể xem trang cá nhân của bạn?"
+            android:textColor="@color/quizlet_text_dark"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <!-- Option: PUBLIC -->
+        <LinearLayout
+            android:id="@+id/card_vis_public"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_role_card_selected"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="Công khai"
+                android:src="@drawable/ic_globe"
+                app:tint="@color/quizlet_blue" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Công khai (PUBLIC)"
+                    android:textColor="@color/quizlet_text_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Mọi người, kể cả Khách, đều có thể xem."
+                    android:textColor="@color/quizlet_text_muted"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <RadioButton
+                android:id="@+id/rb_vis_public"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false" />
+        </LinearLayout>
+
+        <!-- Option: LOGGED_IN_ONLY -->
+        <LinearLayout
+            android:id="@+id/card_vis_logged_in"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_role_card_unselected"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="Chỉ thành viên"
+                android:src="@drawable/ic_group"
+                app:tint="@color/quizlet_text_muted" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chỉ thành viên đã đăng nhập"
+                    android:textColor="@color/quizlet_text_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Chỉ tài khoản SmartFlash đang đăng nhập xem được."
+                    android:textColor="@color/quizlet_text_muted"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <RadioButton
+                android:id="@+id/rb_vis_logged_in"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false" />
+        </LinearLayout>
+
+        <!-- Option: PRIVATE -->
+        <LinearLayout
+            android:id="@+id/card_vis_private"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/bg_role_card_unselected"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:padding="12dp">
+
+            <ImageView
+                android:layout_width="22dp"
+                android:layout_height="22dp"
+                android:contentDescription="Riêng tư"
+                android:src="@drawable/ic_lock"
+                app:tint="@color/quizlet_text_muted" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Riêng tư (PRIVATE)"
+                    android:textColor="@color/quizlet_text_dark"
+                    android:textSize="13sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Ẩn hoàn toàn khỏi người khác (chỉ bạn &amp; Admin xem được)."
+                    android:textColor="@color/quizlet_text_muted"
+                    android:textSize="11sp" />
+            </LinearLayout>
+
+            <RadioButton
+                android:id="@+id/rb_vis_private"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:focusable="false" />
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="2. Bật / tắt hiển thị từng tab với người khác"
+            android:textColor="@color/quizlet_text_dark"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:cardBackgroundColor="@color/quizlet_bg"
+            app:cardCornerRadius="14dp"
+            app:cardElevation="0dp"
+            app:strokeColor="@color/quizlet_border"
+            app:strokeWidth="1dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="14dp"
+                android:paddingVertical="6dp">
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switch_show_sets"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Tab Bộ thẻ (Sets)"
+                    android:textColor="@color/quizlet_text_dark"
+                    android:textSize="13sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/quizlet_border" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switch_show_folders"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Tab Thư mục (Folders)"
+                    android:textColor="@color/quizlet_text_dark"
+                    android:textSize="13sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/quizlet_border" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switch_show_classes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Tab Lớp học (Classes)"
+                    android:textColor="@color/quizlet_text_dark"
+                    android:textSize="13sp" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:background="@color/quizlet_border" />
+
+                <com.google.android.material.materialswitch.MaterialSwitch
+                    android:id="@+id/switch_show_achievements"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="Tab Thành tựu (Achievements)"
+                    android:textColor="@color/quizlet_text_dark"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <TextView
+            android:id="@+id/tv_private_hint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Lưu ý: Khi chính bạn xem trang cá nhân của mình, tất cả 4 tab vẫn luôn hiển thị."
+            android:textColor="@color/quizlet_text_muted"
+            android:textSize="11sp" />
+
+    </LinearLayout>
+</ScrollView>

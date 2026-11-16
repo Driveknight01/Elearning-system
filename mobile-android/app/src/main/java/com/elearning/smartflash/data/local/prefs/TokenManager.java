@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.elearning.smartflash.data.remote.dto.AuthResponseDto;
+import com.elearning.smartflash.data.remote.dto.MyProfileDto;
 import com.elearning.smartflash.data.remote.dto.UserSummaryDto;
 import com.google.gson.Gson;
 
@@ -65,6 +66,21 @@ public class TokenManager {
             return;
         }
         prefs.edit().putString(KEY_USER_JSON, gson.toJson(user)).apply();
+    }
+
+    public synchronized void syncUserFromProfile(MyProfileDto profile) {
+        UserSummaryDto summary = UserSummaryDto.fromProfile(profile);
+        if (summary != null) {
+            saveUser(summary);
+        }
+    }
+
+    public synchronized void updateCachedAvatarUrl(String avatarUrl) {
+        UserSummaryDto current = getUser();
+        if (current != null) {
+            current.setAvatarUrl(avatarUrl);
+            saveUser(current);
+        }
     }
 
     public String getAccessToken() {
