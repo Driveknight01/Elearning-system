@@ -25,18 +25,26 @@
 - **T1.1 & T1.2 — Khởi tạo Monorepo & Khung `backend-springboot`**:
   - Tạo cấu trúc thư mục monorepo (`backend-springboot`, `ai-ml-service`, `frontend-web`, `mobile-android`, `uploads`), [`.gitignore`](file:///D:/Elearning-system/.gitignore) đa nền tảng và script tạo CSDL PostgreSQL [scripts/init_database.sql](file:///D:/Elearning-system/scripts/init_database.sql).
   - Khởi tạo khung Spring Boot 3.3.5 ([backend-springboot/pom.xml](file:///D:/Elearning-system/backend-springboot/pom.xml), [application.yml](file:///D:/Elearning-system/backend-springboot/src/main/resources/application.yml), [SmartFlashApplication.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/SmartFlashApplication.java)) và các package theo module nghiệp vụ.
+- **T1.3, T1.4, T1.5 — Hoàn thành 3 File Flyway Migration PostgreSQL (`V1`, `V2`, `V3`)**:
+  - Tạo [V1__init_core_users_and_cards.sql](file:///D:/Elearning-system/backend-springboot/src/main/resources/db/migration/V1__init_core_users_and_cards.sql) (11 bảng: Danh mục, Người dùng, Auth, Bộ thẻ, Thư mục).
+  - Tạo [V2__init_study_and_activities.sql](file:///D:/Elearning-system/backend-springboot/src/main/resources/db/migration/V2__init_study_and_activities.sql) (14 bảng: FSRS/DKT, Kiểm tra, Minigames, Live Rooms, Lớp học & Hoạt động Giáo viên).
+  - Tạo [V3__init_gamification_chat_admin_and_indexes.sql](file:///D:/Elearning-system/backend-springboot/src/main/resources/db/migration/V3__init_gamification_chat_admin_and_indexes.sql) (17 bảng: Nhóm học, Streak/Thành tựu, AI Chat, 8 bảng Admin Suite & toàn bộ Performance Indexes).
 
 ### 🔄 Đang thực hiện (In Progress)
-- Đang triển khai **Phase 1**: Khởi tạo khung dự án Local Native (`T1.3` → `T1.9`).
+- Đang triển khai **Phase 1**: Hoàn thiện gói `common` Spring Boot và các khung dự án còn lại (`T1.6` → `T1.9`).
 
 ### ⏭️ Kế tiếp (Next Up)
-- [ ] **T1.3** 🟡 `[VỪA — Medium]`: Viết migration Flyway `V1__init_core_users_and_cards.sql` cho nhóm bảng Danh mục, Người dùng và Bộ thẻ.
-- [ ] **T1.4** 🟡 `[VỪA — Medium]`: Viết migration Flyway `V2__init_study_and_activities.sql` cho nhóm bảng Học tập FSRS/DKT, Kiểm tra & Game và Lớp học/Giáo viên.
-- [ ] **T1.5** 🟡 `[VỪA — Medium]`: Viết migration Flyway `V3__init_gamification_chat_admin_and_indexes.sql` cho nhóm bảng Nhóm học, Streak, Thành tựu, AI Chat, 8 bảng Quản trị & Kiểm duyệt và toàn bộ `CREATE INDEX`.
+- [ ] **T1.6** 🟢 `[DỄ — Flash]`: Xây dựng gói `common` trong Spring Boot (`BaseEntity`, `ApiResponse<T>`, `PageResponse<T>`, `ErrorCode`, `AppException`, `GlobalExceptionHandler` và cấu hình `/uploads/**`).
+- [ ] **T1.7** 🟢 `[DỄ — Flash]`: Khởi tạo khung project `ai-ml-service` (Python FastAPI).
+- [ ] **T1.8** 🟢 `[DỄ — Flash]`: Khởi tạo khung project `frontend-web` (React + Vite + TailwindCSS).
+- [ ] **T1.9** 🟢 `[DỄ — Flash]`: Bổ sung dependencies và cấu trúc package MVVM cho `mobile-android`.
 
 ---
 
 ## 3. CHANGELOG (Nhật ký theo từng buổi làm việc)
+
+### [2026-11-16] — Buổi 2 (Cập nhật): Hoàn thành T1.3, T1.4, T1.5 (Flyway Migration 42 Bảng PostgreSQL)
+- Tạo 3 file Flyway SQL (`V1`, `V2`, `V3`) trong `backend-springboot/src/main/resources/db/migration/` khởi tạo đầy đủ 42 bảng, khóa ngoại (`fk_*`), ràng buộc duy nhất và toàn bộ `CREATE INDEX` (`GIN`, B-Tree kép cho FSRS/DKT, Leaderboard, Moderation).
 
 ### [2026-11-16] — Buổi 2: Hoàn thành T1.1 & T1.2 (Khởi tạo Monorepo, Script PostgreSQL & Khung Spring Boot 3.x)
 - Hoàn thành **T1.1**: Khởi tạo Git repository, cấu trúc 4 module chính, file [`.gitignore`](file:///D:/Elearning-system/.gitignore) đa nền tảng và script [scripts/init_database.sql](file:///D:/Elearning-system/scripts/init_database.sql) tạo `smartflash_db` kèm extension `pgcrypto`, `pg_trgm`, `unaccent`.
