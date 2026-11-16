@@ -53,16 +53,22 @@
   - Tạo [LocalStorageService.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/common/service/LocalStorageService.java) lưu ảnh cục bộ `./uploads/avatars/` (validate loại ảnh & dung lượng <= 5MB).
   - Tạo 6 DTOs trong `com.elearning.module.user.dto` (`MyProfileResponse`, `UpdateProfileRequest`, `ChangePasswordRequest`, `UpdatePrivacyRequest`, `AvatarUploadResponse`, `PublicProfileResponse`), [ProfileTabDataLoader.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/user/service/ProfileTabDataLoader.java), [UserService.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/user/service/UserService.java), [UserController.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/user/controller/UserController.java) và [UserProfileIntegrationTest.java](file:///D:/Elearning-system/backend-springboot/src/test/java/com/elearning/module/user/controller/UserProfileIntegrationTest.java).
   - Hỗ trợ `GET/PUT /api/v1/users/me`, `POST /api/v1/users/me/avatar`, `PUT /api/v1/users/me/password`, `PUT /api/v1/users/me/privacy` (`profile_visibility` + `profile_privacy_config` JSONB) và `GET /api/v1/users/profile/{username}` lọc dữ liệu 4 tab (*Bộ thẻ, Thư mục, Lớp học, Thành tựu*) theo đúng quyền riêng tư.
+- **T2.6 — Hoàn thành Giao diện Đăng nhập, Đăng ký (Google Sign-In), OTP & ProtectedRoute (`frontend-web`)**:
+  - Cập nhật [index.html](file:///D:/Elearning-system/frontend-web/index.html) (Google Identity Services), [.env.example](file:///D:/Elearning-system/frontend-web/.env.example), [axiosClient.js](file:///D:/Elearning-system/frontend-web/src/api/axiosClient.js) (tự động xoay vòng Refresh Token khi gặp `401`), [useAuthStore.js](file:///D:/Elearning-system/frontend-web/src/store/useAuthStore.js) và tạo [authApi.js](file:///D:/Elearning-system/frontend-web/src/api/authApi.js).
+  - Tạo [AuthSplitLayout.jsx](file:///D:/Elearning-system/frontend-web/src/components/auth/AuthSplitLayout.jsx) (giao diện 2 cột chuẩn Quizlet), [GoogleSignInButton.jsx](file:///D:/Elearning-system/frontend-web/src/components/auth/GoogleSignInButton.jsx), [ProtectedRoute.jsx](file:///D:/Elearning-system/frontend-web/src/routes/ProtectedRoute.jsx) (RBAC 4 vai trò `GUEST / USER / TEACHER / ADMIN`), [LoginPage.jsx](file:///D:/Elearning-system/frontend-web/src/pages/LoginPage.jsx) (kèm luồng Quên mật khẩu OTP 6 số), [RegisterPage.jsx](file:///D:/Elearning-system/frontend-web/src/pages/RegisterPage.jsx) (chọn vai trò Học viên / Giáo viên), cập nhật [HomePage.jsx](file:///D:/Elearning-system/frontend-web/src/pages/HomePage.jsx) & [App.jsx](file:///D:/Elearning-system/frontend-web/src/App.jsx).
 
 ### 🔄 Đang thực hiện (In Progress)
-- Đang triển khai **Phase 2: Xác thực (JWT + Google OAuth2), RBAC 4 Vai trò & Quyền riêng tư Trang cá nhân** trên nhánh `feat/phase-2-auth` (đã xong phần Backend `T2.1` → `T2.5`).
+- Đang triển khai **Phase 2: Xác thực (JWT + Google OAuth2), RBAC 4 Vai trò & Quyền riêng tư Trang cá nhân** trên nhánh `feat/phase-2-auth` (đã xong `T2.1` → `T2.6`, còn `T2.7` Web Profile và `T2.8`–`T2.9` Android).
 
 ### ⏭️ Kế tiếp (Next Up)
-- [ ] **T2.6** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `LoginPage`, `RegisterPage` (tích hợp nút *Continue with Google*), `ProtectedRoute` theo 4 vai trò và lưu trạng thái đăng nhập vào `useAuthStore`.
+- [ ] **T2.7** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `MainLayout` (Sidebar trái, Topbar tìm kiếm, menu tài khoản) và trang `UserProfilePage` (`/users/:username`) kèm `ProfilePrivacyModal` bật/tắt quyền xem từng tab.
 
 ---
 
 ## 3. CHANGELOG (Nhật ký theo từng buổi làm việc)
+
+### [2026-11-16] — Buổi 4 (Cập nhật lần 5): Hoàn thành T2.6 (Web Login, Register, Google Sign-In & RBAC ProtectedRoute)
+- Hoàn thành **T2.6** trên nhánh `feat/phase-2-auth`: Xây dựng `LoginPage`, `RegisterPage` theo phong cách 2 cột của Quizlet, tích hợp Google Identity Services (`GoogleSignInButton`), luồng khôi phục mật khẩu OTP, `ProtectedRoute` cho 4 vai trò, và `axiosClient` tự động refresh JWT. Đã kiểm chứng `npm run build` thành công (`built in 4.51s`).
 
 ### [2026-11-16] — Buổi 4 (Cập nhật lần 4): Hoàn thành T2.5 (User Profile & Granular Tab Privacy APIs)
 - Hoàn thành **T2.5** trên nhánh `feat/phase-2-auth`: Triển khai `UserController` (`/api/v1/users/me`, `/me/avatar`, `/me/password`, `/me/privacy`, `/profile/{username}`), `UserService`, `LocalStorageService`, `ProfileTabDataLoader`, `UserStreak` (`Persistable<Long>` tránh lỗi detached `User` khi lưu) và `UserProfileIntegrationTest`. Đã kiểm tra biên dịch `mvn test-compile` thành công.

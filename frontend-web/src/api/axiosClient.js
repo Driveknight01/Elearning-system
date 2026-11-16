@@ -10,7 +10,35 @@ export const axiosClient = axios.create({
   withCredentials: true,
 });
 
-// Request interceptor: tự gắn JWT Bearer token nếu có
+const AUTH_SKIP_REFRESH_PATHS = [
+  '/auth/login',
+  '/auth/register',
+  '/auth/google',
+  '/auth/refresh',
+  '/auth/forgot-password',
+  '/auth/reset-password',
+];
+
+let isRefreshing = false;
+let failedQueue = [];
+
+const processQueue = (error, newToken = null) => {
+  failedQueue.forEach(({ resolve, reject }) => {
+    if (error) {
+      reject(error);
+    } else {
+      resolve(newToken);
+    }
+  });
+  failedQueue = [];
+};
+
+const clearAuthStorage = () => {
+  localStorage.removeItem('accessToken');
+  localStorage.removeItem('refreshToken');
+  localStorage.removeItem('user');
+};
+
 axiosClient.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('accessToken');
@@ -22,19 +50,69 @@ axiosClient.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
-// Response interceptor: chuẩn hóa payload hoặc bắt lỗi 401
 axiosClient.interceptors.response.use(
-  (response) => {
-    // Trả về thẳng data payload từ wrapper ApiResponse<T>
-    return response.data;
-  },
+  (response) => response.data,
   async (error) => {
     const originalRequest = error.config;
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    const status = error.response?.status;
+    const requestUrl = originalRequest?.url || '';
+    const shouldSkipRefresh = AUTH_SKIP_REFRESH_PATHS.some((path) => requestUrl.includes(path));
+
+    if (status === 401 && originalRequest && !originalRequest._retry && !shouldSkipRefresh) {
+      const storedRefreshToken = localStorage.getItem('refreshToken');
+      if (!storedRefreshToken) {
+        clearAuthStorage();
+        return Promise.reject(error.response?.data || error);
+      }
+
+      if (isRefreshing) {
+        return new Promise((resolve, reject) => {
+          failedQueue.push({ resolve, reject });
+        })
+          .then((newToken) => {
+            originalRequest.headers.Authorization = `Bearer ${newToken}`;
+            return axiosClient(originalRequest);
+          })
+          .catch((queueErr) => Promise.reject(queueErr));
+      }
+
       originalRequest._retry = true;
-      // Có thể xử lý refresh token ở Phase 2
-      localStorage.removeItem('accessToken');
+      isRefreshing = true;
+
+      try {
+        const refreshRes = await axios.post(
+          `${API_BASE_URL}/auth/refresh`,
+          { refreshToken: storedRefreshToken, platform: 'WEB' },
+          { headers: { 'Content-Type': 'application/json' }, withCredentials: true }
+        );
+
+        const payload = refreshRes.data?.data;
+        if (payload?.accessToken) {
+          localStorage.setItem('accessToken', payload.accessToken);
+          if (payload.refreshToken) {
+            localStorage.setItem('refreshToken', payload.refreshToken);
+          }
+          if (payload.user) {
+            localStorage.setItem('user', JSON.stringify(payload.user));
+          }
+
+          processQueue(null, payload.accessToken);
+          originalRequest.headers.Authorization = `Bearer ${payload.accessToken}`;
+          return axiosClient(originalRequest);
+        }
+        throw new Error('Refresh response missing accessToken');
+      } catch (refreshError) {
+        processQueue(refreshError, null);
+        clearAuthStorage();
+        if (window.location.pathname !== '/login') {
+          window.location.href = '/login';
+        }
+        return Promise.reject(refreshError.response?.data || refreshError);
+      } finally {
+        isRefreshing = false;
+      }
     }
+
     return Promise.reject(error.response?.data || error);
   }
 );

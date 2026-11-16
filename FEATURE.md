@@ -56,7 +56,7 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
   - *Commit*: `feat(auth): implement unified google id-token authentication for web and android`
 - [x] **T2.5** 🟡 `[VỪA — Medium]`: Xây dựng API Hồ sơ cá nhân & **Quyền xem Trang cá nhân**: cập nhật thông tin, upload avatar, đổi mật khẩu, chỉnh `profile_visibility` và `profile_privacy_config` (`JSONB` bật/tắt hiển thị từng tab *Bộ thẻ, Thư mục, Lớp học, Thành tựu*) + API xem trang cá nhân `/api/v1/users/profile/{username}` lọc dữ liệu theo đúng quyền riêng tư.
   - *Commit*: `feat(user): implement profile management and granular tab privacy visibility`
-- [ ] **T2.6** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `LoginPage`, `RegisterPage` (tích hợp nút *Continue with Google*), `ProtectedRoute` theo 4 vai trò và lưu trạng thái đăng nhập vào `useAuthStore`.
+- [x] **T2.6** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `LoginPage`, `RegisterPage` (tích hợp nút *Continue with Google*), `ProtectedRoute` theo 4 vai trò và lưu trạng thái đăng nhập vào `useAuthStore`.
   - *Commit*: `feat(web-auth): build login, register pages with google sign-in and role guards`
 - [ ] **T2.7** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `MainLayout` (Sidebar trái, Topbar tìm kiếm, menu tài khoản) và trang `UserProfilePage` (`/users/:username`) kèm `ProfilePrivacyModal` bật/tắt quyền xem từng tab.
   - *Commit*: `feat(web-profile): build main layout, user profile page and privacy settings modal`

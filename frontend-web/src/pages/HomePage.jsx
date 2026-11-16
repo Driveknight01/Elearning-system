@@ -1,8 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { BookOpen, Sparkles, Trophy, Brain } from 'lucide-react';
+import { Sparkles, Trophy, Brain, LogOut, UserCircle } from 'lucide-react';
+import { useAuthStore } from '../store/useAuthStore';
 
 export default function HomePage() {
+  const { isAuthenticated, user, logout } = useAuthStore();
+
   return (
     <div className="min-h-screen bg-quizlet-bg">
       {/* Header */}
@@ -15,25 +18,61 @@ export default function HomePage() {
             <span className="text-2xl font-black text-quizlet-blue tracking-tight">SmartFlash</span>
           </div>
 
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-3 sm:space-x-4">
             <Link
               to="/explore"
               className="text-quizlet-textMuted hover:text-quizlet-textDark font-medium px-3 py-2 rounded-lg transition"
             >
               Khám phá
             </Link>
-            <Link
-              to="/login"
-              className="text-quizlet-blue hover:bg-blue-50 font-semibold px-4 py-2 rounded-lg transition"
-            >
-              Đăng nhập
-            </Link>
-            <Link
-              to="/register"
-              className="bg-quizlet-blue hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition"
-            >
-              Đăng ký
-            </Link>
+
+            {isAuthenticated && user ? (
+              <div className="flex items-center gap-3">
+                <Link
+                  to={`/users/${user.username}`}
+                  className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-quizlet-bg hover:bg-gray-200/70 transition"
+                >
+                  {user.avatarUrl ? (
+                    <img
+                      src={user.avatarUrl}
+                      alt={user.fullName}
+                      className="w-7 h-7 rounded-full object-cover"
+                    />
+                  ) : (
+                    <UserCircle className="w-6 h-6 text-quizlet-blue" />
+                  )}
+                  <span className="text-sm font-bold text-quizlet-textDark hidden sm:inline">
+                    {user.fullName || user.username}
+                  </span>
+                  <span className="text-[11px] font-bold uppercase px-2 py-0.5 rounded-full bg-blue-100 text-quizlet-blue">
+                    {user.role}
+                  </span>
+                </Link>
+                <button
+                  type="button"
+                  onClick={logout}
+                  className="inline-flex items-center gap-1.5 text-sm font-semibold text-quizlet-textMuted hover:text-quizlet-red px-3 py-2 rounded-lg transition"
+                >
+                  <LogOut className="w-4 h-4" />
+                  <span className="hidden sm:inline">Đăng xuất</span>
+                </button>
+              </div>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  className="text-quizlet-blue hover:bg-blue-50 font-semibold px-4 py-2 rounded-lg transition"
+                >
+                  Đăng nhập
+                </Link>
+                <Link
+                  to="/register"
+                  className="bg-quizlet-blue hover:bg-blue-600 text-white font-semibold px-4 py-2 rounded-lg shadow-sm transition"
+                >
+                  Đăng ký
+                </Link>
+              </>
+            )}
           </div>
         </div>
       </header>
