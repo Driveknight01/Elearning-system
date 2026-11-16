@@ -6,7 +6,9 @@ import com.elearning.common.exception.ErrorCode;
 import com.elearning.common.util.ShareTokenGenerator;
 import com.elearning.module.admin.entity.Category;
 import com.elearning.module.admin.repository.CategoryRepository;
+import com.elearning.module.flashcard.dto.CloneSetRequest;
 import com.elearning.module.flashcard.dto.CreateFlashcardSetRequest;
+import com.elearning.module.flashcard.dto.ExploreSetsResponse;
 import com.elearning.module.flashcard.dto.FlashcardItemRequest;
 import com.elearning.module.flashcard.dto.FlashcardResponse;
 import com.elearning.module.flashcard.dto.SetDetailResponse;
@@ -24,7 +26,9 @@ import com.elearning.module.user.repository.UserRepository;
 import com.elearning.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -124,6 +128,126 @@ public class FlashcardSetService {
         return PageResponse.from(page, content);
     }
 
+    @Transactional(readOnly = true)
+    public PageResponse<SetSummaryResponse> searchPublicSets(String keyword, Long categoryId, String sort, int page, int size) {
+        Sort sortSpec = switch (sort != null ? sort.toLowerCase() : "newest") {
+            case "popular" -> Sort.by(Sort.Direction.DESC, "viewCount", "createdAt");
+            case "rating" -> Sort.by(Sort.Direction.DESC, "avgRating", "ratingCount");
+            default -> Sort.by(Sort.Direction.DESC, "createdAt");
+        };
+        Pageable pageable = PageRequest.of(Math.max(0, page), Math.min(Math.max(1, size), 100), sortSpec);
+        String normalizedKeyword = keyword != null ? keyword.trim() : "";
+
+        Page<FlashcardSet> result = flashcardSetRepository.searchPublicSets(
+                normalizedKeyword,
+                categoryId,
+                Visibility.PUBLIC,
+                ModerationStatus.APPROVED,
+                pageable
+        );
+        return PageResponse.from(result, result.getContent().stream().map(this::toSummaryResponse).toList());
+    }
+
+    @Transactional(readOnly = true)
+    public ExploreSetsResponse getExploreSets() {
+        List<SetSummaryResponse> featured = flashcardSetRepository
+                .findAllByFeaturedTrueAndVisibilityAndModerationStatusAndDeletedAtIsNullOrderByViewCountDesc(
+                        Visibility.PUBLIC,
+                        ModerationStatus.APPROVED,
+                        PageRequest.of(0, 8)
+                )
+                .stream()
+                .map(this::toSummaryResponse)
+                .toList();
+
+        List<SetSummaryResponse> popular = flashcardSetRepository
+                .findAllByVisibilityAndModerationStatusAndDeletedAtIsNull(
+                        Visibility.PUBLIC,
+                        ModerationStatus.APPROVED,
+                        PageRequest.of(0, 12, Sort.by(Sort.Direction.DESC, "viewCount", "createdAt"))
+                )
+                .getContent()
+                .stream()
+                .map(this::toSummaryResponse)
+                .toList();
+
+        List<SetSummaryResponse> recent = flashcardSetRepository
+                .findAllByVisibilityAndModerationStatusAndDeletedAtIsNull(
+                        Visibility.PUBLIC,
+                        ModerationStatus.APPROVED,
+                        PageRequest.of(0, 12, Sort.by(Sort.Direction.DESC, "createdAt"))
+                )
+                .getContent()
+                .stream()
+                .map(this::toSummaryResponse)
+                .toList();
+
+        List<SetSummaryResponse.CategorySummary> categories = categoryRepository
+                .findAllByParentIsNullAndActiveTrueOrderByDisplayOrderAsc()
+                .stream()
+                .map(this::toCategorySummary)
+                .toList();
+
+        return ExploreSetsResponse.builder()
+                .featuredSets(featured)
+                .popularSets(popular)
+                .recentSets(recent)
+                .categories(categories)
+                .build();
+    }
+
+    @Transactional
+    public SetDetailResponse cloneSet(Long sourceSetId, String shareToken, UserPrincipal currentUser, CloneSetRequest request) {
+        FlashcardSet source = findActiveSetOrThrow(sourceSetId);
+        assertCanView(source, shareToken, isOwnerOrAdmin(source, currentUser));
+
+        User newOwner = userRepository.findByIdAndDeletedAtIsNull(currentUser.getId())
+                .orElseThrow(() -> new AppException(ErrorCode.USER_NOT_FOUND));
+
+        String clonedTitle = (request != null && hasText(request.getTitle()))
+                ? request.getTitle().trim()
+                : truncateTitle(source.getTitle() + " (Bản sao)");
+
+        Visibility clonedVisibility = (request != null && request.getVisibility() != null)
+                ? request.getVisibility()
+                : (source.getVisibility() == Visibility.PUBLIC ? Visibility.PUBLIC : Visibility.PRIVATE);
+
+        FlashcardSet cloned = FlashcardSet.builder()
+                .owner(newOwner)
+                .category(source.getCategory())
+                .clonedFromSet(source)
+                .title(clonedTitle)
+                .description(source.getDescription())
+                .visibility(clonedVisibility)
+                .moderationStatus(ModerationStatus.APPROVED)
+                .shareToken(generateUniqueShareToken())
+                .termLang(source.getTermLang())
+                .defLang(source.getDefLang())
+                .tags(source.getTags() != null ? new ArrayList<>(source.getTags()) : new ArrayList<>())
+                .sourceType(source.getSourceType())
+                .build();
+
+        for (Flashcard srcCard : source.getCards()) {
+            cloned.addCard(Flashcard.builder()
+                    .flashcardSet(cloned)
+                    .term(srcCard.getTerm())
+                    .definition(srcCard.getDefinition())
+                    .hint(srcCard.getHint())
+                    .imageUrl(srcCard.getImageUrl())
+                    .audioUrl(srcCard.getAudioUrl())
+                    .conceptTag(srcCard.getConceptTag())
+                    .orderIndex(srcCard.getOrderIndex())
+                    .build());
+        }
+        cloned.setCardCount(cloned.getCards().size());
+
+        source.setCloneCount(source.getCloneCount() + 1);
+        flashcardSetRepository.save(source);
+
+        FlashcardSet savedClone = flashcardSetRepository.saveAndFlush(cloned);
+        return toDetailResponse(savedClone, true);
+    }
+
     @Transactional
     public SetDetailResponse updateSet(Long setId, UserPrincipal currentUser, UpdateFlashcardSetRequest request) {
         FlashcardSet set = flashcardSetRepository.findByIdAndDeletedAtIsNull(setId)
@@ -214,7 +338,12 @@ public class FlashcardSetService {
                 .build();
     }
 
-    private void assertCanView(FlashcardSet set, String shareToken, boolean isOwnerOrAdmin) {
+    public FlashcardSet findActiveSetOrThrow(Long setId) {
+        return flashcardSetRepository.findByIdAndDeletedAtIsNull(setId)
+                .orElseThrow(() -> new AppException(ErrorCode.SET_NOT_FOUND));
+    }
+
+    public void assertCanView(FlashcardSet set, String shareToken, boolean isOwnerOrAdmin) {
         if (isOwnerOrAdmin) {
             return;
         }
@@ -234,7 +363,7 @@ public class FlashcardSetService {
         }
     }
 
-    private boolean isOwnerOrAdmin(FlashcardSet set, UserPrincipal currentUser) {
+    public boolean isOwnerOrAdmin(FlashcardSet set, UserPrincipal currentUser) {
         if (currentUser == null) {
             return false;
         }
@@ -271,7 +400,7 @@ public class FlashcardSetService {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    private SetSummaryResponse toSummaryResponse(FlashcardSet set) {
+    public SetSummaryResponse toSummaryResponse(FlashcardSet set) {
         return SetSummaryResponse.builder()
                 .id(set.getId())
                 .title(set.getTitle())
@@ -328,7 +457,7 @@ public class FlashcardSetService {
                 .build();
     }
 
-    private FlashcardResponse toCardResponse(Flashcard card) {
+    public FlashcardResponse toCardResponse(Flashcard card) {
         return FlashcardResponse.builder()
                 .id(card.getId())
                 .term(card.getTerm())
@@ -375,5 +504,9 @@ public class FlashcardSetService {
         }
         String trimmed = value.trim();
         return trimmed.isEmpty() ? null : trimmed;
+    }
+
+    private static String truncateTitle(String title) {
+        return title.length() <= 200 ? title : title.substring(0, 200);
     }
 }

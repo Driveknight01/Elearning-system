@@ -54,7 +54,13 @@ public class SecurityConfig {
                         // Authentication & Public Guest Endpoints
                         .requestMatchers("/api/v1/auth/**", "/api/v1/public/**").permitAll()
                         .requestMatchers("/api/v1/assigned-activities/join/**", "/api/v1/guest-activities/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/v1/flashcard-sets/my").authenticated()
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/v1/flashcard-sets/my",
+                                "/api/v1/flashcard-sets/saved",
+                                "/api/v1/flashcard-sets/recents",
+                                "/api/v1/flashcard-sets/*/interaction",
+                                "/api/v1/flashcard-sets/*/starred-cards"
+                        ).authenticated()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/flashcard-sets/**",
                                 "/api/v1/categories/**",

@@ -80,15 +80,24 @@
   - Tạo [FlashcardSetService.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/flashcard/service/FlashcardSetService.java) & [FlashcardSetController.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/flashcard/controller/FlashcardSetController.java) hỗ trợ `POST /api/v1/flashcard-sets`, `GET /api/v1/flashcard-sets/my`, `GET /api/v1/flashcard-sets/{id}`, `GET /api/v1/flashcard-sets/share/{shareToken}`, `PUT /api/v1/flashcard-sets/{id}` (đồng bộ thêm/sửa/xóa thẻ con giữ nguyên ID cũ), `DELETE /api/v1/flashcard-sets/{id}` (xóa mềm `deleted_at`) và kiểm tra chặt chẽ `PUBLIC / LINK_ONLY / PRIVATE`.
   - Cập nhật [SecurityConfig.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/security/SecurityConfig.java) (bảo vệ `GET /api/v1/flashcard-sets/my`) và viết [FlashcardSetControllerIntegrationTest.java](file:///D:/Elearning-system/backend-springboot/src/test/java/com/elearning/module/flashcard/controller/FlashcardSetControllerIntegrationTest.java).
 
+- **T3.3 — Hoàn thành API Tìm kiếm, Khám phá, Clone, Tương tác Bộ thẻ & Gắn sao Thẻ khó (`backend-springboot`)**:
+  - Tạo 7 DTOs trong `com.elearning.module.flashcard.dto` (`CloneSetRequest`, `ExploreSetsResponse`, `ResumeStateRequest`, `RateSetRequest`, `SetInteractionResponse`, `SetRatingItemResponse`, `StarredCardsResponse`).
+  - Mở rộng [FlashcardSetService.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/flashcard/service/FlashcardSetService.java) & [FlashcardSetController.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/flashcard/controller/FlashcardSetController.java) với `GET /api/v1/flashcard-sets/explore`, `GET /api/v1/flashcard-sets/search` (lọc từ khóa, danh mục, sắp xếp `newest/popular/rating`), và `POST /api/v1/flashcard-sets/{id}/clone`.
+  - Tạo [SetInteractionService.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/flashcard/service/SetInteractionService.java) & [SetInteractionController.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/flashcard/controller/SetInteractionController.java) hỗ trợ Lưu/Bỏ lưu (`POST/DELETE /{id}/save`, `GET /saved`), Học gần đây (`GET /recents`), Đồng bộ vị trí học dở (`PUT /{id}/resume`, `GET /{id}/interaction`), Đánh giá 1–5★ (`POST /{id}/rate`, `GET /{id}/ratings` tự động cập nhật `avg_rating` & `rating_count`), và Gắn/Bỏ sao thẻ khó (`POST/DELETE /{id}/cards/{cardId}/star`, `GET /{id}/starred-cards`).
+  - Cập nhật [SecurityConfig.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/security/SecurityConfig.java) và viết [SetExploreCloneAndInteractionIntegrationTest.java](file:///D:/Elearning-system/backend-springboot/src/test/java/com/elearning/module/flashcard/controller/SetExploreCloneAndInteractionIntegrationTest.java).
+
 ### 🔄 Đang thực hiện (In Progress)
 - Đang triển khai **Phase 3 (`T3.1` → `T3.12`)** trên nhánh `feat/phase-3-flashcard`.
 
 ### ⏭️ Kế tiếp (Next Up)
-- [ ] **T3.3** 🟡 `[VỪA — Medium]`: Xây dựng API Tìm kiếm & Khám phá bộ thẻ `PUBLIC`, API **Clone (Nhân bản)** bộ thẻ, API **Tương tác Bộ thẻ (`user_set_interactions`: Lưu bộ thẻ yêu thích, Học gần đây Recents, Đánh giá 1–5★, Lưu vị trí học dở `resume_state_json`)** và API gắn dấu sao thẻ khó (`starred_cards`).
+- [ ] **T3.4** 🟢 `[DỄ — Flash]`: Xây dựng API CRUD Thư mục (`folders` — thêm/xóa bộ thẻ vào thư mục) và Nhóm học (`study_groups` — tạo nhóm, tham gia bằng `invite_code`, chia sẻ bộ thẻ vào nhóm).
 
 ---
 
 ## 3. CHANGELOG (Nhật ký theo từng buổi làm việc)
+
+### [2026-11-17] — Buổi 5 (Cập nhật lần 3): Hoàn thành T3.3 (Explore, Search, Clone, Interactions & Starred Cards APIs)
+- Hoàn thành **T3.3** trên nhánh `feat/phase-3-flashcard`: Triển khai `GET /explore`, `GET /search`, `POST /{id}/clone`, `SetInteractionController` + `SetInteractionService` (Saved, Recents, Resume State JSONB, Rating 1–5★, Starred Cards), cập nhật `SecurityConfig` và viết `SetExploreCloneAndInteractionIntegrationTest`. Kiểm chứng `mvn test-compile -o` thành công (`BUILD SUCCESS`).
 
 ### [2026-11-17] — Buổi 5 (Cập nhật lần 2): Hoàn thành T3.2 (API CRUD Bộ thẻ & Kiểm soát Quyền xem)
 - Hoàn thành **T3.2** trên nhánh `feat/phase-3-flashcard`: Triển khai `FlashcardSetController`, `FlashcardSetService`, `ShareTokenGenerator`, 6 DTOs, cập nhật `SecurityConfig` cho `/my`, xử lý đồng bộ danh sách thẻ con khi tạo/sửa (giữ ID thẻ cũ), xóa mềm `deleted_at` và kiểm tra 3 mức quyền xem (`PUBLIC`, `LINK_ONLY`, `PRIVATE`) kèm `FlashcardSetControllerIntegrationTest`.

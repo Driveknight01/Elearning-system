@@ -2,7 +2,9 @@ package com.elearning.module.flashcard.controller;
 
 import com.elearning.common.dto.ApiResponse;
 import com.elearning.common.dto.PageResponse;
+import com.elearning.module.flashcard.dto.CloneSetRequest;
 import com.elearning.module.flashcard.dto.CreateFlashcardSetRequest;
+import com.elearning.module.flashcard.dto.ExploreSetsResponse;
 import com.elearning.module.flashcard.dto.SetDetailResponse;
 import com.elearning.module.flashcard.dto.SetSummaryResponse;
 import com.elearning.module.flashcard.dto.UpdateFlashcardSetRequest;
@@ -49,6 +51,26 @@ public class FlashcardSetController {
                 .body(ApiResponse.success("Tạo bộ thẻ thành công", created));
     }
 
+    @GetMapping("/explore")
+    @Operation(summary = "Khám phá bộ thẻ nổi bật, phổ biến, mới nhất và danh mục gốc (Guest + User)")
+    public ResponseEntity<ApiResponse<ExploreSetsResponse>> getExploreSets() {
+        return ResponseEntity.ok(ApiResponse.success(flashcardSetService.getExploreSets()));
+    }
+
+    @GetMapping("/search")
+    @Operation(summary = "Tìm kiếm & lọc bộ thẻ PUBLIC theo từ khóa, danh mục và sắp xếp (Guest + User)")
+    public ResponseEntity<ApiResponse<PageResponse<SetSummaryResponse>>> searchPublicSets(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(required = false) Long categoryId,
+            @RequestParam(defaultValue = "newest") String sort,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        return ResponseEntity.ok(ApiResponse.success(
+                flashcardSetService.searchPublicSets(keyword, categoryId, sort, page, size)
+        ));
+    }
+
     @GetMapping("/my")
     @Operation(summary = "Lấy danh sách bộ thẻ của người dùng đang đăng nhập")
     public ResponseEntity<ApiResponse<PageResponse<SetSummaryResponse>>> getMySets(
@@ -77,6 +99,19 @@ public class FlashcardSetController {
             @AuthenticationPrincipal UserPrincipal currentUser
     ) {
         return ResponseEntity.ok(ApiResponse.success(flashcardSetService.getSetByShareToken(shareToken, currentUser)));
+    }
+
+    @PostMapping("/{id}/clone")
+    @Operation(summary = "Nhân bản (Clone) bộ thẻ sang tài khoản cá nhân")
+    public ResponseEntity<ApiResponse<SetDetailResponse>> cloneSet(
+            @PathVariable Long id,
+            @RequestParam(required = false) String token,
+            @AuthenticationPrincipal UserPrincipal currentUser,
+            @Valid @RequestBody(required = false) CloneSetRequest request
+    ) {
+        SetDetailResponse cloned = flashcardSetService.cloneSet(id, token, currentUser, request);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(ApiResponse.success("Nhân bản bộ thẻ thành công", cloned));
     }
 
     @PutMapping("/{id}")

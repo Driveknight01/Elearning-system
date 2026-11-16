@@ -72,7 +72,7 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
   - *Commit*: `feat(flashcard): create entities and repositories for sets, cards, interactions, folders and groups`
 - [x] **T3.2** 🟡 `[VỪA — Medium]`: Xây dựng API CRUD Bộ thẻ (`POST/PUT/DELETE /api/v1/flashcard-sets`) xử lý lưu đồng bộ danh sách thẻ con, tự sinh `share_token` (NanoID) và kiểm tra chặt chẽ 3 mức quyền xem (`PUBLIC`, `PRIVATE`, `LINK_ONLY`).
   - *Commit*: `feat(flashcard): implement flashcard set CRUD and visibility access control`
-- [ ] **T3.3** 🟡 `[VỪA — Medium]`: Xây dựng API Tìm kiếm & Khám phá bộ thẻ `PUBLIC`, API **Clone (Nhân bản)** bộ thẻ, API **Tương tác Bộ thẻ (`user_set_interactions`: Lưu bộ thẻ yêu thích, Học gần đây Recents, Đánh giá 1–5★, Lưu vị trí học dở `resume_state_json`)** và API gắn dấu sao thẻ khó (`starred_cards`).
+- [x] **T3.3** 🟡 `[VỪA — Medium]`: Xây dựng API Tìm kiếm & Khám phá bộ thẻ `PUBLIC`, API **Clone (Nhân bản)** bộ thẻ, API **Tương tác Bộ thẻ (`user_set_interactions`: Lưu bộ thẻ yêu thích, Học gần đây Recents, Đánh giá 1–5★, Lưu vị trí học dở `resume_state_json`)** và API gắn dấu sao thẻ khó (`starred_cards`).
   - *Commit*: `feat(flashcard): implement search, clone set, saved/recents/rating interactions and starred card apis`
 - [ ] **T3.4** 🟢 `[DỄ — Flash]`: Xây dựng API CRUD Thư mục (`folders` — thêm/xóa bộ thẻ vào thư mục) và Nhóm học (`study_groups` — tạo nhóm, tham gia bằng `invite_code`, chia sẻ bộ thẻ vào nhóm).
   - *Commit*: `feat(organization): implement folder and study group management apis`

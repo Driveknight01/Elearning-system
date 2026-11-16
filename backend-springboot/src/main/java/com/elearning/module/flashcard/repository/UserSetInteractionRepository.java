@@ -16,6 +16,16 @@ public interface UserSetInteractionRepository extends JpaRepository<UserSetInter
 
     Optional<UserSetInteraction> findByIdUserIdAndIdSetId(Long userId, Long setId);
 
+    Page<UserSetInteraction> findAllByIdUserIdAndSavedTrueAndFlashcardSetDeletedAtIsNullOrderByLastAccessedAtDesc(
+            Long userId,
+            Pageable pageable
+    );
+
+    Page<UserSetInteraction> findAllByIdUserIdAndFlashcardSetDeletedAtIsNullOrderByLastAccessedAtDesc(
+            Long userId,
+            Pageable pageable
+    );
+
     Page<UserSetInteraction> findAllByIdUserIdAndSavedTrueOrderByLastAccessedAtDesc(Long userId, Pageable pageable);
 
     Page<UserSetInteraction> findAllByIdUserIdOrderByLastAccessedAtDesc(Long userId, Pageable pageable);
