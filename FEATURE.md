@@ -74,7 +74,7 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
   - *Commit*: `feat(flashcard): implement flashcard set CRUD and visibility access control`
 - [x] **T3.3** 🟡 `[VỪA — Medium]`: Xây dựng API Tìm kiếm & Khám phá bộ thẻ `PUBLIC`, API **Clone (Nhân bản)** bộ thẻ, API **Tương tác Bộ thẻ (`user_set_interactions`: Lưu bộ thẻ yêu thích, Học gần đây Recents, Đánh giá 1–5★, Lưu vị trí học dở `resume_state_json`)** và API gắn dấu sao thẻ khó (`starred_cards`).
   - *Commit*: `feat(flashcard): implement search, clone set, saved/recents/rating interactions and starred card apis`
-- [ ] **T3.4** 🟢 `[DỄ — Flash]`: Xây dựng API CRUD Thư mục (`folders` — thêm/xóa bộ thẻ vào thư mục) và Nhóm học (`study_groups` — tạo nhóm, tham gia bằng `invite_code`, chia sẻ bộ thẻ vào nhóm).
+- [x] **T3.4** 🟢 `[DỄ — Flash]`: Xây dựng API CRUD Thư mục (`folders` — thêm/xóa bộ thẻ vào thư mục) và Nhóm học (`study_groups` — tạo nhóm, tham gia bằng `invite_code`, chia sẻ bộ thẻ vào nhóm).
   - *Commit*: `feat(organization): implement folder and study group management apis`
 - [ ] **T3.5** 🔴 `[KHÓ — ⚠️ Đề xuất Model Mạnh/Pro]`: [AI Service + BE] Xây dựng module **OCR & Card Parser** trong `ai-ml-service/app/ocr/` (nhận ảnh chụp tài liệu -> trích xuất văn bản -> phân tích cú pháp/LLM tách thành mảng `[{term, definition}]`) và kết nối với Spring Boot qua `POST /api/v1/flashcard-sets/ocr-extract`.
   - *Commit*: `feat(ocr): implement ocr image-to-flashcards extraction pipeline in fastapi and springboot`

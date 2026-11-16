@@ -59,10 +59,12 @@ public class SecurityConfig {
                                 "/api/v1/flashcard-sets/saved",
                                 "/api/v1/flashcard-sets/recents",
                                 "/api/v1/flashcard-sets/*/interaction",
-                                "/api/v1/flashcard-sets/*/starred-cards"
+                                "/api/v1/flashcard-sets/*/starred-cards",
+                                "/api/v1/folders/my"
                         ).authenticated()
                         .requestMatchers(HttpMethod.GET,
                                 "/api/v1/flashcard-sets/**",
+                                "/api/v1/folders/**",
                                 "/api/v1/categories/**",
                                 "/api/v1/users/profile/**",
                                 "/api/v1/games/leaderboard/**"

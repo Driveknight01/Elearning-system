@@ -86,15 +86,23 @@
   - Tạo [SetInteractionService.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/flashcard/service/SetInteractionService.java) & [SetInteractionController.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/flashcard/controller/SetInteractionController.java) hỗ trợ Lưu/Bỏ lưu (`POST/DELETE /{id}/save`, `GET /saved`), Học gần đây (`GET /recents`), Đồng bộ vị trí học dở (`PUT /{id}/resume`, `GET /{id}/interaction`), Đánh giá 1–5★ (`POST /{id}/rate`, `GET /{id}/ratings` tự động cập nhật `avg_rating` & `rating_count`), và Gắn/Bỏ sao thẻ khó (`POST/DELETE /{id}/cards/{cardId}/star`, `GET /{id}/starred-cards`).
   - Cập nhật [SecurityConfig.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/security/SecurityConfig.java) và viết [SetExploreCloneAndInteractionIntegrationTest.java](file:///D:/Elearning-system/backend-springboot/src/test/java/com/elearning/module/flashcard/controller/SetExploreCloneAndInteractionIntegrationTest.java).
 
+- **T3.4 — Hoàn thành API CRUD Thư mục (`folders`) & Nhóm học (`study_groups`) (`backend-springboot`)**:
+  - Tạo DTOs thư mục (`FolderRequest`, `FolderSummaryResponse`, `FolderDetailResponse`), [FolderService.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/flashcard/service/FolderService.java) & [FolderController.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/flashcard/controller/FolderController.java) (`/api/v1/folders`: CRUD thư mục, truy cập qua `shareToken`, kiểm soát `PUBLIC / LINK_ONLY / PRIVATE`, thêm/xóa bộ thẻ `POST/DELETE /{id}/sets/{setId}`).
+  - Tạo DTOs nhóm học (`CreateStudyGroupRequest`, `JoinStudyGroupRequest`, `StudyGroupSummaryResponse`, `StudyGroupDetailResponse`, `StudyGroupMemberResponse`, `StudyGroupSharedSetResponse`), [StudyGroupService.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/group/service/StudyGroupService.java) & [StudyGroupController.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/group/controller/StudyGroupController.java) (`/api/v1/study-groups`: tạo nhóm tự sinh `invite_code`, tham gia `POST /join`, quản lý thành viên, chia sẻ/gỡ bộ thẻ `POST/DELETE /{id}/sets/{setId}`).
+  - Cập nhật [SecurityConfig.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/security/SecurityConfig.java) (bảo vệ `/api/v1/folders/my`, mở `GET /api/v1/folders/**` theo quyền) và viết [FolderAndStudyGroupIntegrationTest.java](file:///D:/Elearning-system/backend-springboot/src/test/java/com/elearning/module/flashcard/controller/FolderAndStudyGroupIntegrationTest.java).
+
 ### 🔄 Đang thực hiện (In Progress)
 - Đang triển khai **Phase 3 (`T3.1` → `T3.12`)** trên nhánh `feat/phase-3-flashcard`.
 
 ### ⏭️ Kế tiếp (Next Up)
-- [ ] **T3.4** 🟢 `[DỄ — Flash]`: Xây dựng API CRUD Thư mục (`folders` — thêm/xóa bộ thẻ vào thư mục) và Nhóm học (`study_groups` — tạo nhóm, tham gia bằng `invite_code`, chia sẻ bộ thẻ vào nhóm).
+- [ ] **T3.5** 🔴 `[KHÓ — ⚠️ Đề xuất Model Mạnh/Pro]`: [AI Service + BE] Xây dựng module **OCR & Card Parser** trong `ai-ml-service/app/ocr/` (nhận ảnh chụp tài liệu -> trích xuất văn bản -> phân tích cú pháp/LLM tách thành mảng `[{term, definition}]`) và kết nối với Spring Boot qua `POST /api/v1/flashcard-sets/ocr-extract`.
 
 ---
 
 ## 3. CHANGELOG (Nhật ký theo từng buổi làm việc)
+
+### [2026-11-17] — Buổi 5 (Cập nhật lần 4): Hoàn thành T3.4 (Folder & StudyGroup Management APIs)
+- Hoàn thành **T3.4** trên nhánh `feat/phase-3-flashcard`: Triển khai `FolderController` + `FolderService` (`/api/v1/folders/**` CRUD, `shareToken`, thêm/xóa bộ thẻ), `StudyGroupController` + `StudyGroupService` (`/api/v1/study-groups/**` tạo nhóm, `invite_code`, tham gia, chia sẻ bộ thẻ), cập nhật `SecurityConfig` và viết `FolderAndStudyGroupIntegrationTest`. Kiểm chứng `mvn test-compile -o` thành công (`BUILD SUCCESS`).
 
 ### [2026-11-17] — Buổi 5 (Cập nhật lần 3): Hoàn thành T3.3 (Explore, Search, Clone, Interactions & Starred Cards APIs)
 - Hoàn thành **T3.3** trên nhánh `feat/phase-3-flashcard`: Triển khai `GET /explore`, `GET /search`, `POST /{id}/clone`, `SetInteractionController` + `SetInteractionService` (Saved, Recents, Resume State JSONB, Rating 1–5★, Starred Cards), cập nhật `SecurityConfig` và viết `SetExploreCloneAndInteractionIntegrationTest`. Kiểm chứng `mvn test-compile -o` thành công (`BUILD SUCCESS`).
