@@ -2,12 +2,16 @@ package com.elearning.module.flashcard.controller;
 
 import com.elearning.common.dto.ApiResponse;
 import com.elearning.common.dto.PageResponse;
+import com.elearning.common.exception.AppException;
+import com.elearning.common.exception.ErrorCode;
 import com.elearning.module.flashcard.dto.CloneSetRequest;
 import com.elearning.module.flashcard.dto.CreateFlashcardSetRequest;
 import com.elearning.module.flashcard.dto.ExploreSetsResponse;
+import com.elearning.module.flashcard.dto.OcrExtractResponse;
 import com.elearning.module.flashcard.dto.SetDetailResponse;
 import com.elearning.module.flashcard.dto.SetSummaryResponse;
 import com.elearning.module.flashcard.dto.UpdateFlashcardSetRequest;
+import com.elearning.module.flashcard.service.AiOcrClient;
 import com.elearning.module.flashcard.service.FlashcardSetService;
 import com.elearning.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -17,8 +21,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,6 +34,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Set;
 
 /**
  * REST endpoints for Flashcard Set CRUD and visibility-guarded retrieval.
@@ -38,7 +47,16 @@ import org.springframework.web.bind.annotation.RestController;
 @Tag(name = "Flashcard Sets", description = "CRUD bộ thẻ Flashcard và kiểm soát quyền truy cập PUBLIC / PRIVATE / LINK_ONLY")
 public class FlashcardSetController {
 
+    private static final long MAX_OCR_IMAGE_BYTES = 10L * 1024 * 1024; // 10 MB
+    private static final Set<String> ALLOWED_OCR_MIME_TYPES = Set.of(
+            "image/jpeg", "image/jpg", "image/png", "image/webp", "image/bmp", "image/tiff"
+    );
+    private static final Set<String> ALLOWED_OCR_EXTENSIONS = Set.of(
+            ".jpg", ".jpeg", ".png", ".webp", ".bmp", ".tiff"
+    );
+
     private final FlashcardSetService flashcardSetService;
+    private final AiOcrClient aiOcrClient;
 
     @PostMapping
     @Operation(summary = "Tạo bộ thẻ mới kèm danh sách thẻ con đồng bộ")
@@ -133,5 +151,41 @@ public class FlashcardSetController {
     ) {
         flashcardSetService.deleteSet(id, currentUser);
         return ResponseEntity.ok(ApiResponse.successMessage("Xóa bộ thẻ thành công"));
+    }
+
+    @PostMapping(value = "/ocr-extract", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @Operation(summary = "Trích xuất danh sách cặp thẻ Flashcard từ ảnh tài liệu qua AI OCR Service (không tự lưu DB)")
+    public ResponseEntity<ApiResponse<OcrExtractResponse>> extractCardsFromOcrImage(
+            @AuthenticationPrincipal UserPrincipal currentUser,
+            @RequestParam("file") MultipartFile file,
+            @RequestParam(value = "sourceLang", required = false) String sourceLang,
+            @RequestParam(value = "targetLang", required = false) String targetLang
+    ) {
+        validateOcrImageFile(file);
+        OcrExtractResponse result = aiOcrClient.extractCards(file, sourceLang, targetLang);
+        return ResponseEntity.ok(ApiResponse.success("Trích xuất thẻ từ ảnh thành công", result));
+    }
+
+    private void validateOcrImageFile(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            throw new AppException(ErrorCode.INVALID_REQUEST, "Vui lòng chọn tệp ảnh để quét OCR");
+        }
+        if (file.getSize() > MAX_OCR_IMAGE_BYTES) {
+            throw new AppException(ErrorCode.FILE_TOO_LARGE, "Ảnh quét OCR tối đa 10MB");
+        }
+        String contentType = file.getContentType() != null ? file.getContentType().trim().toLowerCase() : "";
+        String filename = file.getOriginalFilename() != null ? file.getOriginalFilename().trim().toLowerCase() : "";
+        String ext = filename.contains(".") ? filename.substring(filename.lastIndexOf('.')) : "";
+
+        boolean validMime = ALLOWED_OCR_MIME_TYPES.contains(contentType);
+        boolean validExtFallback = (!StringUtils.hasText(contentType) || "application/octet-stream".equals(contentType))
+                && ALLOWED_OCR_EXTENSIONS.contains(ext);
+
+        if (!validMime && !validExtFallback) {
+            throw new AppException(
+                    ErrorCode.INVALID_REQUEST,
+                    "Chỉ hỗ trợ định dạng ảnh JPG, PNG, WEBP, BMP hoặc TIFF cho quét OCR"
+            );
+        }
     }
 }

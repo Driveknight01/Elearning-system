@@ -100,6 +100,11 @@ app:
     dkt-timeout-ms: 1500
     ocr-timeout-ms: 15000
     chat-timeout-ms: 20000
+  media:
+    pixabay-api-key: ${PIXABAY_API_KEY:}
+    unsplash-access-key: ${UNSPLASH_ACCESS_KEY:}
+    pollinations-base-url: ${POLLINATIONS_BASE_URL:https://image.pollinations.ai/prompt}
+    timeout-ms: 8000
 
 logging:
   level:

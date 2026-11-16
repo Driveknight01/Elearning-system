@@ -76,9 +76,9 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
   - *Commit*: `feat(flashcard): implement search, clone set, saved/recents/rating interactions and starred card apis`
 - [x] **T3.4** 🟢 `[DỄ — Flash]`: Xây dựng API CRUD Thư mục (`folders` — thêm/xóa bộ thẻ vào thư mục) và Nhóm học (`study_groups` — tạo nhóm, tham gia bằng `invite_code`, chia sẻ bộ thẻ vào nhóm).
   - *Commit*: `feat(organization): implement folder and study group management apis`
-- [ ] **T3.5** 🔴 `[KHÓ — ⚠️ Đề xuất Model Mạnh/Pro]`: [AI Service + BE] Xây dựng module **OCR & Card Parser** trong `ai-ml-service/app/ocr/` (nhận ảnh chụp tài liệu -> trích xuất văn bản -> phân tích cú pháp/LLM tách thành mảng `[{term, definition}]`) và kết nối với Spring Boot qua `POST /api/v1/flashcard-sets/ocr-extract`.
+- [x] **T3.5** 🔴 `[KHÓ — ⚠️ Đề xuất Model Mạnh/Pro]`: [AI Service + BE] Xây dựng module **OCR & Card Parser** trong `ai-ml-service/app/ocr/` (nhận ảnh chụp tài liệu -> trích xuất văn bản -> phân tích cú pháp/LLM tách thành mảng `[{term, definition}]`) và kết nối với Spring Boot qua `POST /api/v1/flashcard-sets/ocr-extract`.
   - *Commit*: `feat(ocr): implement ocr image-to-flashcards extraction pipeline in fastapi and springboot`
-- [ ] **T3.6** 🟡 `[VỪA — Medium]`: [BE] Xây dựng `MediaController`: upload ảnh thẻ, tìm ảnh minh họa miễn phí theo từ khóa `Term` (Pixabay/Unsplash API) và tạo ảnh minh họa tự động bằng AI (`Pollinations/Imagen`) lưu URL vào thẻ.
+- [x] **T3.6** 🟡 `[VỪA — Medium]`: [BE] Xây dựng `MediaController`: upload ảnh thẻ, tìm ảnh minh họa miễn phí theo từ khóa `Term` (Pixabay/Unsplash API) và tạo ảnh minh họa tự động bằng AI (`Pollinations/Imagen`) lưu URL vào thẻ.
   - *Commit*: `feat(media): implement stock image search and AI mnemonic image generation for cards`
 - [ ] **T3.7** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `LandingExplorePage` (cho cả Guest và User) và `LibraryPage` (quản lý Bộ thẻ của tôi, Thư mục, Nhóm học).
   - *Commit*: `feat(web-library): build explore landing page, personal library, folders and study groups ui`
