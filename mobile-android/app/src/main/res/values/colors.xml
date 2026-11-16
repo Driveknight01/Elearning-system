@@ -1,13 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="quizlet_blue">#4255FF</color>
+    <color name="quizlet_blue_dark">#3446E3</color>
+    <color name="quizlet_blue_light">#EEF0FF</color>
     <color name="quizlet_dark_blue">#2E3856</color>
     <color name="quizlet_bg">#F6F7FB</color>
     <color name="quizlet_card">#FFFFFF</color>
+    <color name="quizlet_border">#E5E7EB</color>
     <color name="quizlet_text_dark">#1A1D28</color>
     <color name="quizlet_text_muted">#586380</color>
     <color name="quizlet_yellow">#FFCD1F</color>
     <color name="quizlet_green">#23B26D</color>
+    <color name="quizlet_green_light">#ECFDF5</color>
     <color name="quizlet_red">#FF725B</color>
+    <color name="quizlet_red_light">#FEF2F2</color>
     <color name="quizlet_purple">#9333EA</color>
+    <color name="quizlet_purple_light">#F5F3FF</color>
+    <color name="white">#FFFFFF</color>
 </resources>

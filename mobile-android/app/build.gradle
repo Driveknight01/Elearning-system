@@ -73,6 +73,9 @@ dependencies {
     implementation "androidx.camera:camera-view:${camerax_version}"
     implementation 'com.google.mlkit:text-recognition:16.0.1'
 
+    // Google Sign-In SDK (used with unified backend POST /api/v1/auth/google)
+    implementation 'com.google.android.gms:play-services-auth:21.2.0'
+
     // Testing
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'

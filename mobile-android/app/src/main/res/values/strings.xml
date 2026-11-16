@@ -3,4 +3,37 @@
     <string name="welcome_title">SmartFlash</string>
     <string name="welcome_subtitle">Học tập cá nhân hóa với FSRS-4.5, DKT &amp; OCR</string>
     <string name="btn_get_started">Bắt đầu học</string>
+
+    <!-- Google OAuth2 Web Client ID (phải khớp GOOGLE_CLIENT_ID ở backend) -->
+    <string name="google_web_client_id" translatable="false">226507914034-rjm7n0fcnucpb3sakg5q6kk8gbrs8hcf.apps.googleusercontent.com</string>
+
+    <!-- Auth UI Strings -->
+    <string name="splash_tagline">Ghi nhớ thông minh hơn với FSRS-4.5 &amp; AI</string>
+    <string name="tab_login">Đăng nhập</string>
+    <string name="tab_register">Đăng ký</string>
+    <string name="login_title">Chào mừng trở lại!</string>
+    <string name="login_subtitle">Đăng nhập để tiếp tục chuỗi ngày học của bạn</string>
+    <string name="register_title">Tạo tài khoản SmartFlash</string>
+    <string name="register_subtitle">Bắt đầu hành trình ghi nhớ bền bỉ cùng AI</string>
+    <string name="hint_identifier">Email hoặc tên đăng nhập</string>
+    <string name="hint_password">Mật khẩu</string>
+    <string name="hint_full_name">Họ và tên</string>
+    <string name="hint_username">Tên đăng nhập (username)</string>
+    <string name="hint_email">Email</string>
+    <string name="action_forgot_password">Quên mật khẩu?</string>
+    <string name="action_login">Đăng nhập</string>
+    <string name="action_register">Tạo tài khoản</string>
+    <string name="action_continue_google">Tiếp tục với Google</string>
+    <string name="action_continue_guest">Tiếp tục với tư cách Khách</string>
+    <string name="divider_or">Hoặc</string>
+    <string name="role_learner">Học viên</string>
+    <string name="role_learner_desc">Tạo thẻ, ôn tập FSRS &amp; minigames</string>
+    <string name="role_teacher">Giáo viên</string>
+    <string name="role_teacher_desc">Quản lý lớp học &amp; giao hoạt động</string>
+    <string name="forgot_title">Khôi phục mật khẩu</string>
+    <string name="forgot_step1_desc">Nhập email tài khoản để nhận mã OTP 6 số.</string>
+    <string name="forgot_step2_desc">Nhập mã OTP 6 số đã gửi về email và mật khẩu mới.</string>
+    <string name="action_send_otp">Gửi mã OTP</string>
+    <string name="action_reset_password">Đặt lại mật khẩu</string>
+    <string name="action_logout">Đăng xuất</string>
 </resources>
