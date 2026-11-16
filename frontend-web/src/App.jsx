@@ -1,19 +1,39 @@
 import React, { useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useSearchParams } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import UserProfilePage from './pages/UserProfilePage';
 import ProtectedRoute from './routes/ProtectedRoute';
+import MainLayout from './components/layout/MainLayout';
 import { useAuthStore } from './store/useAuthStore';
 
 function RolePlaceholder({ title, description }) {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-quizlet-bg px-4">
-      <div className="bg-white rounded-2xl border border-gray-200 p-8 max-w-md w-full text-center shadow-sm">
-        <h2 className="text-2xl font-extrabold text-quizlet-textDark">{title}</h2>
-        <p className="mt-2 text-sm text-quizlet-textMuted">{description}</p>
+    <MainLayout>
+      <div className="max-w-4xl mx-auto px-4 py-16 flex items-center justify-center">
+        <div className="bg-white rounded-2xl border border-gray-200 p-8 max-w-md w-full text-center shadow-sm">
+          <h2 className="text-2xl font-extrabold text-quizlet-textDark">{title}</h2>
+          <p className="mt-2 text-sm text-quizlet-textMuted">{description}</p>
+        </div>
       </div>
-    </div>
+    </MainLayout>
+  );
+}
+
+function ExplorePlaceholder() {
+  const [searchParams] = useSearchParams();
+  const query = searchParams.get('q');
+
+  return (
+    <RolePlaceholder
+      title="Khám phá Bộ thẻ Công khai"
+      description={
+        query
+          ? `Kết quả tìm kiếm cho "${query}" sẽ được kích hoạt khi hoàn thiện module Bộ thẻ Flashcard ở Phase 3. Mẹo: Gõ @username trên thanh tìm kiếm để đi thẳng tới trang cá nhân!`
+          : 'Trang khám phá bộ thẻ cộng đồng theo danh mục sẽ hoàn thiện ở Phase 3.'
+      }
+    />
   );
 }
 
@@ -30,8 +50,10 @@ function App() {
     <Routes>
       {/* Public / Guest Routes */}
       <Route path="/" element={<HomePage />} />
+      <Route path="/explore" element={<ExplorePlaceholder />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
+      <Route path="/users/:username" element={<UserProfilePage />} />
 
       {/* Authenticated Learner / Teacher / Admin Routes */}
       <Route
@@ -75,12 +97,14 @@ function App() {
       <Route
         path="*"
         element={
-          <div className="min-h-screen flex items-center justify-center bg-quizlet-bg">
-            <div className="text-center">
-              <h2 className="text-4xl font-extrabold text-quizlet-textDark">404</h2>
-              <p className="mt-2 text-quizlet-textMuted">Trang không tồn tại hoặc đang phát triển</p>
+          <MainLayout>
+            <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center px-4">
+              <div className="text-center">
+                <h2 className="text-4xl font-extrabold text-quizlet-textDark">404</h2>
+                <p className="mt-2 text-quizlet-textMuted">Trang không tồn tại hoặc đang phát triển</p>
+              </div>
             </div>
-          </div>
+          </MainLayout>
         }
       />
     </Routes>

@@ -58,7 +58,7 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
   - *Commit*: `feat(user): implement profile management and granular tab privacy visibility`
 - [x] **T2.6** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `LoginPage`, `RegisterPage` (tích hợp nút *Continue with Google*), `ProtectedRoute` theo 4 vai trò và lưu trạng thái đăng nhập vào `useAuthStore`.
   - *Commit*: `feat(web-auth): build login, register pages with google sign-in and role guards`
-- [ ] **T2.7** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `MainLayout` (Sidebar trái, Topbar tìm kiếm, menu tài khoản) và trang `UserProfilePage` (`/users/:username`) kèm `ProfilePrivacyModal` bật/tắt quyền xem từng tab.
+- [x] **T2.7** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `MainLayout` (Sidebar trái, Topbar tìm kiếm, menu tài khoản) và trang `UserProfilePage` (`/users/:username`) kèm `ProfilePrivacyModal` bật/tắt quyền xem từng tab.
   - *Commit*: `feat(web-profile): build main layout, user profile page and privacy settings modal`
 - [ ] **T2.8** 🟡 `[VỪA — Medium]`: [Android] Xây dựng `TokenManager` (`SharedPreferences`), `RetrofitClient` (kèm `AuthInterceptor` tự gắn Bearer JWT) và màn hình `SplashActivity`, `LoginActivity`, `RegisterActivity` (có Google Sign-In).
   - *Commit*: `feat(android-auth): implement retrofit jwt interceptor and login/register activities`

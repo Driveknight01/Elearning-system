@@ -56,16 +56,22 @@
 - **T2.6 — Hoàn thành Giao diện Đăng nhập, Đăng ký (Google Sign-In), OTP & ProtectedRoute (`frontend-web`)**:
   - Cập nhật [index.html](file:///D:/Elearning-system/frontend-web/index.html) (Google Identity Services), [.env.example](file:///D:/Elearning-system/frontend-web/.env.example), [axiosClient.js](file:///D:/Elearning-system/frontend-web/src/api/axiosClient.js) (tự động xoay vòng Refresh Token khi gặp `401`), [useAuthStore.js](file:///D:/Elearning-system/frontend-web/src/store/useAuthStore.js) và tạo [authApi.js](file:///D:/Elearning-system/frontend-web/src/api/authApi.js).
   - Tạo [AuthSplitLayout.jsx](file:///D:/Elearning-system/frontend-web/src/components/auth/AuthSplitLayout.jsx) (giao diện 2 cột chuẩn Quizlet), [GoogleSignInButton.jsx](file:///D:/Elearning-system/frontend-web/src/components/auth/GoogleSignInButton.jsx), [ProtectedRoute.jsx](file:///D:/Elearning-system/frontend-web/src/routes/ProtectedRoute.jsx) (RBAC 4 vai trò `GUEST / USER / TEACHER / ADMIN`), [LoginPage.jsx](file:///D:/Elearning-system/frontend-web/src/pages/LoginPage.jsx) (kèm luồng Quên mật khẩu OTP 6 số), [RegisterPage.jsx](file:///D:/Elearning-system/frontend-web/src/pages/RegisterPage.jsx) (chọn vai trò Học viên / Giáo viên), cập nhật [HomePage.jsx](file:///D:/Elearning-system/frontend-web/src/pages/HomePage.jsx) & [App.jsx](file:///D:/Elearning-system/frontend-web/src/App.jsx).
+- **T2.7 — Hoàn thành `MainLayout`, Trang Cá nhân `UserProfilePage` & `ProfilePrivacyModal` (`frontend-web`)**:
+  - Tạo [userApi.js](file:///D:/Elearning-system/frontend-web/src/api/userApi.js) (kết nối `/api/v1/users/me`, `/me/avatar`, `/me/password`, `/me/privacy`, `/profile/{username}`), cập nhật [axiosClient.js](file:///D:/Elearning-system/frontend-web/src/api/axiosClient.js) hỗ trợ upload `FormData`, tạo [userHelpers.js](file:///D:/Elearning-system/frontend-web/src/utils/userHelpers.js) và [UserAvatar.jsx](file:///D:/Elearning-system/frontend-web/src/components/common/UserAvatar.jsx).
+  - Tạo [MainLayout.jsx](file:///D:/Elearning-system/frontend-web/src/components/layout/MainLayout.jsx) (Sidebar trái thu gọn/drawer mobile, Topbar tìm kiếm hỗ trợ nhảy nhanh `@username`, menu tài khoản & role links), [ProfilePrivacyModal.jsx](file:///D:/Elearning-system/frontend-web/src/components/profile/ProfilePrivacyModal.jsx) (bật/tắt quyền xem tổng thể và 4 tab *Bộ thẻ, Thư mục, Lớp học, Thành tựu*), [ProfileSettingsPanel.jsx](file:///D:/Elearning-system/frontend-web/src/components/profile/ProfileSettingsPanel.jsx) (cập nhật thông tin, upload avatar, đổi mật khẩu / đặt mật khẩu cho tài khoản Google), và [UserProfilePage.jsx](file:///D:/Elearning-system/frontend-web/src/pages/UserProfilePage.jsx) (`/users/:username`), cập nhật [HomePage.jsx](file:///D:/Elearning-system/frontend-web/src/pages/HomePage.jsx) & [App.jsx](file:///D:/Elearning-system/frontend-web/src/App.jsx).
 
 ### 🔄 Đang thực hiện (In Progress)
-- Đang triển khai **Phase 2: Xác thực (JWT + Google OAuth2), RBAC 4 Vai trò & Quyền riêng tư Trang cá nhân** trên nhánh `feat/phase-2-auth` (đã xong `T2.1` → `T2.6`, còn `T2.7` Web Profile và `T2.8`–`T2.9` Android).
+- Đang triển khai **Phase 2: Xác thực (JWT + Google OAuth2), RBAC 4 Vai trò & Quyền riêng tư Trang cá nhân** trên nhánh `feat/phase-2-auth` (đã xong toàn bộ Web & Backend `T2.1` → `T2.7`, còn `T2.8`–`T2.9` Android).
 
 ### ⏭️ Kế tiếp (Next Up)
-- [ ] **T2.7** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `MainLayout` (Sidebar trái, Topbar tìm kiếm, menu tài khoản) và trang `UserProfilePage` (`/users/:username`) kèm `ProfilePrivacyModal` bật/tắt quyền xem từng tab.
+- [ ] **T2.8** 🟡 `[VỪA — Medium]`: [Android] Xây dựng `TokenManager` (`SharedPreferences`), `RetrofitClient` (kèm `AuthInterceptor` tự gắn Bearer JWT) và màn hình `SplashActivity`, `LoginActivity`, `RegisterActivity` (có Google Sign-In).
 
 ---
 
 ## 3. CHANGELOG (Nhật ký theo từng buổi làm việc)
+
+### [2026-11-16] — Buổi 4 (Cập nhật lần 6): Hoàn thành T2.7 (Web MainLayout, UserProfilePage & ProfilePrivacyModal)
+- Hoàn thành **T2.7** trên nhánh `feat/phase-2-auth`: Xây dựng `MainLayout` (Sidebar trái, Topbar tìm kiếm, menu tài khoản chuẩn Quizlet), trang `UserProfilePage` (`/users/:username`) hiển thị 4 tab theo quyền riêng tư, `ProfileSettingsPanel` (chỉnh thông tin, upload avatar, đổi/đặt mật khẩu) và `ProfilePrivacyModal` bật/tắt quyền xem từng tab. Đã kiểm chứng `npm.cmd run build` thành công (`built in 6.19s`).
 
 ### [2026-11-16] — Buổi 4 (Cập nhật lần 5): Hoàn thành T2.6 (Web Login, Register, Google Sign-In & RBAC ProtectedRoute)
 - Hoàn thành **T2.6** trên nhánh `feat/phase-2-auth`: Xây dựng `LoginPage`, `RegisterPage` theo phong cách 2 cột của Quizlet, tích hợp Google Identity Services (`GoogleSignInButton`), luồng khôi phục mật khẩu OTP, `ProtectedRoute` cho 4 vai trò, và `axiosClient` tự động refresh JWT. Đã kiểm chứng `npm run build` thành công (`built in 4.51s`).
