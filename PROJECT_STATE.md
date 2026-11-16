@@ -1,6 +1,6 @@
 # PROJECT_STATE.md — Trạng thái Dự án & Nhật ký Phát triển
 
-> **LƯU Ý CHO AI AGENT**: Hãy đọc [AGENTS.md](file:///D:/Elearning-system/AGENTS.md) trước khi viết bất kỳ dòng code nào. Sau mỗi task hoàn thành trong [FEATURE.md](file:///D:/Elearning-system/FEATURE.md), bạn **BẮT BUỘC** phải cập nhật mục **Trạng thái hiện tại**, **CHANGELOG** trong file này (đồng bộ với [CLAUDE.md](file:///D:/Elearning-system/CLAUDE.md)) và nhắc người dùng chuyển đổi mô hình AI (`🟢 Flash` / `🟡 Medium` / `🔴 Pro`) cho task kế tiếp. **ĐẶC BIỆT**: Mọi quyết định thay đổi kiến trúc/công nghệ/CSDL đều **BẮT BUỘC** phải giải thích, phân tích ưu-nhược điểm và hỏi ý kiến người dùng, tuyệt đối không tự ý quyết định.
+> **LƯU Ý CHO AI AGENT**: Hãy đọc [AGENTS.md](file:///D:/Elearning-system/AGENTS.md) trước khi viết bất kỳ dòng code nào. Sau mỗi task hoàn thành trong [FEATURE.md](file:///D:/Elearning-system/FEATURE.md), bạn **BẮT BUỘC** phải cập nhật mục **Trạng thái hiện tại**, **CHANGELOG** trong file này (đồng bộ với [CLAUDE.md](file:///D:/Elearning-system/CLAUDE.md)), **hướng dẫn chi tiết cách chạy test/kiểm chứng trong IDE** (IntelliJ IDEA / Android Studio / VS Code) cho người dùng, và nhắc người dùng chuyển đổi mô hình AI (`🟢 Flash` / `🟡 Medium` / `🔴 Pro`) cho task kế tiếp. **ĐẶC BIỆT**: Mọi quyết định thay đổi kiến trúc/công nghệ/CSDL đều **BẮT BUỘC** phải giải thích, phân tích ưu-nhược điểm và hỏi ý kiến người dùng, tuyệt đối không tự ý quyết định.
 
 ---
 
@@ -40,16 +40,21 @@
 - **T2.1 — Hoàn thành Auth/User JPA Entities, Enums & Repositories (`backend-springboot`)**:
   - Tạo Enums [Role.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/user/entity/Role.java), [UserStatus.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/user/entity/UserStatus.java), [ProfileVisibility.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/user/entity/ProfileVisibility.java), [OAuthProvider.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/entity/OAuthProvider.java), [PlatformType.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/entity/PlatformType.java), [TokenType.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/entity/TokenType.java).
   - Tạo Entities [User.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/user/entity/User.java), [ProfilePrivacyConfig.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/user/entity/ProfilePrivacyConfig.java), [OAuthAccount.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/entity/OAuthAccount.java), [RefreshToken.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/entity/RefreshToken.java), [VerificationToken.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/entity/VerificationToken.java) và 4 Repositories (`UserRepository`, `OAuthAccountRepository`, `RefreshTokenRepository`, `VerificationTokenRepository`).
+- **T2.2 — Hoàn thành Spring Security 6, JWT Provider & RBAC Filter (`backend-springboot`)**:
+  - Tạo [JwtProperties.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/security/JwtProperties.java), [UserPrincipal.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/security/UserPrincipal.java), [CustomUserDetailsService.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/security/CustomUserDetailsService.java), [JwtTokenProvider.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/security/JwtTokenProvider.java), [JwtAuthenticationFilter.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/security/JwtAuthenticationFilter.java), [JwtAuthenticationEntryPoint.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/security/JwtAuthenticationEntryPoint.java), [CustomAccessDeniedHandler.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/security/CustomAccessDeniedHandler.java), [SecurityConfig.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/security/SecurityConfig.java) và unit test [JwtTokenProviderTest.java](file:///D:/Elearning-system/backend-springboot/src/test/java/com/elearning/security/JwtTokenProviderTest.java).
 
 ### 🔄 Đang thực hiện (In Progress)
-- Đang triển khai **Phase 2: Xác thực (JWT + Google OAuth2), RBAC 4 Vai trò & Quyền riêng tư Trang cá nhân** trên nhánh `feat/phase-2-auth` (đã xong `T2.1`).
+- Đang triển khai **Phase 2: Xác thực (JWT + Google OAuth2), RBAC 4 Vai trò & Quyền riêng tư Trang cá nhân** trên nhánh `feat/phase-2-auth` (đã xong `T2.1`, `T2.2`).
 
 ### ⏭️ Kế tiếp (Next Up)
-- [ ] **T2.2** 🟡 `[VỪA — Medium]`: Cấu hình Spring Security 6, `JwtTokenProvider`, `JwtAuthenticationFilter` và `CustomUserDetailsService` hỗ trợ phân quyền theo Role và cho phép Guest truy cập các public endpoints.
+- [ ] **T2.3** 🟡 `[VỪA — Medium]`: Xây dựng API Đăng ký, Đăng nhập bằng Email/Password, Quên mật khẩu (OTP), Refresh Token và Đăng xuất (`POST /api/v1/auth/register`, `/login`, `/forgot-password`, `/refresh`, `/logout`).
 
 ---
 
 ## 3. CHANGELOG (Nhật ký theo từng buổi làm việc)
+
+### [2026-11-16] — Buổi 4 (Cập nhật): Hoàn thành T2.2 (Spring Security 6 & JWT Authentication)
+- Hoàn thành **T2.2** trên nhánh `feat/phase-2-auth`: Cấu hình `SecurityConfig` (Stateless JWT, CORS, BCrypt, public Guest endpoints, `/api/v1/admin/**` chỉ cho `ADMIN`), `JwtTokenProvider` (JJWT 0.12.6), `JwtAuthenticationFilter`, `CustomUserDetailsService`, handler 401/403 chuẩn `ApiResponse` và `JwtTokenProviderTest` (pass 7/7 tests).
 
 ### [2026-11-16] — Buổi 4: Hoàn thành T2.1 (Auth & User Entities, Enums & Repositories)
 - Hoàn thành **T2.1** trên nhánh `feat/phase-2-auth`: Khởi tạo đầy đủ JPA Entities (`User`, `ProfilePrivacyConfig` JSONB, `OAuthAccount`, `RefreshToken`, `VerificationToken`), Enums (`Role`, `UserStatus`, `ProfileVisibility`, `OAuthProvider`, `PlatformType`, `TokenType`) và 4 Spring Data JPA Repositories khớp schema PostgreSQL `V1__init_core_users_and_cards.sql`.

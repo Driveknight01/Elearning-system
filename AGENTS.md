@@ -10,9 +10,10 @@ Tài liệu này là **Hiến pháp Kỹ thuật** của dự án **Hệ thống
 > **LUẬT BẤT DI BẤT DỊCH KHI LÀM VIỆC THEO TASK**:
 > 1. **Trước khi bắt đầu code**: Luôn đọc [CLAUDE.md](file:///D:/Elearning-system/CLAUDE.md) (hoặc [PROJECT_STATE.md](file:///D:/Elearning-system/PROJECT_STATE.md)) và [FEATURE.md](file:///D:/Elearning-system/FEATURE.md) để nắm chính xác task hiện tại đang làm dở và không viết trùng lặp hoặc phá vỡ cấu trúc đã có.
 > 2. **Khi thiết kế hoặc sửa đổi Database**: Phải đối chiếu và cập nhật ngay vào [docs/DATABASE.md](file:///D:/Elearning-system/docs/DATABASE.md).
-> 3. **Ngay sau khi hoàn thành mỗi Task**: Agent **BẮT BUỘC** phải thực hiện 2 thao tác trước khi kết thúc lượt trả lời:
+> 3. **Ngay sau khi hoàn thành mỗi Task**: Agent **BẮT BUỘC** phải thực hiện 3 thao tác trước khi kết thúc lượt trả lời:
 >    - Đánh dấu `[x]` vào mã Task tương ứng (ví dụ `T1.1`, `T2.1`...) trong file [FEATURE.md](file:///D:/Elearning-system/FEATURE.md).
 >    - Cập nhật mục **Trạng thái hiện tại (Đã xong / Đang dở / Kế tiếp)** và ghi thêm 1 dòng vào **CHANGELOG** trong cả [CLAUDE.md](file:///D:/Elearning-system/CLAUDE.md) và [PROJECT_STATE.md](file:///D:/Elearning-system/PROJECT_STATE.md).
+>    - **Hướng dẫn chạy kiểm thử trong IDE cho người dùng**: Luôn trình bày rõ các bước để người dùng tự kiểm thử lại task vừa làm ngay trong IDE tương ứng (**IntelliJ IDEA** cho `backend-springboot`, **Android Studio** cho `mobile-android`, **VS Code / Terminal / Trình duyệt** cho `frontend-web` & `ai-ml-service`), kèm kết quả mong đợi.
 > 4. **Nhắc nhở Chuyển đổi Mô hình AI (Model Switching Reminder)**: Khi kết thúc một task và giới thiệu task kế tiếp trong [FEATURE.md](file:///D:/Elearning-system/FEATURE.md), Agent phải kiểm tra nhãn độ khó của task kế tiếp (`🟢 [DỄ — Flash]`, `🟡 [VỪA — Medium]`, hoặc `🔴 [KHÓ — ⚠️ Đề xuất Model Mạnh/Pro]`) để **chủ động nhắc người dùng** chuyển sang mô hình phù hợp trước khi chạy task tiếp theo.
 > 5. **Nhắc nhở Chiến lược Tạo Nhánh Git (Git Branching Strategy Reminder)**:
 >    - **Phase 1 (`T1.1` → `T1.9`)**: Được phép commit trực tiếp trên nhánh `main` vì là thiết lập khung sườn chung.
