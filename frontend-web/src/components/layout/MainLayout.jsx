@@ -5,46 +5,49 @@ import {
   X,
   Search,
   Home,
-  Compass,
-  FolderKanban,
+  Folder,
+  Users,
+  Bell,
   GraduationCap,
+  Layers,
+  Gamepad2,
+  Plus,
+  Trophy,
+  Settings,
+  Moon,
+  Sun,
+  LogOut,
+  Shield,
   ShieldCheck,
   User as UserIcon,
-  Settings,
-  LogOut,
-  Plus,
-  Bell,
-  Flame,
-  ChevronDown,
-  BadgeCheck,
-  Sparkles,
 } from 'lucide-react';
 import { useAuthStore } from '../../store/useAuthStore';
+import { useThemeStore } from '../../store/useThemeStore';
 import UserAvatar from '../common/UserAvatar';
-import { getRoleMeta } from '../../utils/userHelpers';
 
 export default function MainLayout({ children }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, user, logout } = useAuthStore();
+  const { theme, toggleTheme } = useThemeStore();
+  const isDark = theme === 'dark';
 
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
-  const [bellOpen, setBellOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
 
   const accountMenuRef = useRef(null);
-  const bellMenuRef = useRef(null);
   const searchInputRef = useRef(null);
 
   const role = isAuthenticated ? user?.role || 'USER' : 'GUEST';
-  const roleMeta = getRoleMeta(role);
+  const profilePath = user?.username ? `/users/${user.username}` : '/login';
 
   useEffect(() => {
     setMobileDrawerOpen(false);
     setAccountMenuOpen(false);
-    setBellOpen(false);
+    setNotifOpen(false);
   }, [location.pathname, location.search]);
 
   useEffect(() => {
@@ -52,14 +55,11 @@ export default function MainLayout({ children }) {
       if (accountMenuRef.current && !accountMenuRef.current.contains(event.target)) {
         setAccountMenuOpen(false);
       }
-      if (bellMenuRef.current && !bellMenuRef.current.contains(event.target)) {
-        setBellOpen(false);
-      }
     };
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
         setAccountMenuOpen(false);
-        setBellOpen(false);
+        setNotifOpen(false);
         setMobileDrawerOpen(false);
       }
       if (
@@ -103,13 +103,23 @@ export default function MainLayout({ children }) {
 
   const primaryNavItems = [
     { to: '/', label: 'Trang chủ', icon: Home, end: true },
-    { to: '/explore', label: 'Khám phá', icon: Compass },
+    {
+      to: isAuthenticated ? '/library' : '/explore',
+      label: 'Thư viện của bạn',
+      icon: Folder,
+    },
     ...(isAuthenticated
-      ? [{ to: '/library', label: 'Thư viện của tôi', icon: FolderKanban }]
+      ? [{ to: '/library?tab=groups', label: 'Nhóm học', icon: Users }]
       : []),
   ];
 
-  const workspaceNavItems = [
+  const startHereItems = [
+    { to: '/explore?mode=test', label: 'Bài thi', icon: GraduationCap },
+    { to: '/explore?mode=flashcards', label: 'Thẻ ghi nhớ', icon: Layers },
+    { to: '/explore?mode=games', label: 'Trò chơi', icon: Gamepad2 },
+  ];
+
+  const workspaceItems = [
     ...(role === 'TEACHER' || role === 'ADMIN'
       ? [{ to: '/teacher', label: 'Lớp học & Giao bài', icon: GraduationCap }]
       : []),
@@ -118,36 +128,43 @@ export default function MainLayout({ children }) {
       : []),
   ];
 
-  const profilePath = user?.username ? `/users/${user.username}` : '/login';
-
-  const renderNavLink = (item, collapsed = false) => {
-    const Icon = item.icon;
-    return (
-      <NavLink
-        key={item.to}
-        to={item.to}
-        end={item.end}
-        title={collapsed ? item.label : undefined}
-        className={({ isActive }) =>
-          `flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-semibold transition ${
-            isActive
-              ? 'bg-blue-50 text-quizlet-blue'
-              : 'text-quizlet-textMuted hover:bg-gray-100 hover:text-quizlet-textDark'
-          } ${collapsed ? 'justify-center px-2.5' : ''}`
-        }
+  // Slimmer vertical height (h-9 = 36px) & fixed left icon slot (w-10) so icons never shift when expanding
+  const renderFixedRailItem = ({ to, label, icon: Icon, end }, collapsed) => (
+    <NavLink
+      key={label}
+      to={to}
+      end={end}
+      title={collapsed ? label : undefined}
+      className={({ isActive }) => {
+        const active =
+          isActive &&
+          !(to.includes('?') && `${location.pathname}${location.search}` !== to);
+        return `group flex items-center h-9 rounded-lg text-[14px] font-semibold transition-colors ${
+          active
+            ? 'bg-[#EDEFFF] text-[#4255FF] dark:bg-[#2E3856] dark:text-white'
+            : 'text-[#586380] hover:bg-[#F6F7FB] hover:text-[#282E3E] dark:text-[#A8B1D1] dark:hover:bg-[#202140] dark:hover:text-white'
+        }`;
+      }}
+    >
+      <span className="w-10 h-9 shrink-0 flex items-center justify-center">
+        <Icon className="w-[18px] h-[18px]" />
+      </span>
+      <span
+        className={`whitespace-nowrap overflow-hidden transition-all duration-200 ${
+          collapsed ? 'w-0 opacity-0' : 'pr-3 opacity-100'
+        }`}
       >
-        <Icon className="w-5 h-5 shrink-0" />
-        {!collapsed && <span className="truncate">{item.label}</span>}
-      </NavLink>
-    );
-  };
+        {label}
+      </span>
+    </NavLink>
+  );
 
   return (
-    <div className="min-h-screen bg-quizlet-bg flex flex-col">
-      {/* Sticky Quizlet-style Topbar */}
-      <header className="sticky top-0 z-40 h-16 bg-white border-b border-gray-200 px-3 sm:px-6 flex items-center justify-between gap-3">
-        {/* Left: Sidebar Toggle + Brand */}
-        <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+    <div className="min-h-screen bg-white dark:bg-[#0A082D] text-[#282E3E] dark:text-[#F6F7FB] flex flex-col">
+      {/* Top Header (No Upgrade button; includes quick Light/Dark toggle) */}
+      <header className="sticky top-0 z-40 h-16 bg-white dark:bg-[#0A082D] px-3 sm:px-4 flex items-center justify-between gap-3">
+        {/* Left: Fixed Hamburger + Brand Mark */}
+        <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"
             onClick={() => {
@@ -158,218 +175,195 @@ export default function MainLayout({ children }) {
               }
             }}
             aria-label="Mở hoặc thu gọn thanh điều hướng"
-            className="p-2 rounded-xl text-quizlet-textMuted hover:bg-gray-100 hover:text-quizlet-textDark transition"
+            className="w-10 h-10 rounded-full flex items-center justify-center text-[#586380] hover:bg-[#F6F7FB] hover:text-[#282E3E] dark:text-[#A8B1D1] dark:hover:bg-[#202140] dark:hover:text-white transition-colors"
           >
             <Menu className="w-5 h-5" />
           </button>
 
-          <Link to="/" className="flex items-center gap-2.5 group">
-            <div className="w-9 h-9 rounded-xl bg-quizlet-blue text-white flex items-center justify-center font-black text-base shadow-sm group-hover:scale-105 transition">
+          <Link to="/" className="flex items-center gap-2 group" aria-label="SmartFlash Trang chủ">
+            <div className="w-9 h-9 rounded-full bg-[#4255FF] dark:bg-white text-white dark:text-[#0A082D] flex items-center justify-center font-extrabold text-[15px] tracking-tight group-hover:scale-105 transition-transform">
               SF
             </div>
-            <span className="text-xl font-black text-quizlet-blue tracking-tight hidden sm:inline">
-              SmartFlash
-            </span>
           </Link>
         </div>
 
-        {/* Center: Search Bar */}
-        <form
-          onSubmit={handleSearchSubmit}
-          className="flex-1 max-w-xl mx-1 sm:mx-4 relative"
-        >
-          <Search className="w-4 h-4 text-quizlet-textMuted absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+        {/* Center: Search Bar (~15% shorter) */}
+        <form onSubmit={handleSearchSubmit} className="flex-1 max-w-[570px] mx-2 sm:mx-6 relative">
+          <Search className="w-[18px] h-[18px] text-[#586380] dark:text-[#A8B1D1] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
           <input
             ref={searchInputRef}
             type="text"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder="Tìm bộ thẻ, chủ đề hoặc @username..."
-            className="w-full h-10 pl-10 pr-14 rounded-full bg-quizlet-bg border border-transparent focus:bg-white focus:border-quizlet-blue focus:ring-2 focus:ring-blue-100 text-sm text-quizlet-textDark placeholder:text-quizlet-textMuted/80 outline-none transition"
+            placeholder="Tìm bộ thẻ, câu hỏi hoặc @username"
+            className="w-full h-10 pl-10 pr-10 rounded-lg bg-[#F6F7FB] dark:bg-[#2E3856] border border-transparent focus:bg-white dark:focus:bg-[#202140] focus:border-[#D9DDE8] dark:focus:border-[#4255FF] text-[14px] font-medium text-[#282E3E] dark:text-white placeholder:text-[#586380] dark:placeholder:text-[#A8B1D1] outline-none transition-colors"
           />
-          {searchQuery ? (
+          {searchQuery && (
             <button
               type="button"
               onClick={() => setSearchQuery('')}
               aria-label="Xóa từ khóa"
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-1 rounded-full text-quizlet-textMuted hover:text-quizlet-textDark hover:bg-gray-200/70 transition"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-full text-[#586380] hover:text-[#282E3E] dark:text-[#A8B1D1] dark:hover:text-white"
             >
               <X className="w-3.5 h-3.5" />
             </button>
-          ) : (
-            <kbd className="hidden md:inline-flex items-center justify-center absolute right-3 top-1/2 -translate-y-1/2 px-1.5 py-0.5 text-[11px] font-bold text-quizlet-textMuted bg-white border border-gray-200 rounded-md">
-              /
-            </kbd>
           )}
         </form>
 
-        {/* Right: Quick Create, Streak, Notifications, Account Menu */}
-        <div className="flex items-center gap-2 sm:gap-2.5 shrink-0">
+        {/* Right: Create (+), Avatar Dropdown */}
+        <div className="flex items-center gap-2.5 shrink-0">
           {isAuthenticated && user ? (
             <>
               <Link
                 to="/library"
                 title="Tạo bộ thẻ hoặc thư mục mới"
-                className="inline-flex items-center gap-1.5 h-9 px-3 rounded-xl bg-quizlet-blue hover:bg-blue-600 text-white text-sm font-bold shadow-sm transition"
+                aria-label="Tạo bộ thẻ mới"
+                className="w-10 h-10 rounded-full bg-[#4255FF] hover:bg-[#3545E0] text-white flex items-center justify-center transition-colors"
               >
-                <Plus className="w-4 h-4" />
-                <span className="hidden md:inline">Tạo</span>
+                <Plus className="w-5 h-5 stroke-[2.5]" />
               </Link>
 
-              <Link
-                to={profilePath}
-                title="Chuỗi ngày học hiện tại"
-                className="hidden sm:inline-flex items-center gap-1 h-9 px-2.5 rounded-xl bg-amber-50 border border-amber-200/80 text-amber-700 text-xs font-extrabold hover:bg-amber-100/70 transition"
-              >
-                <Flame className="w-4 h-4 text-orange-500 fill-orange-400" />
-                <span>{user.currentStreak ?? 0}</span>
-              </Link>
-
-              {/* Notification Bell */}
-              <div className="relative" ref={bellMenuRef}>
-                <button
-                  type="button"
-                  onClick={() => setBellOpen((prev) => !prev)}
-                  aria-label="Thông báo"
-                  className="w-9 h-9 rounded-xl border border-gray-200 bg-white hover:bg-gray-50 flex items-center justify-center text-quizlet-textMuted hover:text-quizlet-textDark transition"
-                >
-                  <Bell className="w-4 h-4" />
-                </button>
-
-                {bellOpen && (
-                  <div className="absolute right-0 mt-2 w-72 bg-white rounded-2xl border border-gray-200 shadow-xl p-4 z-50">
-                    <div className="flex items-center justify-between mb-2">
-                      <span className="text-sm font-bold text-quizlet-textDark">Thông báo</span>
-                      <span className="text-[11px] font-semibold text-quizlet-blue bg-blue-50 px-2 py-0.5 rounded-full">
-                        Mới
-                      </span>
-                    </div>
-                    <p className="text-xs text-quizlet-textMuted leading-relaxed">
-                      Chào mừng <span className="font-semibold text-quizlet-textDark">{user.fullName || user.username}</span>! Hệ thống thông báo nhắc học FSRS và bảng tin lớp học sẽ mở ở các Phase tiếp theo.
-                    </p>
-                  </div>
-                )}
-              </div>
-
-              {/* Account Dropdown */}
+              {/* Avatar & Dropdown */}
               <div className="relative" ref={accountMenuRef}>
                 <button
                   type="button"
                   onClick={() => setAccountMenuOpen((prev) => !prev)}
                   aria-expanded={accountMenuOpen}
                   aria-haspopup="menu"
-                  className="inline-flex items-center gap-2 pl-1.5 pr-2.5 py-1 rounded-full border border-gray-200 bg-white hover:bg-gray-50 transition"
+                  aria-label="Menu tài khoản"
+                  className="rounded-full p-0.5 hover:ring-2 hover:ring-[#D9DDE8] dark:hover:ring-[#4255FF] transition"
                 >
                   <UserAvatar
                     src={user.avatarUrl}
                     fullName={user.fullName}
                     username={user.username}
-                    size="xs"
-                  />
-                  <span className="text-sm font-bold text-quizlet-textDark max-w-[110px] truncate hidden md:inline">
-                    {user.fullName || user.username}
-                  </span>
-                  <ChevronDown
-                    className={`w-4 h-4 text-quizlet-textMuted transition-transform ${
-                      accountMenuOpen ? 'rotate-180' : ''
-                    }`}
+                    size="sm"
                   />
                 </button>
 
                 {accountMenuOpen && (
                   <div
                     role="menu"
-                    className="absolute right-0 mt-2 w-72 bg-white rounded-2xl border border-gray-200 shadow-xl overflow-hidden z-50"
+                    className="absolute right-0 mt-2 w-64 bg-white dark:bg-[#0A082D] rounded-2xl border border-[#EDEFF4] dark:border-[#2E3856] shadow-xl overflow-hidden z-50"
                   >
-                    {/* User Summary Header */}
-                    <div className="p-4 bg-gradient-to-br from-quizlet-bg to-white border-b border-gray-100">
-                      <div className="flex items-center gap-3">
-                        <UserAvatar
-                          src={user.avatarUrl}
-                          fullName={user.fullName}
-                          username={user.username}
-                          size="md"
-                        />
-                        <div className="min-w-0 flex-1">
-                          <div className="flex items-center gap-1">
-                            <p className="text-sm font-extrabold text-quizlet-textDark truncate">
-                              {user.fullName || user.username}
-                            </p>
-                            {user.verifiedTeacher && (
-                              <BadgeCheck
-                                className="w-4 h-4 text-quizlet-blue shrink-0"
-                                title="Giáo viên đã xác minh"
-                              />
-                            )}
-                          </div>
-                          <p className="text-xs text-quizlet-textMuted truncate">@{user.username}</p>
-                          <span
-                            className={`mt-1.5 inline-flex items-center px-2 py-0.5 rounded-full text-[11px] font-bold border ${roleMeta.badgeClass}`}
-                          >
-                            {roleMeta.label}
-                          </span>
-                        </div>
+                    <Link
+                      to={profilePath}
+                      className="p-4 flex items-center gap-3 border-b border-[#EDEFF4] dark:border-[#2E3856] hover:bg-[#F6F7FB] dark:hover:bg-[#202140] transition-colors"
+                    >
+                      <UserAvatar
+                        src={user.avatarUrl}
+                        fullName={user.fullName}
+                        username={user.username}
+                        size="md"
+                      />
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[14px] font-bold text-[#282E3E] dark:text-white truncate">
+                          {user.username || user.fullName}
+                        </p>
+                        <p className="text-[12px] text-[#586380] dark:text-[#A8B1D1] truncate">
+                          {user.email || `@${user.username}`}
+                        </p>
                       </div>
+                    </Link>
+
+                    <div className="py-1.5 border-b border-[#EDEFF4] dark:border-[#2E3856]">
+                      <Link
+                        to={`${profilePath}?tab=achievements`}
+                        role="menuitem"
+                        className="flex items-center gap-3 px-4 py-2.5 text-[14px] font-semibold text-[#282E3E] dark:text-[#F6F7FB] hover:bg-[#F6F7FB] dark:hover:bg-[#202140] transition-colors"
+                      >
+                        <Trophy className="w-[18px] h-[18px] text-[#586380] dark:text-[#A8B1D1]" />
+                        <span>Thành tựu</span>
+                      </Link>
+                      <Link
+                        to="/settings"
+                        role="menuitem"
+                        className="flex items-center gap-3 px-4 py-2.5 text-[14px] font-semibold text-[#282E3E] dark:text-[#F6F7FB] hover:bg-[#F6F7FB] dark:hover:bg-[#202140] transition-colors"
+                      >
+                        <Settings className="w-[18px] h-[18px] text-[#586380] dark:text-[#A8B1D1]" />
+                        <span>Cài đặt</span>
+                      </Link>
+                      <button
+                        type="button"
+                        onClick={toggleTheme}
+                        role="menuitemcheckbox"
+                        aria-checked={isDark}
+                        className="w-full flex items-center justify-between gap-3 px-4 py-2.5 text-[14px] font-semibold text-[#282E3E] dark:text-[#F6F7FB] hover:bg-[#F6F7FB] dark:hover:bg-[#202140] transition-colors"
+                      >
+                        <span className="flex items-center gap-3">
+                          {isDark ? (
+                            <Sun className="w-[18px] h-[18px] text-[#FFCD1F]" />
+                          ) : (
+                            <Moon className="w-[18px] h-[18px] text-[#586380]" />
+                          )}
+                          <span>Chế độ tối</span>
+                        </span>
+                        <span
+                          className={`inline-flex items-center w-9 h-5 rounded-full p-0.5 transition-colors ${
+                            isDark ? 'bg-[#4255FF]' : 'bg-[#D9DDE8]'
+                          }`}
+                        >
+                          <span
+                            className={`w-4 h-4 rounded-full bg-white shadow transition-transform ${
+                              isDark ? 'translate-x-4' : 'translate-x-0'
+                            }`}
+                          />
+                        </span>
+                      </button>
                     </div>
 
-                    {/* Menu Links */}
-                    <div className="p-2 space-y-0.5">
-                      <Link
-                        to={profilePath}
-                        role="menuitem"
-                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-semibold text-quizlet-textDark hover:bg-blue-50 hover:text-quizlet-blue transition"
-                      >
-                        <UserIcon className="w-4 h-4" />
-                        <span>Trang cá nhân</span>
-                      </Link>
-                      <Link
-                        to={`${profilePath}?tab=settings`}
-                        role="menuitem"
-                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-semibold text-quizlet-textDark hover:bg-blue-50 hover:text-quizlet-blue transition"
-                      >
-                        <Settings className="w-4 h-4" />
-                        <span>Cài đặt hồ sơ & Quyền riêng tư</span>
-                      </Link>
-                      <Link
-                        to="/library"
-                        role="menuitem"
-                        className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-semibold text-quizlet-textDark hover:bg-blue-50 hover:text-quizlet-blue transition"
-                      >
-                        <FolderKanban className="w-4 h-4" />
-                        <span>Thư viện của tôi</span>
-                      </Link>
-                      {(role === 'TEACHER' || role === 'ADMIN') && (
+                    {(role === 'TEACHER' || role === 'ADMIN') && (
+                      <div className="py-1.5 border-b border-[#EDEFF4] dark:border-[#2E3856]">
                         <Link
                           to="/teacher"
                           role="menuitem"
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-semibold text-quizlet-textDark hover:bg-purple-50 hover:text-quizlet-purple transition"
+                          className="flex items-center gap-3 px-4 py-2.5 text-[14px] font-semibold text-[#282E3E] dark:text-[#F6F7FB] hover:bg-[#F6F7FB] dark:hover:bg-[#202140] transition-colors"
                         >
-                          <GraduationCap className="w-4 h-4" />
+                          <GraduationCap className="w-[18px] h-[18px] text-[#586380] dark:text-[#A8B1D1]" />
                           <span>Không gian Giáo viên</span>
                         </Link>
-                      )}
-                      {role === 'ADMIN' && (
-                        <Link
-                          to="/admin"
-                          role="menuitem"
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-semibold text-quizlet-textDark hover:bg-amber-50 hover:text-amber-700 transition"
-                        >
-                          <ShieldCheck className="w-4 h-4" />
-                          <span>Cổng Quản trị Admin</span>
-                        </Link>
-                      )}
-                    </div>
+                        {role === 'ADMIN' && (
+                          <Link
+                            to="/admin"
+                            role="menuitem"
+                            className="flex items-center gap-3 px-4 py-2.5 text-[14px] font-semibold text-[#282E3E] dark:text-[#F6F7FB] hover:bg-[#F6F7FB] dark:hover:bg-[#202140] transition-colors"
+                          >
+                            <ShieldCheck className="w-[18px] h-[18px] text-[#586380] dark:text-[#A8B1D1]" />
+                            <span>Cổng Quản trị Admin</span>
+                          </Link>
+                        )}
+                      </div>
+                    )}
 
-                    <div className="p-2 border-t border-gray-100">
+                    <div className="py-1.5 border-b border-[#EDEFF4] dark:border-[#2E3856]">
                       <button
                         type="button"
                         onClick={handleLogout}
                         role="menuitem"
-                        className="w-full flex items-center gap-2.5 px-3 py-2 rounded-xl text-sm font-semibold text-quizlet-red hover:bg-red-50 transition"
+                        className="w-full flex items-center gap-3 px-4 py-2.5 text-[14px] font-semibold text-[#282E3E] dark:text-[#F6F7FB] hover:bg-[#F6F7FB] dark:hover:bg-[#202140] transition-colors"
                       >
-                        <LogOut className="w-4 h-4" />
+                        <LogOut className="w-[18px] h-[18px] text-[#586380] dark:text-[#A8B1D1]" />
                         <span>Đăng xuất</span>
                       </button>
+                    </div>
+
+                    <div className="py-1.5">
+                      <Link
+                        to={profilePath}
+                        role="menuitem"
+                        className="flex items-center gap-3 px-4 py-2 text-[13px] font-semibold text-[#586380] dark:text-[#A8B1D1] hover:bg-[#F6F7FB] dark:hover:bg-[#202140] hover:text-[#282E3E] dark:hover:text-white transition-colors"
+                      >
+                        <UserIcon className="w-4 h-4" />
+                        <span>Hồ sơ cá nhân</span>
+                      </Link>
+                      <Link
+                        to={`${profilePath}?tab=settings`}
+                        role="menuitem"
+                        className="flex items-center gap-3 px-4 py-2 text-[13px] font-semibold text-[#586380] dark:text-[#A8B1D1] hover:bg-[#F6F7FB] dark:hover:bg-[#202140] hover:text-[#282E3E] dark:hover:text-white transition-colors"
+                      >
+                        <Shield className="w-4 h-4" />
+                        <span>Quyền riêng tư</span>
+                      </Link>
                     </div>
                   </div>
                 )}
@@ -379,13 +373,13 @@ export default function MainLayout({ children }) {
             <div className="flex items-center gap-2">
               <Link
                 to="/login"
-                className="text-sm font-bold text-quizlet-blue hover:bg-blue-50 px-3.5 py-2 rounded-xl transition"
+                className="text-sm font-bold text-[#282E3E] dark:text-white hover:bg-[#F6F7FB] dark:hover:bg-[#202140] px-4 py-2 rounded-full transition-colors"
               >
                 Đăng nhập
               </Link>
               <Link
                 to="/register"
-                className="text-sm font-bold bg-quizlet-blue hover:bg-blue-600 text-white px-4 py-2 rounded-xl shadow-sm transition"
+                className="text-sm font-bold bg-[#4255FF] hover:bg-[#3545E0] text-white px-4 py-2 rounded-full transition-colors"
               >
                 Đăng ký
               </Link>
@@ -394,86 +388,121 @@ export default function MainLayout({ children }) {
         </div>
       </header>
 
-      {/* Body: Left Sidebar + Main Content */}
+      {/* Body: Expandable Fixed-Icon Left Rail (No visible scrollbar) + Main Content */}
       <div className="flex flex-1 min-h-0">
         {/* Desktop Sidebar */}
         <aside
-          className={`hidden lg:flex flex-col justify-between bg-white border-r border-gray-200 sticky top-16 h-[calc(100vh-4rem)] transition-all duration-200 shrink-0 ${
-            sidebarCollapsed ? 'w-20 px-2.5 py-4' : 'w-64 p-4'
+          className={`hidden lg:flex flex-col bg-white dark:bg-[#0A082D] sticky top-16 h-[calc(100vh-4rem)] shrink-0 overflow-x-hidden overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden px-3 py-3 transition-[width] duration-200 ease-out ${
+            sidebarCollapsed ? 'w-[64px]' : 'w-[244px]'
           }`}
         >
-          <div className="space-y-6 overflow-y-auto">
+          {/* Primary Nav */}
+          <nav className="space-y-1">
+            {primaryNavItems.map((item) => renderFixedRailItem(item, sidebarCollapsed))}
+
+            {isAuthenticated && (
+              <div className="relative">
+                <button
+                  type="button"
+                  onClick={() => setNotifOpen((prev) => !prev)}
+                  title={sidebarCollapsed ? 'Thông báo' : undefined}
+                  className="w-full flex items-center h-9 rounded-lg text-[14px] font-semibold text-[#586380] hover:bg-[#F6F7FB] hover:text-[#282E3E] dark:text-[#A8B1D1] dark:hover:bg-[#202140] dark:hover:text-white transition-colors"
+                >
+                  <span className="w-10 h-9 shrink-0 flex items-center justify-center">
+                    <Bell className="w-[18px] h-[18px]" />
+                  </span>
+                  <span
+                    className={`whitespace-nowrap overflow-hidden transition-all duration-200 ${
+                      sidebarCollapsed ? 'w-0 opacity-0' : 'pr-3 opacity-100'
+                    }`}
+                  >
+                    Thông báo
+                  </span>
+                </button>
+
+                {notifOpen && (
+                  <div className="mt-1 p-3 rounded-xl bg-[#F6F7FB] dark:bg-[#202140] border border-[#EDEFF4] dark:border-[#2E3856] text-xs text-[#586380] dark:text-[#A8B1D1]">
+                    {sidebarCollapsed
+                      ? 'Chưa có thông báo mới.'
+                      : 'Chào mừng bạn trở lại! Hiện chưa có thông báo mới.'}
+                  </div>
+                )}
+              </div>
+            )}
+          </nav>
+
+          {/* Divider */}
+          <div className="my-3.5 border-t border-[#EDEFF4] dark:border-[#2E3856]" />
+
+          {/* "Bắt đầu tại đây" — expands downward & pushes items below */}
+          <div>
+            <div
+              className={`overflow-hidden transition-all duration-200 ease-out ${
+                sidebarCollapsed ? 'max-h-0 opacity-0 mb-0' : 'max-h-8 opacity-100 mb-2'
+              }`}
+            >
+              <p className="px-2.5 text-[13px] font-bold text-[#282E3E] dark:text-[#F6F7FB] whitespace-nowrap">
+                Bắt đầu tại đây
+              </p>
+            </div>
+
             <nav className="space-y-1">
-              {primaryNavItems.map((item) => renderNavLink(item, sidebarCollapsed))}
+              {startHereItems.map((item) => renderFixedRailItem(item, sidebarCollapsed))}
             </nav>
-
-            {workspaceNavItems.length > 0 && (
-              <div>
-                {!sidebarCollapsed && (
-                  <p className="px-3.5 mb-2 text-[11px] font-extrabold uppercase tracking-wider text-quizlet-textMuted">
-                    Không gian chuyên biệt
-                  </p>
-                )}
-                <nav className="space-y-1">
-                  {workspaceNavItems.map((item) => renderNavLink(item, sidebarCollapsed))}
-                </nav>
-              </div>
-            )}
-
-            {isAuthenticated && user && (
-              <div>
-                {!sidebarCollapsed && (
-                  <p className="px-3.5 mb-2 text-[11px] font-extrabold uppercase tracking-wider text-quizlet-textMuted">
-                    Tài khoản
-                  </p>
-                )}
-                <nav className="space-y-1">
-                  {renderNavLink(
-                    { to: profilePath, label: 'Hồ sơ cá nhân', icon: UserIcon, end: true },
-                    sidebarCollapsed
-                  )}
-                </nav>
-              </div>
-            )}
           </div>
 
-          {/* Bottom Sidebar Summary / CTA */}
-          {!sidebarCollapsed && (
-            <div className="pt-4 border-t border-gray-100">
-              {isAuthenticated && user ? (
-                <Link
-                  to={`${profilePath}?tab=settings`}
-                  className="block p-3.5 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50/70 border border-blue-100 hover:border-blue-200 transition"
-                >
-                  <div className="flex items-center justify-between text-xs font-bold text-quizlet-blue">
-                    <span>Mục tiêu mỗi ngày</span>
-                    <Flame className="w-4 h-4 text-orange-500" />
-                  </div>
-                  <p className="mt-1 text-base font-extrabold text-quizlet-textDark">
-                    {user.dailyGoalCards || 20} thẻ / ngày
-                  </p>
-                  <p className="mt-0.5 text-[11px] text-quizlet-textMuted">
-                    Nhấn để tùy chỉnh mục tiêu & hồ sơ
-                  </p>
-                </Link>
-              ) : (
-                <div className="p-3.5 rounded-2xl bg-gradient-to-br from-quizlet-blue to-quizlet-darkBlue text-white">
-                  <div className="flex items-center gap-1.5 text-xs font-bold text-quizlet-yellow">
-                    <Sparkles className="w-4 h-4" />
-                    <span>SmartFlash AI</span>
-                  </div>
-                  <p className="mt-1 text-sm font-bold leading-snug">
-                    Ghi nhớ thông minh với FSRS-4.5 & DKT
-                  </p>
-                  <Link
-                    to="/register"
-                    className="mt-3 inline-flex w-full items-center justify-center py-2 rounded-xl bg-white text-quizlet-blue text-xs font-extrabold hover:bg-blue-50 transition"
-                  >
-                    Tạo tài khoản miễn phí
-                  </Link>
-                </div>
-              )}
+          {/* Divider */}
+          <div className="my-3.5 border-t border-[#EDEFF4] dark:border-[#2E3856]" />
+
+          {/* "Thư mục của bạn" */}
+          <div>
+            <div
+              className={`overflow-hidden transition-all duration-200 ease-out ${
+                sidebarCollapsed ? 'max-h-0 opacity-0 mb-0' : 'max-h-8 opacity-100 mb-2'
+              }`}
+            >
+              <p className="px-2.5 text-[13px] font-bold text-[#282E3E] dark:text-[#F6F7FB] whitespace-nowrap">
+                Thư mục của bạn
+              </p>
             </div>
+
+            <Link
+              to="/library"
+              title={sidebarCollapsed ? 'Thư mục mới' : undefined}
+              className="flex items-center h-9 rounded-lg text-[14px] font-semibold text-[#586380] hover:bg-[#F6F7FB] hover:text-[#282E3E] dark:text-[#A8B1D1] dark:hover:bg-[#202140] dark:hover:text-white transition-colors"
+            >
+              <span className="w-10 h-9 shrink-0 flex items-center justify-center">
+                <Plus className="w-[18px] h-[18px]" />
+              </span>
+              <span
+                className={`whitespace-nowrap overflow-hidden transition-all duration-200 ${
+                  sidebarCollapsed ? 'w-0 opacity-0' : 'pr-3 opacity-100'
+                }`}
+              >
+                Thư mục mới
+              </span>
+            </Link>
+          </div>
+
+          {/* Teacher / Admin shortcuts if applicable */}
+          {workspaceItems.length > 0 && (
+            <>
+              <div className="my-3.5 border-t border-[#EDEFF4] dark:border-[#2E3856]" />
+              <div>
+                <div
+                  className={`overflow-hidden transition-all duration-200 ease-out ${
+                    sidebarCollapsed ? 'max-h-0 opacity-0 mb-0' : 'max-h-8 opacity-100 mb-2'
+                  }`}
+                >
+                  <p className="px-2.5 text-[13px] font-bold text-[#282E3E] dark:text-[#F6F7FB] whitespace-nowrap">
+                    Quản lý
+                  </p>
+                </div>
+                <nav className="space-y-1">
+                  {workspaceItems.map((item) => renderFixedRailItem(item, sidebarCollapsed))}
+                </nav>
+              </div>
+            </>
           )}
         </aside>
 
@@ -481,78 +510,86 @@ export default function MainLayout({ children }) {
         {mobileDrawerOpen && (
           <div className="fixed inset-0 z-50 lg:hidden flex">
             <div
-              className="fixed inset-0 bg-quizlet-textDark/40 backdrop-blur-[1px]"
+              className="fixed inset-0 bg-black/50"
               onClick={() => setMobileDrawerOpen(false)}
             />
-            <aside className="relative w-72 max-w-[85vw] bg-white h-full shadow-2xl flex flex-col justify-between p-4 z-10">
+            <aside className="relative w-64 max-w-[82vw] bg-white dark:bg-[#0A082D] h-full shadow-2xl flex flex-col justify-between p-3 z-10 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               <div>
-                <div className="flex items-center justify-between pb-4 mb-4 border-b border-gray-100">
-                  <Link to="/" className="flex items-center gap-2.5">
-                    <div className="w-9 h-9 rounded-xl bg-quizlet-blue text-white flex items-center justify-center font-black text-base">
+                <div className="flex items-center justify-between px-2 pb-3 mb-2 border-b border-[#EDEFF4] dark:border-[#2E3856]">
+                  <Link to="/" className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-[#4255FF] dark:bg-white text-white dark:text-[#0A082D] flex items-center justify-center font-extrabold text-sm">
                       SF
                     </div>
-                    <span className="text-xl font-black text-quizlet-blue">SmartFlash</span>
+                    <span className="text-lg font-extrabold text-[#282E3E] dark:text-white">
+                      SmartFlash
+                    </span>
                   </Link>
                   <button
                     type="button"
                     onClick={() => setMobileDrawerOpen(false)}
-                    className="p-2 rounded-xl text-quizlet-textMuted hover:bg-gray-100"
+                    className="p-2 rounded-full text-[#586380] dark:text-[#A8B1D1] hover:bg-[#F6F7FB] dark:hover:bg-[#202140]"
                   >
                     <X className="w-5 h-5" />
                   </button>
                 </div>
 
                 <nav className="space-y-1">
-                  {primaryNavItems.map((item) => renderNavLink(item, false))}
+                  {primaryNavItems.map((item) => renderFixedRailItem(item, false))}
                 </nav>
 
-                {workspaceNavItems.length > 0 && (
-                  <div className="mt-6">
-                    <p className="px-3.5 mb-2 text-[11px] font-extrabold uppercase tracking-wider text-quizlet-textMuted">
-                      Không gian chuyên biệt
-                    </p>
-                    <nav className="space-y-1">
-                      {workspaceNavItems.map((item) => renderNavLink(item, false))}
-                    </nav>
-                  </div>
-                )}
+                <div className="my-3.5 border-t border-[#EDEFF4] dark:border-[#2E3856]" />
+                <p className="px-2.5 mb-2 text-[13px] font-bold text-[#282E3E] dark:text-[#F6F7FB]">
+                  Bắt đầu tại đây
+                </p>
+                <nav className="space-y-1">
+                  {startHereItems.map((item) => renderFixedRailItem(item, false))}
+                </nav>
 
-                {isAuthenticated && user && (
-                  <div className="mt-6">
-                    <p className="px-3.5 mb-2 text-[11px] font-extrabold uppercase tracking-wider text-quizlet-textMuted">
-                      Tài khoản
-                    </p>
+                <div className="my-3.5 border-t border-[#EDEFF4] dark:border-[#2E3856]" />
+                <p className="px-2.5 mb-2 text-[13px] font-bold text-[#282E3E] dark:text-[#F6F7FB]">
+                  Thư mục của bạn
+                </p>
+                <Link
+                  to="/library"
+                  className="flex items-center h-9 rounded-lg text-[14px] font-semibold text-[#586380] dark:text-[#A8B1D1] hover:bg-[#F6F7FB] dark:hover:bg-[#202140]"
+                >
+                  <span className="w-10 h-9 shrink-0 flex items-center justify-center">
+                    <Plus className="w-[18px] h-[18px]" />
+                  </span>
+                  <span>Thư mục mới</span>
+                </Link>
+
+                {workspaceItems.length > 0 && (
+                  <>
+                    <div className="my-3.5 border-t border-[#EDEFF4] dark:border-[#2E3856]" />
                     <nav className="space-y-1">
-                      {renderNavLink(
-                        { to: profilePath, label: 'Hồ sơ cá nhân', icon: UserIcon, end: true },
-                        false
-                      )}
+                      {workspaceItems.map((item) => renderFixedRailItem(item, false))}
                     </nav>
-                  </div>
+                  </>
                 )}
               </div>
 
-              <div className="pt-4 border-t border-gray-100">
+              <div className="pt-3 border-t border-[#EDEFF4] dark:border-[#2E3856]">
                 {isAuthenticated ? (
                   <button
                     type="button"
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-sm font-semibold text-quizlet-red hover:bg-red-50 transition"
+                    className="w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-semibold text-quizlet-red hover:bg-red-50 dark:hover:bg-red-950/30"
                   >
-                    <LogOut className="w-5 h-5" />
+                    <LogOut className="w-4 h-4" />
                     <span>Đăng xuất</span>
                   </button>
                 ) : (
                   <div className="grid grid-cols-2 gap-2">
                     <Link
                       to="/login"
-                      className="text-center py-2.5 rounded-xl border border-gray-200 text-sm font-bold text-quizlet-textDark hover:bg-gray-50"
+                      className="text-center py-2.5 rounded-full border border-[#D9DDE8] dark:border-[#2E3856] text-sm font-bold text-[#282E3E] dark:text-white"
                     >
                       Đăng nhập
                     </Link>
                     <Link
                       to="/register"
-                      className="text-center py-2.5 rounded-xl bg-quizlet-blue text-sm font-bold text-white hover:bg-blue-600"
+                      className="text-center py-2.5 rounded-full bg-[#4255FF] text-sm font-bold text-white"
                     >
                       Đăng ký
                     </Link>

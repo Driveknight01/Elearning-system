@@ -1,10 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { Eye, EyeOff, Loader2, Mail, Lock, KeyRound, ArrowLeft, CheckCircle2 } from 'lucide-react';
+import { Eye, EyeOff, Loader2, ArrowLeft, CheckCircle2 } from 'lucide-react';
 import AuthSplitLayout from '../components/auth/AuthSplitLayout';
 import GoogleSignInButton from '../components/auth/GoogleSignInButton';
 import authApi from '../api/authApi';
 import { useAuthStore } from '../store/useAuthStore';
+
+const AUTH_INPUT_CLASS =
+  'w-full h-14 px-4 bg-[#F3F4F8] hover:bg-[#ECEEF5] border-2 border-transparent hover:border-[#4255FF]/60 focus:bg-white focus:hover:bg-white focus:border-[#4255FF] rounded-xl text-[16px] font-semibold tracking-tight text-[#282E3E] placeholder:text-[#646F90] placeholder:font-semibold caret-[#4255FF] outline-none transition-all duration-150';
 
 export default function LoginPage() {
   const navigate = useNavigate();
@@ -83,7 +86,7 @@ export default function LoginPage() {
       });
       handleAuthSuccess(res);
     } catch (err) {
-      setErrorMessage(err?.message || 'Tên đăng nhập hoặc mật khẩu không chính xác.');
+      setErrorMessage(err?.message || 'Email, tên người dùng hoặc mật khẩu không chính xác.');
     } finally {
       setSubmitting(false);
     }
@@ -97,9 +100,7 @@ export default function LoginPage() {
 
     try {
       const res = await authApi.forgotPassword(resetEmail.trim());
-      setSuccessMessage(
-        res?.message || 'Mã OTP 6 số đã được gửi tới email của bạn.'
-      );
+      setSuccessMessage(res?.message || 'Mã OTP 6 số đã được gửi tới email của bạn.');
       setViewMode('reset');
     } catch (err) {
       setErrorMessage(err?.message || 'Không thể gửi mã OTP. Vui lòng kiểm tra lại email.');
@@ -135,13 +136,13 @@ export default function LoginPage() {
   return (
     <AuthSplitLayout mode="login">
       {errorMessage && (
-        <div className="mb-5 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm text-red-700 font-medium">
+        <div className="mb-5 rounded-xl bg-red-50 border border-red-200 px-4 py-3 text-sm font-semibold text-red-700">
           {errorMessage}
         </div>
       )}
 
       {successMessage && (
-        <div className="mb-5 rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-3 text-sm text-emerald-700 font-medium flex items-start gap-2">
+        <div className="mb-5 rounded-xl bg-emerald-50 border border-emerald-200 px-4 py-3 text-sm font-semibold text-emerald-700 flex items-start gap-2">
           <CheckCircle2 className="w-4 h-4 mt-0.5 shrink-0" />
           <span>{successMessage}</span>
         </div>
@@ -153,37 +154,35 @@ export default function LoginPage() {
             onSuccess={handleGoogleLogin}
             onError={handleGoogleError}
             disabled={submitting}
+            label="Đăng nhập với Google"
           />
 
-          <div className="my-6 flex items-center gap-4">
-            <div className="h-px flex-1 bg-gray-200" />
-            <span className="text-xs font-semibold uppercase tracking-wider text-quizlet-textMuted">
+          <div className="mt-7 mb-3 flex items-center gap-4">
+            <div className="h-px flex-1 bg-[#EDEFF4]" />
+            <span className="text-[13px] leading-none font-bold tracking-tight text-[#586380]">
               hoặc email
             </span>
-            <div className="h-px flex-1 bg-gray-200" />
+            <div className="h-px flex-1 bg-[#EDEFF4]" />
           </div>
 
           <form onSubmit={handleLoginSubmit} className="space-y-4">
             <div>
-              <label className="block text-xs font-bold uppercase tracking-wider text-quizlet-textMuted mb-1.5">
-                Email hoặc Tên đăng nhập
+              <label className="block text-[14px] leading-none font-bold tracking-tight text-[#586380] mb-2">
+                Email
               </label>
-              <div className="relative">
-                <Mail className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-                <input
-                  type="text"
-                  required
-                  value={identifier}
-                  onChange={(e) => setIdentifier(e.target.value)}
-                  placeholder="name@example.com hoặc username"
-                  className="w-full pl-10 pr-4 py-3 bg-quizlet-bg border-2 border-transparent focus:border-quizlet-blue focus:bg-white rounded-xl text-sm font-medium text-quizlet-textDark outline-none transition"
-                />
-              </div>
+              <input
+                type="text"
+                required
+                value={identifier}
+                onChange={(e) => setIdentifier(e.target.value)}
+                placeholder="Nhập địa chỉ email hoặc tên người dùng"
+                className={AUTH_INPUT_CLASS}
+              />
             </div>
 
             <div>
-              <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-xs font-bold uppercase tracking-wider text-quizlet-textMuted">
+              <div className="flex items-center justify-between mb-2">
+                <label className="block text-[14px] font-bold tracking-tight text-[#586380]">
                   Mật khẩu
                 </label>
                 <button
@@ -193,48 +192,57 @@ export default function LoginPage() {
                     setSuccessMessage('');
                     setViewMode('forgot');
                   }}
-                  className="text-xs font-semibold text-quizlet-blue hover:underline"
+                  className="text-[14px] font-bold tracking-tight text-[#4255FF] hover:underline"
                 >
-                  Quên mật khẩu?
+                  Quên mật khẩu
                 </button>
               </div>
               <div className="relative">
-                <Lock className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
                 <input
                   type={showPassword ? 'text' : 'password'}
                   required
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  placeholder="Nhập mật khẩu"
-                  className="w-full pl-10 pr-11 py-3 bg-quizlet-bg border-2 border-transparent focus:border-quizlet-blue focus:bg-white rounded-xl text-sm font-medium text-quizlet-textDark outline-none transition"
+                  placeholder="Nhập mật khẩu của bạn"
+                  className={`${AUTH_INPUT_CLASS} pr-12`}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((prev) => !prev)}
-                  className="absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 hover:text-quizlet-textDark"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 text-[#586380] hover:text-[#282E3E] transition-colors"
                   aria-label={showPassword ? 'Ẩn mật khẩu' : 'Hiện mật khẩu'}
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? (
+                    <EyeOff className="w-5 h-5" />
+                  ) : (
+                    <Eye className="w-5 h-5" />
+                  )}
                 </button>
               </div>
             </div>
 
+            <p className="text-center text-[13px] font-medium text-[#586380] leading-relaxed pt-1">
+              Bằng cách nhấn Đăng nhập, bạn đồng ý với{' '}
+              <span className="font-bold text-[#282E3E]">Điều khoản dịch vụ</span> và{' '}
+              <span className="font-bold text-[#282E3E]">Chính sách bảo mật</span> của SmartFlash.
+            </p>
+
             <button
               type="submit"
               disabled={submitting}
-              className="w-full bg-quizlet-blue hover:bg-[#3546E0] disabled:opacity-60 text-white font-bold py-3.5 rounded-xl shadow-md shadow-blue-500/20 flex items-center justify-center gap-2 transition"
+              className="w-full h-14 rounded-full bg-[#4255FF] hover:bg-[#3545E0] disabled:opacity-60 text-white text-[16px] font-bold tracking-tight flex items-center justify-center gap-2 transition-colors"
             >
               {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
               <span>Đăng nhập</span>
             </button>
-          </form>
 
-          <p className="mt-6 text-center text-sm text-quizlet-textMuted">
-            Chưa có tài khoản SmartFlash?{' '}
-            <Link to="/register" className="font-bold text-quizlet-blue hover:underline">
-              Đăng ký miễn phí
+            <Link
+              to="/register"
+              className="w-full h-14 rounded-full bg-[#F3F4F8] hover:bg-[#E2E5EE] text-[#586380] hover:text-[#282E3E] text-[15px] font-bold tracking-tight flex items-center justify-center transition-colors"
+            >
+              Chưa có tài khoản? Tạo tài khoản
             </Link>
-          </p>
+          </form>
         </>
       )}
 
@@ -246,39 +254,36 @@ export default function LoginPage() {
               setErrorMessage('');
               setViewMode('login');
             }}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-quizlet-textMuted hover:text-quizlet-textDark"
+            className="inline-flex items-center gap-1.5 text-sm font-bold tracking-tight text-[#586380] hover:text-[#282E3E]"
           >
             <ArrowLeft className="w-4 h-4" /> Quay lại đăng nhập
           </button>
 
           <div>
-            <h2 className="text-xl font-extrabold text-quizlet-textDark">Khôi phục mật khẩu</h2>
-            <p className="mt-1 text-sm text-quizlet-textMuted">
+            <h2 className="text-xl font-bold tracking-tight text-[#282E3E]">Khôi phục mật khẩu</h2>
+            <p className="mt-1 text-sm font-medium text-[#586380]">
               Nhập email đã đăng ký để nhận mã OTP 6 chữ số (có hiệu lực 15 phút).
             </p>
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-quizlet-textMuted mb-1.5">
+            <label className="block text-[14px] font-bold tracking-tight text-[#586380] mb-2">
               Email tài khoản
             </label>
-            <div className="relative">
-              <Mail className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="email"
-                required
-                value={resetEmail}
-                onChange={(e) => setResetEmail(e.target.value)}
-                placeholder="name@example.com"
-                className="w-full pl-10 pr-4 py-3 bg-quizlet-bg border-2 border-transparent focus:border-quizlet-blue focus:bg-white rounded-xl text-sm font-medium text-quizlet-textDark outline-none transition"
-              />
-            </div>
+            <input
+              type="email"
+              required
+              value={resetEmail}
+              onChange={(e) => setResetEmail(e.target.value)}
+              placeholder="name@example.com"
+              className={AUTH_INPUT_CLASS}
+            />
           </div>
 
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-quizlet-blue hover:bg-[#3546E0] disabled:opacity-60 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition"
+            className="w-full h-14 rounded-full bg-[#4255FF] hover:bg-[#3545E0] disabled:opacity-60 text-white text-[16px] font-bold tracking-tight flex items-center justify-center gap-2 transition-colors"
           >
             {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
             <span>Gửi mã OTP</span>
@@ -294,58 +299,53 @@ export default function LoginPage() {
               setErrorMessage('');
               setViewMode('forgot');
             }}
-            className="inline-flex items-center gap-1.5 text-sm font-semibold text-quizlet-textMuted hover:text-quizlet-textDark"
+            className="inline-flex items-center gap-1.5 text-sm font-bold tracking-tight text-[#586380] hover:text-[#282E3E]"
           >
             <ArrowLeft className="w-4 h-4" /> Gửi lại mã OTP
           </button>
 
           <div>
-            <h2 className="text-xl font-extrabold text-quizlet-textDark">Đặt mật khẩu mới</h2>
-            <p className="mt-1 text-sm text-quizlet-textMuted">
-              Nhập mã OTP 6 số vừa gửi tới <span className="font-semibold text-quizlet-textDark">{resetEmail}</span>.
+            <h2 className="text-xl font-bold tracking-tight text-[#282E3E]">Đặt mật khẩu mới</h2>
+            <p className="mt-1 text-sm font-medium text-[#586380]">
+              Nhập mã OTP 6 số vừa gửi tới{' '}
+              <span className="font-bold text-[#282E3E]">{resetEmail}</span>.
             </p>
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-quizlet-textMuted mb-1.5">
+            <label className="block text-[14px] font-bold tracking-tight text-[#586380] mb-2">
               Mã OTP (6 chữ số)
             </label>
-            <div className="relative">
-              <KeyRound className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="text"
-                required
-                maxLength={6}
-                value={otpCode}
-                onChange={(e) => setOtpCode(e.target.value)}
-                placeholder="123456"
-                className="w-full pl-10 pr-4 py-3 bg-quizlet-bg border-2 border-transparent focus:border-quizlet-blue focus:bg-white rounded-xl text-sm font-bold tracking-widest text-quizlet-textDark outline-none transition"
-              />
-            </div>
+            <input
+              type="text"
+              required
+              maxLength={6}
+              value={otpCode}
+              onChange={(e) => setOtpCode(e.target.value)}
+              placeholder="123456"
+              className={`${AUTH_INPUT_CLASS} font-bold tracking-widest`}
+            />
           </div>
 
           <div>
-            <label className="block text-xs font-bold uppercase tracking-wider text-quizlet-textMuted mb-1.5">
+            <label className="block text-[14px] font-bold tracking-tight text-[#586380] mb-2">
               Mật khẩu mới
             </label>
-            <div className="relative">
-              <Lock className="w-4 h-4 text-gray-400 absolute left-3.5 top-1/2 -translate-y-1/2" />
-              <input
-                type="password"
-                required
-                minLength={6}
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                placeholder="Tối thiểu 6 ký tự"
-                className="w-full pl-10 pr-4 py-3 bg-quizlet-bg border-2 border-transparent focus:border-quizlet-blue focus:bg-white rounded-xl text-sm font-medium text-quizlet-textDark outline-none transition"
-              />
-            </div>
+            <input
+              type="password"
+              required
+              minLength={6}
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              placeholder="Tối thiểu 6 ký tự"
+              className={AUTH_INPUT_CLASS}
+            />
           </div>
 
           <button
             type="submit"
             disabled={submitting}
-            className="w-full bg-quizlet-blue hover:bg-[#3546E0] disabled:opacity-60 text-white font-bold py-3.5 rounded-xl flex items-center justify-center gap-2 transition"
+            className="w-full h-14 rounded-full bg-[#4255FF] hover:bg-[#3545E0] disabled:opacity-60 text-white text-[16px] font-bold tracking-tight flex items-center justify-center gap-2 transition-colors"
           >
             {submitting && <Loader2 className="w-4 h-4 animate-spin" />}
             <span>Xác nhận đổi mật khẩu</span>

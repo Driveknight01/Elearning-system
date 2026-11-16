@@ -5,13 +5,20 @@ const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 const PLACEHOLDER_CLIENT_ID = 'your-google-client-id.apps.googleusercontent.com';
 
 const isGoogleConfigured =
-  Boolean(GOOGLE_CLIENT_ID) && GOOGLE_CLIENT_ID.trim() !== '' && GOOGLE_CLIENT_ID !== PLACEHOLDER_CLIENT_ID;
+  Boolean(GOOGLE_CLIENT_ID) &&
+  GOOGLE_CLIENT_ID.trim() !== '' &&
+  GOOGLE_CLIENT_ID !== PLACEHOLDER_CLIENT_ID;
 
 /**
- * Renders Google Identity Services "Continue with Google" button.
- * Sends the Google {@code idToken} (credential) to {@link onSuccess}.
+ * Renders a full-width gray pill Google Sign-In button matching the auth form typography.
+ * Overlays Google Identity Services button transparently when VITE_GOOGLE_CLIENT_ID is configured.
  */
-export default function GoogleSignInButton({ onSuccess, onError, disabled = false, label = 'Tiếp tục với Google' }) {
+export default function GoogleSignInButton({
+  onSuccess,
+  onError,
+  disabled = false,
+  label = 'Đăng nhập với Google',
+}) {
   const buttonContainerRef = useRef(null);
   const [gsiReady, setGsiReady] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -49,8 +56,8 @@ export default function GoogleSignInButton({ onSuccess, onError, disabled = fals
           theme: 'outline',
           size: 'large',
           text: 'continue_with',
-          shape: 'rectangular',
-          width: buttonContainerRef.current.offsetWidth || 380,
+          shape: 'pill',
+          width: 400,
           locale: 'vi',
         });
         setGsiReady(true);
@@ -77,7 +84,9 @@ export default function GoogleSignInButton({ onSuccess, onError, disabled = fals
       return;
     }
     if (!window.google?.accounts?.id) {
-      onError?.('Không tải được Google Sign-In SDK (https://accounts.google.com/gsi/client). Hãy kiểm tra kết nối mạng hoặc tắt trình chặn quảng cáo.');
+      onError?.(
+        'Không tải được Google Sign-In SDK (https://accounts.google.com/gsi/client). Hãy kiểm tra kết nối mạng hoặc tắt trình chặn quảng cáo.'
+      );
       return;
     }
     window.google.accounts.id.prompt();
@@ -85,47 +94,42 @@ export default function GoogleSignInButton({ onSuccess, onError, disabled = fals
 
   return (
     <div className="w-full">
-      {isGoogleConfigured ? (
-        <div className="relative">
+      <div
+        className={`group relative w-full h-14 rounded-full overflow-hidden ${
+          disabled || loading ? 'opacity-60 pointer-events-none' : ''
+        }`}
+      >
+        {/* Visual Gray Pill Button */}
+        <button
+          type="button"
+          disabled={disabled || loading}
+          onClick={handleFallbackClick}
+          className="w-full h-full flex items-center justify-center gap-3 px-6 rounded-full bg-[#F3F4F8] group-hover:bg-[#E2E5EE] active:bg-[#D8DCE8] text-[16px] font-bold tracking-tight text-[#586380] group-hover:text-[#282E3E] transition-colors duration-150"
+        >
+          {loading ? (
+            <Loader2 className="w-5 h-5 animate-spin text-quizlet-blue" />
+          ) : (
+            <GoogleIcon />
+          )}
+          <span className="text-center">{loading ? 'Đang xác thực...' : label}</span>
+        </button>
+
+        {/* Transparent GSI Overlay when configured */}
+        {isGoogleConfigured && (
           <div
             ref={buttonContainerRef}
-            className={`w-full min-h-[44px] flex justify-center ${disabled || loading ? 'opacity-60 pointer-events-none' : ''}`}
+            aria-hidden={!gsiReady}
+            className={`absolute inset-0 flex items-center justify-center opacity-0 scale-x-150 scale-y-125 origin-center cursor-pointer ${
+              gsiReady ? 'pointer-events-auto' : 'pointer-events-none'
+            }`}
           />
-          {!gsiReady && (
-            <button
-              type="button"
-              disabled={disabled || loading}
-              onClick={handleFallbackClick}
-              className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-gray-200 rounded-xl font-semibold text-quizlet-textDark hover:bg-gray-50 transition"
-            >
-              <GoogleIcon />
-              <span>{label}</span>
-            </button>
-          )}
-          {loading && (
-            <div className="mt-2 flex items-center justify-center gap-2 text-sm text-quizlet-blue font-medium">
-              <Loader2 className="w-4 h-4 animate-spin" />
-              <span>Đang xác thực tài khoản Google...</span>
-            </div>
-          )}
-        </div>
-      ) : (
-        <>
-          <button
-            type="button"
-            disabled={disabled}
-            onClick={handleFallbackClick}
-            className="w-full flex items-center justify-center gap-3 px-4 py-3 border-2 border-gray-200 rounded-xl font-semibold text-quizlet-textDark hover:bg-gray-50 hover:border-gray-300 transition"
-          >
-            <GoogleIcon />
-            <span>{label}</span>
-          </button>
-          {configNotice && (
-            <p className="mt-2 text-xs text-amber-700 bg-amber-50 border border-amber-200 rounded-lg px-3 py-2">
-              {configNotice}
-            </p>
-          )}
-        </>
+        )}
+      </div>
+
+      {configNotice && (
+        <p className="mt-2.5 text-xs font-medium text-amber-700 bg-amber-50 border border-amber-200 rounded-xl px-3.5 py-2">
+          {configNotice}
+        </p>
       )}
     </div>
   );
@@ -133,7 +137,7 @@ export default function GoogleSignInButton({ onSuccess, onError, disabled = fals
 
 function GoogleIcon() {
   return (
-    <svg className="w-5 h-5" viewBox="0 0 24 24" aria-hidden="true">
+    <svg className="w-[22px] h-[22px] shrink-0" viewBox="0 0 24 24" aria-hidden="true">
       <path
         fill="#4285F4"
         d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3.05h3.88c2.27-2.09 3.665-5.17 3.665-9.17Z"

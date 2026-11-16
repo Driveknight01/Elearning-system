@@ -3,7 +3,35 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    background-color: #ffffff;
+    color-scheme: light;
+  }
+
+  html.dark {
+    background-color: #0a082d;
+    color-scheme: dark;
+  }
+
+  html,
+  body,
+  input,
+  button,
+  textarea,
+  select {
+    font-family: 'Plus Jakarta Sans', 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
   body {
     min-height: 100vh;
   }
+}
+
+/* Synchronize all surface, text, border, and icon colors during Light/Dark switch to eliminate flicker */
+html.theme-transitioning *,
+html.theme-transitioning *::before,
+html.theme-transitioning *::after {
+  transition-property: background-color, border-color, color, fill, stroke !important;
+  transition-duration: 220ms !important;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1) !important;
 }

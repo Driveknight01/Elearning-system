@@ -23,18 +23,18 @@ export default function ProtectedRoute({
 
   if (allowedRoles.length > 0 && !hasRole(allowedRoles)) {
     return (
-      <div className="min-h-screen bg-quizlet-bg flex items-center justify-center px-4">
-        <div className="max-w-md w-full bg-white rounded-2xl shadow-sm border border-gray-200 p-8 text-center">
-          <div className="w-14 h-14 rounded-2xl bg-red-50 text-quizlet-red flex items-center justify-center mx-auto mb-4">
+      <div className="min-h-screen bg-white dark:bg-[#0A082D] flex items-center justify-center px-4">
+        <div className="max-w-md w-full bg-white dark:bg-[#202140] rounded-2xl shadow-sm border border-[#EDEFF4] dark:border-[#2E3856] p-8 text-center">
+          <div className="w-14 h-14 rounded-2xl bg-red-50 dark:bg-[#431F25] text-quizlet-red flex items-center justify-center mx-auto mb-4">
             <ShieldAlert className="w-7 h-7" />
           </div>
-          <h1 className="text-2xl font-extrabold text-quizlet-textDark">403 — Không có quyền truy cập</h1>
-          <p className="mt-2 text-sm text-quizlet-textMuted">
+          <h1 className="text-2xl font-extrabold text-[#282E3E] dark:text-white">403 — Không có quyền truy cập</h1>
+          <p className="mt-2 text-sm text-[#586380] dark:text-[#A8B1D1]">
             Tài khoản hiện tại ({user?.role || 'GUEST'}) không có quyền mở trang này.
           </p>
           <Link
             to="/"
-            className="mt-6 inline-flex items-center gap-2 bg-quizlet-blue hover:bg-blue-600 text-white font-semibold px-5 py-2.5 rounded-xl transition"
+            className="mt-6 inline-flex items-center gap-2 bg-[#4255FF] hover:bg-[#3545E0] text-white font-semibold px-5 py-2.5 rounded-full transition"
           >
             <ArrowLeft className="w-4 h-4" />
             Quay về Trang chủ
