@@ -50,7 +50,7 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
   - *Commit*: `feat(auth): create user, oauth, refresh and verification token entities and repositories`
 - [x] **T2.2** 🟡 `[VỪA — Medium]`: Cấu hình Spring Security 6, `JwtTokenProvider`, `JwtAuthenticationFilter` và `CustomUserDetailsService` hỗ trợ phân quyền theo Role và cho phép Guest truy cập các public endpoints.
   - *Commit*: `feat(security): configure spring security 6 and jwt authentication filter`
-- [ ] **T2.3** 🟡 `[VỪA — Medium]`: Xây dựng API Đăng ký, Đăng nhập bằng Email/Password, Quên mật khẩu (OTP), Refresh Token và Đăng xuất (`POST /api/v1/auth/register`, `/login`, `/forgot-password`, `/refresh`, `/logout`).
+- [x] **T2.3** 🟡 `[VỪA — Medium]`: Xây dựng API Đăng ký, Đăng nhập bằng Email/Password, Quên mật khẩu (OTP), Refresh Token và Đăng xuất (`POST /api/v1/auth/register`, `/login`, `/forgot-password`, `/refresh`, `/logout`).
   - *Commit*: `feat(auth): implement register, login, forgot password otp, refresh token and logout apis`
 - [ ] **T2.4** 🔴 `[KHÓ — ⚠️ Đề xuất Model Mạnh/Pro]`: Xây dựng `GoogleOAuth2Verifier` và API `POST /api/v1/auth/google` xác thực Google `idToken` dùng chung cho cả Web React và Android Native (tự động tạo user + `oauth_accounts` + khởi tạo bảng `user_streaks` ở lần đầu đăng nhập).
   - *Commit*: `feat(auth): implement unified google id-token authentication for web and android`
