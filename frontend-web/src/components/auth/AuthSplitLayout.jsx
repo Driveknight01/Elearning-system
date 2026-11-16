@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { X } from 'lucide-react';
 import authBannerImg from '../../assets/auth-banner.jpg';
+import smartflashLogo from '../../assets/smartflash-logo.png';
 
 /**
  * Split-screen authentication shell.
@@ -19,17 +20,30 @@ export default function AuthSplitLayout({ mode = 'login', children }) {
           alt="SmartFlash Study Banner"
           className="w-full h-full object-cover object-center"
         />
+        <Link
+          to="/"
+          aria-label="SmartFlash Trang chủ"
+          className="absolute top-6 left-6 z-10 rounded-xl shadow-lg hover:scale-105 transition-transform"
+        >
+          <img
+            src={smartflashLogo}
+            alt="SmartFlash"
+            className="w-11 h-11 rounded-xl object-contain"
+          />
+        </Link>
       </div>
 
       {/* Right Form Panel (Scrollable independently on desktop) */}
       <div className="w-full lg:w-1/2 lg:h-screen lg:overflow-y-auto relative flex flex-col bg-white">
         {/* Top-right Close Button */}
         <div className="flex items-center justify-between lg:justify-end px-5 pt-5 sm:px-7 sm:pt-6 shrink-0">
-          <Link to="/" className="lg:hidden inline-flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-quizlet-blue text-white flex items-center justify-center font-extrabold text-sm">
-              SF
-            </div>
-            <span className="text-xl font-extrabold text-quizlet-blue tracking-tight">
+          <Link to="/" className="lg:hidden inline-flex items-center gap-2.5">
+            <img
+              src={smartflashLogo}
+              alt="SmartFlash"
+              className="w-8 h-8 rounded-lg object-contain"
+            />
+            <span className="text-xl font-extrabold text-[#282E3E] tracking-tight">
               SmartFlash
             </span>
           </Link>

@@ -68,7 +68,7 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
 ---
 
 ## Phase 3: CRUD Bộ thẻ Flashcard, Phân quyền Xem, OCR & Ảnh Minh họa AI
-- [ ] **T3.1** 🟢 `[DỄ — Flash]`: Tạo JPA Entities & Repositories cho `FlashcardSet`, `Flashcard`, `UserSetInteraction`, `StarredCard`, `Folder`, `StudyGroup`, `StudyGroupMember`.
+- [x] **T3.1** 🟢 `[DỄ — Flash]`: Tạo JPA Entities & Repositories cho `FlashcardSet`, `Flashcard`, `UserSetInteraction`, `StarredCard`, `Folder`, `StudyGroup`, `StudyGroupMember`.
   - *Commit*: `feat(flashcard): create entities and repositories for sets, cards, interactions, folders and groups`
 - [ ] **T3.2** 🟡 `[VỪA — Medium]`: Xây dựng API CRUD Bộ thẻ (`POST/PUT/DELETE /api/v1/flashcard-sets`) xử lý lưu đồng bộ danh sách thẻ con, tự sinh `share_token` (NanoID) và kiểm tra chặt chẽ 3 mức quyền xem (`PUBLIC`, `PRIVATE`, `LINK_ONLY`).
   - *Commit*: `feat(flashcard): implement flashcard set CRUD and visibility access control`

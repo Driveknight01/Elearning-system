@@ -24,6 +24,7 @@ import {
 import { useAuthStore } from '../../store/useAuthStore';
 import { useThemeStore } from '../../store/useThemeStore';
 import UserAvatar from '../common/UserAvatar';
+import smartflashLogo from '../../assets/smartflash-logo.png';
 
 export default function MainLayout({ children }) {
   const navigate = useNavigate();
@@ -181,9 +182,11 @@ export default function MainLayout({ children }) {
           </button>
 
           <Link to="/" className="flex items-center gap-2 group" aria-label="SmartFlash Trang chủ">
-            <div className="w-9 h-9 rounded-full bg-[#4255FF] dark:bg-white text-white dark:text-[#0A082D] flex items-center justify-center font-extrabold text-[15px] tracking-tight group-hover:scale-105 transition-transform">
-              SF
-            </div>
+            <img
+              src={smartflashLogo}
+              alt="SmartFlash"
+              className="w-9 h-9 rounded-xl object-contain group-hover:scale-105 transition-transform"
+            />
           </Link>
         </div>
 
@@ -516,10 +519,12 @@ export default function MainLayout({ children }) {
             <aside className="relative w-64 max-w-[82vw] bg-white dark:bg-[#0A082D] h-full shadow-2xl flex flex-col justify-between p-3 z-10 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
               <div>
                 <div className="flex items-center justify-between px-2 pb-3 mb-2 border-b border-[#EDEFF4] dark:border-[#2E3856]">
-                  <Link to="/" className="flex items-center gap-2">
-                    <div className="w-8 h-8 rounded-full bg-[#4255FF] dark:bg-white text-white dark:text-[#0A082D] flex items-center justify-center font-extrabold text-sm">
-                      SF
-                    </div>
+                  <Link to="/" className="flex items-center gap-2.5">
+                    <img
+                      src={smartflashLogo}
+                      alt="SmartFlash"
+                      className="w-8 h-8 rounded-lg object-contain"
+                    />
                     <span className="text-lg font-extrabold text-[#282E3E] dark:text-white">
                       SmartFlash
                     </span>
