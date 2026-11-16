@@ -4,22 +4,30 @@ import com.elearning.common.exception.AppException;
 import com.elearning.common.exception.ErrorCode;
 import com.elearning.module.auth.dto.AuthResponse;
 import com.elearning.module.auth.dto.ForgotPasswordRequest;
+import com.elearning.module.auth.dto.GoogleLoginRequest;
 import com.elearning.module.auth.dto.LoginRequest;
 import com.elearning.module.auth.dto.LogoutRequest;
 import com.elearning.module.auth.dto.RefreshTokenRequest;
 import com.elearning.module.auth.dto.RegisterRequest;
 import com.elearning.module.auth.dto.ResetPasswordRequest;
 import com.elearning.module.auth.dto.UserSummaryResponse;
+import com.elearning.module.auth.entity.OAuthAccount;
+import com.elearning.module.auth.entity.OAuthProvider;
 import com.elearning.module.auth.entity.PlatformType;
 import com.elearning.module.auth.entity.RefreshToken;
 import com.elearning.module.auth.entity.TokenType;
 import com.elearning.module.auth.entity.VerificationToken;
+import com.elearning.module.auth.repository.OAuthAccountRepository;
 import com.elearning.module.auth.repository.RefreshTokenRepository;
 import com.elearning.module.auth.repository.VerificationTokenRepository;
 import com.elearning.module.user.entity.Role;
 import com.elearning.module.user.entity.User;
 import com.elearning.module.user.entity.UserStatus;
+import com.elearning.module.user.entity.UserStreak;
 import com.elearning.module.user.repository.UserRepository;
+import com.elearning.module.user.repository.UserStreakRepository;
+import com.elearning.security.GoogleOAuth2Verifier;
+import com.elearning.security.GoogleUserInfo;
 import com.elearning.security.JwtProperties;
 import com.elearning.security.JwtTokenProvider;
 import com.elearning.security.UserPrincipal;
@@ -46,15 +54,20 @@ import java.util.HexFormat;
 public class AuthService {
 
     private static final int OTP_EXPIRATION_MINUTES = 15;
+    private static final int MAX_USERNAME_BASE_LENGTH = 40;
+    private static final int MAX_FULL_NAME_LENGTH = 100;
     private static final SecureRandom SECURE_RANDOM = new SecureRandom();
 
     private final UserRepository userRepository;
+    private final UserStreakRepository userStreakRepository;
+    private final OAuthAccountRepository oAuthAccountRepository;
     private final RefreshTokenRepository refreshTokenRepository;
     private final VerificationTokenRepository verificationTokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final JwtProperties jwtProperties;
     private final OtpMailService otpMailService;
+    private final GoogleOAuth2Verifier googleOAuth2Verifier;
 
     @Transactional
     public AuthResponse register(RegisterRequest request) {
@@ -80,6 +93,7 @@ public class AuthService {
                 .build();
 
         User savedUser = userRepository.save(user);
+        ensureUserStreakInitialized(savedUser);
         return issueTokenPair(savedUser, request.getPlatform(), request.getDeviceInfo(), request.getFcmToken());
     }
 
@@ -96,6 +110,22 @@ public class AuthService {
         }
 
         ensureAccountActive(user);
+        return issueTokenPair(user, request.getPlatform(), request.getDeviceInfo(), request.getFcmToken());
+    }
+
+    /**
+     * Authenticates or registers a user via Google ID Token (shared across Web React and Android Native).
+     * Automatically creates {@code users}, {@code oauth_accounts}, and {@code user_streaks} on first login.
+     */
+    @Transactional
+    public AuthResponse loginWithGoogle(GoogleLoginRequest request) {
+        GoogleUserInfo googleUser = googleOAuth2Verifier.verify(request.getIdToken());
+
+        User user = oAuthAccountRepository
+                .findByProviderAndProviderUserId(OAuthProvider.GOOGLE, googleUser.subject())
+                .map(oauthAccount -> handleExistingGoogleAccount(oauthAccount, googleUser))
+                .orElseGet(() -> linkOrCreateGoogleUser(googleUser));
+
         return issueTokenPair(user, request.getPlatform(), request.getDeviceInfo(), request.getFcmToken());
     }
 
@@ -188,6 +218,107 @@ public class AuthService {
         if (currentUser != null) {
             refreshTokenRepository.revokeAllByUserId(currentUser.getId());
         }
+    }
+
+    private User handleExistingGoogleAccount(OAuthAccount oauthAccount, GoogleUserInfo googleUser) {
+        User user = oauthAccount.getUser();
+        if (user.isDeleted()) {
+            throw new AppException(ErrorCode.ACCOUNT_BANNED, "Tài khoản của bạn đã bị vô hiệu hóa");
+        }
+        ensureAccountActive(user);
+
+        if (!StringUtils.hasText(user.getAvatarUrl()) && StringUtils.hasText(googleUser.avatarUrl())) {
+            user.setAvatarUrl(googleUser.avatarUrl());
+            user = userRepository.save(user);
+        }
+        ensureUserStreakInitialized(user);
+        return user;
+    }
+
+    private User linkOrCreateGoogleUser(GoogleUserInfo googleUser) {
+        User user = userRepository.findByEmailAndDeletedAtIsNull(googleUser.email())
+                .map(existingUser -> {
+                    ensureAccountActive(existingUser);
+                    if (!StringUtils.hasText(existingUser.getAvatarUrl()) && StringUtils.hasText(googleUser.avatarUrl())) {
+                        existingUser.setAvatarUrl(googleUser.avatarUrl());
+                        return userRepository.save(existingUser);
+                    }
+                    return existingUser;
+                })
+                .orElseGet(() -> createGoogleUser(googleUser));
+
+        OAuthAccount oauthAccount = OAuthAccount.builder()
+                .user(user)
+                .provider(OAuthProvider.GOOGLE)
+                .providerUserId(googleUser.subject())
+                .build();
+        oAuthAccountRepository.save(oauthAccount);
+
+        ensureUserStreakInitialized(user);
+        return user;
+    }
+
+    private User createGoogleUser(GoogleUserInfo googleUser) {
+        if (userRepository.existsByEmailIgnoreCase(googleUser.email())) {
+            throw new AppException(ErrorCode.ACCOUNT_BANNED, "Tài khoản gắn với email này đã bị vô hiệu hóa");
+        }
+
+        User newUser = User.builder()
+                .username(generateUniqueUsername(googleUser.email()))
+                .email(googleUser.email())
+                .passwordHash(null)
+                .fullName(truncateFullName(googleUser.fullName()))
+                .avatarUrl(googleUser.avatarUrl())
+                .role(Role.USER)
+                .status(UserStatus.ACTIVE)
+                .build();
+
+        return userRepository.save(newUser);
+    }
+
+    private void ensureUserStreakInitialized(User user) {
+        if (user.getId() != null && !userStreakRepository.existsById(user.getId())) {
+            UserStreak streak = UserStreak.builder()
+                    .user(user)
+                    .currentStreak(0)
+                    .longestStreak(0)
+                    .freezeCount(0)
+                    .totalXp(0L)
+                    .build();
+            userStreakRepository.save(streak);
+        }
+    }
+
+    private String generateUniqueUsername(String email) {
+        String localPart = email.substring(0, email.indexOf('@'))
+                .toLowerCase()
+                .replaceAll("[^a-z0-9._-]", "_")
+                .replaceAll("^[_.-]+|[_.-]+$", "");
+
+        if (localPart.length() < 3) {
+            localPart = "user_" + localPart;
+        }
+        String base = localPart.length() > MAX_USERNAME_BASE_LENGTH
+                ? localPart.substring(0, MAX_USERNAME_BASE_LENGTH)
+                : localPart;
+
+        if (!userRepository.existsByUsernameIgnoreCase(base)) {
+            return base;
+        }
+
+        String candidate;
+        do {
+            int suffix = 100_000 + SECURE_RANDOM.nextInt(900_000);
+            candidate = base + "_" + suffix;
+        } while (userRepository.existsByUsernameIgnoreCase(candidate));
+        return candidate;
+    }
+
+    private String truncateFullName(String fullName) {
+        String sanitized = StringUtils.hasText(fullName) ? fullName.trim() : "SmartFlash User";
+        return sanitized.length() > MAX_FULL_NAME_LENGTH
+                ? sanitized.substring(0, MAX_FULL_NAME_LENGTH)
+                : sanitized;
     }
 
     private AuthResponse issueTokenPair(User user, PlatformType platform, String deviceInfo, String fcmToken) {

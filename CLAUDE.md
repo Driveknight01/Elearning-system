@@ -45,16 +45,23 @@
 - **T2.3 — Hoàn thành API Auth: Đăng ký, Đăng nhập, OTP Quên mật khẩu, Refresh Token & Đăng xuất (`backend-springboot`)**:
   - Tạo 8 DTOs trong `com.elearning.module.auth.dto` (`RegisterRequest`, `LoginRequest`, `ForgotPasswordRequest`, `ResetPasswordRequest`, `RefreshTokenRequest`, `LogoutRequest`, `AuthResponse`, `UserSummaryResponse`).
   - Tạo [OtpMailService.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/service/OtpMailService.java), [AuthService.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/service/AuthService.java), [AuthController.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/controller/AuthController.java) và [AuthServiceTest.java](file:///D:/Elearning-system/backend-springboot/src/test/java/com/elearning/module/auth/service/AuthServiceTest.java).
+- **T2.4 — Hoàn thành Xác thực Google OAuth2 ID Token dùng chung cho Web & Android (`backend-springboot`)**:
+  - Tạo [GoogleOAuth2Properties.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/security/GoogleOAuth2Properties.java), [GoogleUserInfo.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/security/GoogleUserInfo.java), [GoogleOAuth2Verifier.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/security/GoogleOAuth2Verifier.java) (xác thực RS256 qua Google JWKS bằng JJWT 0.12.6 + `RestClient`, không phát sinh thêm dependency trong `pom.xml`).
+  - Tạo [UserStreak.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/user/entity/UserStreak.java), [UserStreakRepository.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/user/repository/UserStreakRepository.java) và [GoogleLoginRequest.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/dto/GoogleLoginRequest.java).
+  - Cập nhật [AuthService.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/service/AuthService.java) & [AuthController.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/auth/controller/AuthController.java) với API `POST /api/v1/auth/google` (tự động tạo `users` + `oauth_accounts` + khởi tạo `user_streaks` ở lần đầu đăng nhập, hoặc liên kết tài khoản trùng email) cùng bộ test [GoogleOAuth2VerifierTest.java](file:///D:/Elearning-system/backend-springboot/src/test/java/com/elearning/security/GoogleOAuth2VerifierTest.java), [AuthServiceTest.java](file:///D:/Elearning-system/backend-springboot/src/test/java/com/elearning/module/auth/service/AuthServiceTest.java) và [AuthGoogleIntegrationTest.java](file:///D:/Elearning-system/backend-springboot/src/test/java/com/elearning/module/auth/controller/AuthGoogleIntegrationTest.java).
 
 ### 🔄 Đang thực hiện (In Progress)
-- Đang triển khai **Phase 2: Xác thực (JWT + Google OAuth2), RBAC 4 Vai trò & Quyền riêng tư Trang cá nhân** trên nhánh `feat/phase-2-auth` (đã xong `T2.1`, `T2.2`, `T2.3`).
+- Đang triển khai **Phase 2: Xác thực (JWT + Google OAuth2), RBAC 4 Vai trò & Quyền riêng tư Trang cá nhân** trên nhánh `feat/phase-2-auth` (đã xong `T2.1`, `T2.2`, `T2.3`, `T2.4`).
 
 ### ⏭️ Kế tiếp (Next Up)
-- [ ] **T2.4** 🔴 `[KHÓ — ⚠️ Đề xuất Model Mạnh/Pro]`: Xây dựng `GoogleOAuth2Verifier` và API `POST /api/v1/auth/google` xác thực Google `idToken` dùng chung cho cả Web React và Android Native (tự động tạo user + `oauth_accounts` + khởi tạo bảng `user_streaks` ở lần đầu đăng nhập).
+- [ ] **T2.5** 🟡 `[VỪA — Medium]`: Xây dựng API Hồ sơ cá nhân & **Quyền xem Trang cá nhân**: cập nhật thông tin, upload avatar, đổi mật khẩu, chỉnh `profile_visibility` và `profile_privacy_config` (`JSONB` bật/tắt hiển thị từng tab *Bộ thẻ, Thư mục, Lớp học, Thành tựu*) + API xem trang cá nhân `/api/v1/users/profile/{username}` lọc dữ liệu theo đúng quyền riêng tư.
 
 ---
 
 ## 3. CHANGELOG (Nhật ký theo từng buổi làm việc)
+
+### [2026-11-16] — Buổi 4 (Cập nhật lần 3): Hoàn thành T2.4 (Unified Google OAuth2 ID Token Verification)
+- Hoàn thành **T2.4** trên nhánh `feat/phase-2-auth`: Triển khai `GoogleOAuth2Verifier` xác thực Google `idToken` (RS256 qua `https://www.googleapis.com/oauth2/v3/certs` với cache JWKS & auto-refresh khi xoay khóa), `UserStreak` entity/repository, và endpoint `POST /api/v1/auth/google` dùng chung cho Web React & Android Native (tự động tạo `users`, `oauth_accounts`, `user_streaks` ở lần đầu đăng nhập hoặc liên kết email đã có). Đã kiểm tra biên dịch `mvn test-compile` thành công.
 
 ### [2026-11-16] — Buổi 4 (Cập nhật lần 2): Hoàn thành T2.3 (Auth APIs: Register, Login, OTP Reset, Refresh, Logout)
 - Hoàn thành **T2.3** trên nhánh `feat/phase-2-auth`: Triển khai `AuthController` (`/api/v1/auth/register`, `/login`, `/forgot-password`, `/reset-password`, `/refresh`, `/logout`), `AuthService` (BCrypt, SHA-256 hash refresh token + token rotation, OTP 6 số 15 phút), `OtpMailService` (có fallback log console khi chưa cấu hình SMTP) và `AuthServiceTest`.

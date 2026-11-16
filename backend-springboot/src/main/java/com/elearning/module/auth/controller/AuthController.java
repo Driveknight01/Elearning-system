@@ -3,6 +3,7 @@ package com.elearning.module.auth.controller;
 import com.elearning.common.dto.ApiResponse;
 import com.elearning.module.auth.dto.AuthResponse;
 import com.elearning.module.auth.dto.ForgotPasswordRequest;
+import com.elearning.module.auth.dto.GoogleLoginRequest;
 import com.elearning.module.auth.dto.LoginRequest;
 import com.elearning.module.auth.dto.LogoutRequest;
 import com.elearning.module.auth.dto.RefreshTokenRequest;
@@ -46,6 +47,13 @@ public class AuthController {
     public ResponseEntity<ApiResponse<AuthResponse>> login(@Valid @RequestBody LoginRequest request) {
         AuthResponse response = authService.login(request);
         return ResponseEntity.ok(ApiResponse.success("Đăng nhập thành công", response));
+    }
+
+    @PostMapping("/google")
+    @Operation(summary = "Đăng nhập / Đăng ký bằng Google ID Token (dùng chung cho Web và Android)")
+    public ResponseEntity<ApiResponse<AuthResponse>> googleLogin(@Valid @RequestBody GoogleLoginRequest request) {
+        AuthResponse response = authService.loginWithGoogle(request);
+        return ResponseEntity.ok(ApiResponse.success("Đăng nhập Google thành công", response));
     }
 
     @PostMapping("/forgot-password")
