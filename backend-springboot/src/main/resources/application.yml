@@ -7,6 +7,11 @@ server:
 spring:
   application:
     name: smartflash-backend
+  config:
+    import:
+      - optional:file:.env[.properties]
+      - optional:file:backend-springboot/.env[.properties]
+      - optional:classpath:application-local.yml
 
   # 1. PostgreSQL 16+ Native Local Connection
   datasource:
@@ -64,6 +69,9 @@ spring:
           auth: true
           starttls:
             enable: true
+          connectiontimeout: 5000
+          timeout: 5000
+          writetimeout: 5000
 
 # Swagger / OpenAPI Documentation
 springdoc:
@@ -83,7 +91,7 @@ app:
     access-token-expiration-ms: 86400000        # 24 hours
     refresh-token-expiration-ms: 604800000      # 7 days
   oauth2:
-    google-client-id: ${GOOGLE_CLIENT_ID:your-google-client-id.apps.googleusercontent.com}
+    google-client-id: ${GOOGLE_CLIENT_ID:226507914034-rjm7n0fcnucpb3sakg5q6kk8gbrs8hcf.apps.googleusercontent.com}
   storage:
     upload-dir: ${UPLOAD_DIR:./uploads}
     base-url: ${STORAGE_BASE_URL:http://localhost:8080/uploads}

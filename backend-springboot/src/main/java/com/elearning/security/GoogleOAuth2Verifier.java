@@ -123,13 +123,14 @@ public class GoogleOAuth2Verifier {
         try {
             return Jwts.parser()
                     .keyLocator(keyLocator)
+                    .clockSkewSeconds(60)
                     .build()
                     .parseSignedClaims(idToken)
                     .getPayload();
         } catch (AppException ex) {
             throw ex;
         } catch (JwtException | IllegalArgumentException ex) {
-            log.debug("Failed to verify Google ID token: {}", ex.getMessage());
+            log.warn("Failed to verify Google ID token: {}", ex.getMessage());
             throw new AppException(ErrorCode.INVALID_TOKEN, "Google ID token không hợp lệ hoặc đã hết hạn");
         }
     }

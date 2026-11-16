@@ -10,6 +10,7 @@ import com.elearning.module.auth.dto.RefreshTokenRequest;
 import com.elearning.module.auth.dto.RegisterRequest;
 import com.elearning.module.auth.dto.ResetPasswordRequest;
 import com.elearning.module.auth.service.AuthService;
+import com.elearning.module.auth.service.OtpMailService;
 import com.elearning.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthService authService;
+    private final OtpMailService otpMailService;
 
     @PostMapping("/register")
     @Operation(summary = "Đăng ký tài khoản mới (Email/Password)")
@@ -60,7 +62,10 @@ public class AuthController {
     @Operation(summary = "Gửi mã OTP 6 số đặt lại mật khẩu qua Email")
     public ResponseEntity<ApiResponse<Void>> forgotPassword(@Valid @RequestBody ForgotPasswordRequest request) {
         authService.forgotPassword(request);
-        return ResponseEntity.ok(ApiResponse.successMessage("Mã OTP khôi phục mật khẩu đã được gửi tới email của bạn"));
+        String msg = otpMailService.isSmtpConfigured()
+                ? "Mã OTP khôi phục mật khẩu đã được gửi tới email của bạn"
+                : "Chế độ Local Dev (chưa bật SMTP): vui lòng lấy mã OTP 6 số trong console Backend";
+        return ResponseEntity.ok(ApiResponse.successMessage(msg));
     }
 
     @PostMapping("/reset-password")

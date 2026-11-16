@@ -96,8 +96,10 @@ export default function LoginPage() {
     setSubmitting(true);
 
     try {
-      await authApi.forgotPassword(resetEmail.trim());
-      setSuccessMessage('Mã OTP 6 số đã được gửi tới email của bạn (hoặc xem log console backend nếu chưa bật SMTP).');
+      const res = await authApi.forgotPassword(resetEmail.trim());
+      setSuccessMessage(
+        res?.message || 'Mã OTP 6 số đã được gửi tới email của bạn.'
+      );
       setViewMode('reset');
     } catch (err) {
       setErrorMessage(err?.message || 'Không thể gửi mã OTP. Vui lòng kiểm tra lại email.');

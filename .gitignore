@@ -28,6 +28,8 @@ out/
 .env
 .env.*
 !.env.example
+application-local.yml
+application-local.properties
 *.pem
 *.key
 *.jks

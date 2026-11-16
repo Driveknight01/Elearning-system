@@ -76,7 +76,11 @@ export default function GoogleSignInButton({ onSuccess, onError, disabled = fals
       );
       return;
     }
-    window.google?.accounts?.id?.prompt();
+    if (!window.google?.accounts?.id) {
+      onError?.('Không tải được Google Sign-In SDK (https://accounts.google.com/gsi/client). Hãy kiểm tra kết nối mạng hoặc tắt trình chặn quảng cáo.');
+      return;
+    }
+    window.google.accounts.id.prompt();
   };
 
   return (
