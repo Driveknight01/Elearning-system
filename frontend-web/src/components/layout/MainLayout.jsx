@@ -26,7 +26,7 @@ import { useThemeStore } from '../../store/useThemeStore';
 import UserAvatar from '../common/UserAvatar';
 import smartflashLogo from '../../assets/smartflash-logo.png';
 
-export default function MainLayout({ children }) {
+export default function MainLayout({ children, hideSidebar = false, stickyHeader = true }) {
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, user, logout } = useAuthStore();
@@ -36,9 +36,11 @@ export default function MainLayout({ children }) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [mobileDrawerOpen, setMobileDrawerOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [createMenuOpen, setCreateMenuOpen] = useState(false);
   const [accountMenuOpen, setAccountMenuOpen] = useState(false);
   const [notifOpen, setNotifOpen] = useState(false);
 
+  const createMenuRef = useRef(null);
   const accountMenuRef = useRef(null);
   const searchInputRef = useRef(null);
 
@@ -47,18 +49,23 @@ export default function MainLayout({ children }) {
 
   useEffect(() => {
     setMobileDrawerOpen(false);
+    setCreateMenuOpen(false);
     setAccountMenuOpen(false);
     setNotifOpen(false);
   }, [location.pathname, location.search]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
+      if (createMenuRef.current && !createMenuRef.current.contains(event.target)) {
+        setCreateMenuOpen(false);
+      }
       if (accountMenuRef.current && !accountMenuRef.current.contains(event.target)) {
         setAccountMenuOpen(false);
       }
     };
     const handleKeyDown = (event) => {
       if (event.key === 'Escape') {
+        setCreateMenuOpen(false);
         setAccountMenuOpen(false);
         setNotifOpen(false);
         setMobileDrawerOpen(false);
@@ -163,13 +170,17 @@ export default function MainLayout({ children }) {
   return (
     <div className="min-h-screen bg-white dark:bg-[#0A082D] text-[#282E3E] dark:text-[#F6F7FB] flex flex-col">
       {/* Top Header (No Upgrade button; includes quick Light/Dark toggle) */}
-      <header className="sticky top-0 z-40 h-16 bg-white dark:bg-[#0A082D] px-3 sm:px-4 flex items-center justify-between gap-3">
+      <header
+        className={`${
+          stickyHeader ? 'sticky top-0 z-40' : 'relative z-40'
+        } h-16 bg-white dark:bg-[#0A082D] px-3 sm:px-4 flex items-center justify-between gap-3`}
+      >
         {/* Left: Fixed Hamburger + Brand Mark */}
         <div className="flex items-center gap-2 shrink-0">
           <button
             type="button"
             onClick={() => {
-              if (window.innerWidth < 1024) {
+              if (hideSidebar || window.innerWidth < 1024) {
                 setMobileDrawerOpen((prev) => !prev);
               } else {
                 setSidebarCollapsed((prev) => !prev);
@@ -181,12 +192,15 @@ export default function MainLayout({ children }) {
             <Menu className="w-5 h-5" />
           </button>
 
-          <Link to="/" className="flex items-center gap-2 group" aria-label="SmartFlash Trang chủ">
+          <Link to="/" className="flex items-center gap-2 group" aria-label="ELearner Trang chủ">
             <img
               src={smartflashLogo}
-              alt="SmartFlash"
-              className="w-9 h-9 rounded-xl object-contain group-hover:scale-105 transition-transform"
+              alt="ELearner"
+              className="w-8 h-8 rounded-lg object-contain group-hover:scale-105 transition-transform"
             />
+            <span className="text-[21px] leading-none font-semibold tracking-[-0.01em] text-[#282E3E] dark:text-white hidden sm:inline">
+              ELearner
+            </span>
           </Link>
         </div>
 
@@ -217,14 +231,50 @@ export default function MainLayout({ children }) {
         <div className="flex items-center gap-2.5 shrink-0">
           {isAuthenticated && user ? (
             <>
-              <Link
-                to="/library"
-                title="Tạo bộ thẻ hoặc thư mục mới"
-                aria-label="Tạo bộ thẻ mới"
-                className="w-10 h-10 rounded-full bg-[#4255FF] hover:bg-[#3545E0] text-white flex items-center justify-center transition-colors"
-              >
-                <Plus className="w-5 h-5 stroke-[2.5]" />
-              </Link>
+              <div className="relative" ref={createMenuRef}>
+                <button
+                  type="button"
+                  onClick={() => setCreateMenuOpen((prev) => !prev)}
+                  title="Tạo mới"
+                  aria-label="Tạo bộ thẻ hoặc thư mục mới"
+                  aria-expanded={createMenuOpen}
+                  className="w-10 h-10 rounded-full bg-[#4255FF] hover:bg-[#3545E0] text-white flex items-center justify-center transition-colors"
+                >
+                  <Plus className="w-5 h-5 stroke-[2.5]" />
+                </button>
+
+                {createMenuOpen && (
+                  <div
+                    role="menu"
+                    className="absolute right-0 mt-2 w-56 bg-white dark:bg-[#0A082D] rounded-2xl border border-[#EDEFF4] dark:border-[#2E3856] shadow-xl py-1.5 z-50"
+                  >
+                    <Link
+                      to="/sets/create"
+                      role="menuitem"
+                      className="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-[#282E3E] dark:text-[#F6F7FB] hover:bg-[#F6F7FB] dark:hover:bg-[#202140] transition-colors"
+                    >
+                      <Layers className="w-[18px] h-[18px] text-[#4255FF]" />
+                      <span>Học phần (Bộ thẻ)</span>
+                    </Link>
+                    <Link
+                      to="/library?tab=folders"
+                      role="menuitem"
+                      className="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-[#282E3E] dark:text-[#F6F7FB] hover:bg-[#F6F7FB] dark:hover:bg-[#202140] transition-colors"
+                    >
+                      <Folder className="w-[18px] h-[18px] text-[#586380] dark:text-[#A8B1D1]" />
+                      <span>Thư mục</span>
+                    </Link>
+                    <Link
+                      to="/library?tab=groups"
+                      role="menuitem"
+                      className="flex items-center gap-3 px-4 py-2.5 text-[14px] font-bold text-[#282E3E] dark:text-[#F6F7FB] hover:bg-[#F6F7FB] dark:hover:bg-[#202140] transition-colors"
+                    >
+                      <Users className="w-[18px] h-[18px] text-[#586380] dark:text-[#A8B1D1]" />
+                      <span>Nhóm học</span>
+                    </Link>
+                  </div>
+                )}
+              </div>
 
               {/* Avatar & Dropdown */}
               <div className="relative" ref={accountMenuRef}>
@@ -394,11 +444,12 @@ export default function MainLayout({ children }) {
       {/* Body: Expandable Fixed-Icon Left Rail (No visible scrollbar) + Main Content */}
       <div className="flex flex-1 min-h-0">
         {/* Desktop Sidebar */}
-        <aside
-          className={`hidden lg:flex flex-col bg-white dark:bg-[#0A082D] sticky top-16 h-[calc(100vh-4rem)] shrink-0 overflow-x-hidden overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden px-3 py-3 transition-[width] duration-200 ease-out ${
-            sidebarCollapsed ? 'w-[64px]' : 'w-[244px]'
-          }`}
-        >
+        {!hideSidebar && (
+          <aside
+            className={`hidden lg:flex flex-col bg-white dark:bg-[#0A082D] sticky top-16 h-[calc(100vh-4rem)] shrink-0 overflow-x-hidden overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden px-3 py-3 transition-[width] duration-200 ease-out ${
+              sidebarCollapsed ? 'w-[64px]' : 'w-[244px]'
+            }`}
+          >
           {/* Primary Nav */}
           <nav className="space-y-1">
             {primaryNavItems.map((item) => renderFixedRailItem(item, sidebarCollapsed))}
@@ -507,26 +558,35 @@ export default function MainLayout({ children }) {
               </div>
             </>
           )}
-        </aside>
+          </aside>
+        )}
 
-        {/* Mobile Drawer Overlay */}
-        {mobileDrawerOpen && (
-          <div className="fixed inset-0 z-50 lg:hidden flex">
-            <div
-              className="fixed inset-0 bg-black/50"
-              onClick={() => setMobileDrawerOpen(false)}
-            />
-            <aside className="relative w-64 max-w-[82vw] bg-white dark:bg-[#0A082D] h-full shadow-2xl flex flex-col justify-between p-3 z-10 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+        {/* Slide-over Drawer Overlay (Mobile, or Desktop when hideSidebar=true) */}
+        <div
+          aria-hidden={!mobileDrawerOpen}
+          className={`fixed inset-0 z-50 flex transition-opacity duration-300 ${
+            hideSidebar ? '' : 'lg:hidden'
+          } ${mobileDrawerOpen ? 'pointer-events-auto opacity-100' : 'pointer-events-none opacity-0'}`}
+        >
+          <div
+            className="fixed inset-0 bg-black/45 transition-opacity duration-300"
+            onClick={() => setMobileDrawerOpen(false)}
+          />
+          <aside
+            className={`relative w-64 max-w-[82vw] bg-white dark:bg-[#0A082D] h-full shadow-2xl flex flex-col justify-between p-3 z-10 overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden transform transition-transform duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+              mobileDrawerOpen ? 'translate-x-0' : '-translate-x-full'
+            }`}
+          >
               <div>
                 <div className="flex items-center justify-between px-2 pb-3 mb-2 border-b border-[#EDEFF4] dark:border-[#2E3856]">
-                  <Link to="/" className="flex items-center gap-2.5">
+                  <Link to="/" className="flex items-center gap-2">
                     <img
                       src={smartflashLogo}
-                      alt="SmartFlash"
-                      className="w-8 h-8 rounded-lg object-contain"
+                      alt="ELearner"
+                      className="w-7 h-7 rounded-lg object-contain"
                     />
-                    <span className="text-lg font-extrabold text-[#282E3E] dark:text-white">
-                      SmartFlash
+                    <span className="text-[19px] leading-none font-semibold tracking-[-0.01em] text-[#282E3E] dark:text-white">
+                      ELearner
                     </span>
                   </Link>
                   <button
@@ -601,9 +661,8 @@ export default function MainLayout({ children }) {
                   </div>
                 )}
               </div>
-            </aside>
-          </div>
-        )}
+          </aside>
+        </div>
 
         {/* Main Workspace */}
         <main className="flex-1 min-w-0">{children}</main>

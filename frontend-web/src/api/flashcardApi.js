@@ -28,6 +28,18 @@ export const flashcardApi = {
       params: token ? { token } : undefined,
     }),
 
+  createSet: (payload) => axiosClient.post('/flashcard-sets', payload),
+
+  updateSet: (id, payload) => axiosClient.put(`/flashcard-sets/${id}`, payload),
+
+  ocrExtract: (file, { sourceLang, targetLang } = {}) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    if (sourceLang) formData.append('sourceLang', sourceLang);
+    if (targetLang) formData.append('targetLang', targetLang);
+    return axiosClient.post('/flashcard-sets/ocr-extract', formData);
+  },
+
   saveSet: (id, token) =>
     axiosClient.post(`/flashcard-sets/${id}/save`, null, {
       params: token ? { token } : undefined,

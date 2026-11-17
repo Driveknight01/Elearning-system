@@ -5,6 +5,7 @@ import com.elearning.common.exception.ErrorCode;
 import com.elearning.config.AiServiceProperties;
 import com.elearning.module.flashcard.dto.OcrExtractResponse;
 import com.elearning.module.flashcard.dto.OcrExtractedCardDto;
+import com.elearning.module.flashcard.dto.OcrTextBoxDto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
@@ -106,6 +107,7 @@ public class AiOcrClient {
             FastApiOcrResponse remote = restClient.post()
                     .uri("/ocr/extract")
                     .contentType(MediaType.MULTIPART_FORM_DATA)
+                    .accept(MediaType.APPLICATION_JSON)
                     .body(body)
                     .retrieve()
                     .body(FastApiOcrResponse.class);
@@ -123,9 +125,25 @@ public class AiOcrClient {
                             .build())
                     .toList();
 
+            List<OcrTextBoxDto> boxes = remote.getBoxes() == null
+                    ? Collections.emptyList()
+                    : remote.getBoxes().stream()
+                    .map(b -> OcrTextBoxDto.builder()
+                            .id(b.getId())
+                            .text(b.getText())
+                            .x(b.getX())
+                            .y(b.getY())
+                            .width(b.getWidth())
+                            .height(b.getHeight())
+                            .angle(b.getAngle() != null ? b.getAngle() : 0.0)
+                            .confidence(b.getConfidence())
+                            .build())
+                    .toList();
+
             return OcrExtractResponse.builder()
                     .rawText(remote.getRawText() != null ? remote.getRawText() : "")
                     .cards(cards)
+                    .boxes(boxes)
                     .confidence(remote.getConfidence() != null ? remote.getConfidence() : 0.0)
                     .engine(remote.getEngine() != null ? remote.getEngine() : "unknown")
                     .warnings(remote.getWarnings() != null ? remote.getWarnings() : Collections.emptyList())
@@ -170,6 +188,7 @@ public class AiOcrClient {
         private String rawText;
 
         private List<FastApiOcrCard> cards;
+        private List<FastApiOcrBox> boxes;
         private Double confidence;
         private String engine;
         private List<String> warnings;
@@ -179,5 +198,17 @@ public class AiOcrClient {
     private static class FastApiOcrCard {
         private String term;
         private String definition;
+    }
+
+    @Data
+    private static class FastApiOcrBox {
+        private String id;
+        private String text;
+        private Double x;
+        private Double y;
+        private Double width;
+        private Double height;
+        private Double angle;
+        private Double confidence;
     }
 }

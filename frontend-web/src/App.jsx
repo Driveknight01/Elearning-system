@@ -7,6 +7,7 @@ import UserProfilePage from './pages/UserProfilePage';
 import SettingsPage from './pages/SettingsPage';
 import LandingExplorePage from './pages/LandingExplorePage';
 import LibraryPage from './pages/LibraryPage';
+import SetEditorPage from './pages/SetEditorPage';
 import ProtectedRoute from './routes/ProtectedRoute';
 import MainLayout from './components/layout/MainLayout';
 import { useAuthStore } from './store/useAuthStore';
@@ -76,10 +77,7 @@ function App() {
         path="/sets/create"
         element={
           <ProtectedRoute allowedRoles={['USER', 'TEACHER', 'ADMIN']}>
-            <RolePlaceholder
-              title="Tạo Bộ thẻ Mới"
-              description="Trình soạn thảo bộ thẻ kèm Import Copy-Paste, quét OCR và ảnh AI sẽ hoàn thiện ở task T3.8."
-            />
+            <SetEditorPage />
           </ProtectedRoute>
         }
       />
@@ -88,10 +86,7 @@ function App() {
         path="/sets/:id/edit"
         element={
           <ProtectedRoute allowedRoles={['USER', 'TEACHER', 'ADMIN']}>
-            <RolePlaceholder
-              title="Chỉnh sửa Bộ thẻ"
-              description="Trình soạn thảo chỉnh sửa bộ thẻ sẽ hoàn thiện ở task T3.8."
-            />
+            <SetEditorPage />
           </ProtectedRoute>
         }
       />

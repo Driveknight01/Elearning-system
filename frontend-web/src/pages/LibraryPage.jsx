@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useLocation, useNavigate, useSearchParams } from 'react-router-dom';
 import {
   Layers,
   Folder,
@@ -47,6 +47,8 @@ const PILL_TABS = [
 
 export default function LibraryPage() {
   const [searchParams, setSearchParams] = useSearchParams();
+  const location = useLocation();
+  const navigate = useNavigate();
   const { user } = useAuthStore();
 
   const rawTab = searchParams.get('tab') || 'sets';
@@ -120,6 +122,13 @@ export default function LibraryPage() {
   useEffect(() => {
     loadAllLibraryData();
   }, [loadAllLibraryData]);
+
+  useEffect(() => {
+    if (location.state?.toast) {
+      showMessage('success', location.state.toast);
+      navigate(`${location.pathname}${location.search}`, { replace: true, state: null });
+    }
+  }, [location.state, location.pathname, location.search, navigate]);
 
   useEffect(() => {
     const closeMenu = () => setOpenMenuSetId(null);

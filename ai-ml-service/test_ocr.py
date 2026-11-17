@@ -4,7 +4,7 @@ from fastapi.testclient import TestClient
 
 from app.core.config import settings
 from app.ocr.card_parser import parse_cards_from_text, parse_llm_json_payload
-from app.ocr.schemas import ExtractedCardItem
+from app.ocr.schemas import ExtractedCardItem, OcrTextBox
 from main import app
 
 client = TestClient(app)
@@ -57,6 +57,7 @@ def test_ocr_extract_uses_tesseract_fallback_and_parses_cards():
         patch("app.ocr.service._extract_with_gemini_vision", new=AsyncMock(return_value=None)),
         patch("app.ocr.service._extract_with_openai_vision", new=AsyncMock(return_value=None)),
         patch("app.ocr.service._extract_with_paddleocr", return_value=None),
+        patch("app.ocr.service._extract_with_rapidocr", return_value=None),
         patch("app.ocr.service._extract_with_tesseract", return_value=sample_text),
     ):
         response = client.post(
@@ -81,9 +82,12 @@ def test_ocr_extract_uses_gemini_vision_when_available():
         ExtractedCardItem(term="ephemeral", definition="ngắn ngủi, phù du"),
     ]
 
-    with patch(
-        "app.ocr.service._extract_with_gemini_vision",
-        new=AsyncMock(return_value=("ubiquitous - có mặt ở khắp mọi nơi\nephemeral - ngắn ngủi, phù du", mocked_cards)),
+    with (
+        patch(
+            "app.ocr.service._extract_with_gemini_vision",
+            new=AsyncMock(return_value=("ubiquitous - có mặt ở khắp mọi nơi\nephemeral - ngắn ngủi, phù du", mocked_cards)),
+        ),
+        patch("app.ocr.service._extract_with_rapidocr", return_value=None),
     ):
         response = client.post(
             "/ocr/extract",
@@ -99,11 +103,38 @@ def test_ocr_extract_uses_gemini_vision_when_available():
     assert body["cards"][0]["term"] == "ubiquitous"
 
 
+def test_ocr_extract_uses_rapidocr_and_returns_word_boxes():
+    mock_boxes = [
+        OcrTextBox(id="box_0_0", text="routine", x=0.4, y=0.3, width=0.15, height=0.05, confidence=0.98),
+        OcrTextBox(id="box_1_0", text="thói", x=0.5, y=0.4, width=0.08, height=0.04, confidence=0.95),
+        OcrTextBox(id="box_1_1", text="quen", x=0.59, y=0.4, width=0.09, height=0.04, confidence=0.96),
+    ]
+    with (
+        patch("app.ocr.service._extract_with_gemini_vision", new=AsyncMock(return_value=None)),
+        patch("app.ocr.service._extract_with_openai_vision", new=AsyncMock(return_value=None)),
+        patch("app.ocr.service._extract_with_paddleocr", return_value=None),
+        patch("app.ocr.service._extract_with_rapidocr", return_value=("routine - thói quen", mock_boxes)),
+    ):
+        response = client.post(
+            "/ocr/extract",
+            files={"file": ("card.png", FAKE_PNG_BYTES, "image/png")},
+        )
+
+    assert response.status_code == 200
+    body = response.json()
+    assert body["success"] is True
+    assert body["engine"] == "rapidocr"
+    assert len(body["boxes"]) == 3
+    assert body["boxes"][0]["text"] == "routine"
+    assert len(body["cards"]) == 1
+
+
 def test_ocr_extract_graceful_fallback_when_no_engine_or_key():
     with (
         patch("app.ocr.service._extract_with_gemini_vision", new=AsyncMock(return_value=None)),
         patch("app.ocr.service._extract_with_openai_vision", new=AsyncMock(return_value=None)),
         patch("app.ocr.service._extract_with_paddleocr", return_value=None),
+        patch("app.ocr.service._extract_with_rapidocr", return_value=None),
         patch("app.ocr.service._extract_with_tesseract", return_value=None),
     ):
         response = client.post(

@@ -82,7 +82,7 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
   - *Commit*: `feat(media): implement stock image search and AI mnemonic image generation for cards`
 - [x] **T3.7** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `LandingExplorePage` (cho cả Guest và User) và `LibraryPage` (quản lý Bộ thẻ của tôi, Thư mục, Nhóm học).
   - *Commit*: `feat(web-library): build explore landing page, personal library, folders and study groups ui`
-- [ ] **T3.8** 🔴 `[KHÓ — ⚠️ Đề xuất Model Mạnh/Pro]`: [Web] Xây dựng `SetEditorPage` (Tạo/Sửa bộ thẻ): thêm/xóa/kéo-thả thứ tự thẻ, chọn quyền xem (`Public/Private/Link-only`), **Import nhanh bằng Copy-Paste (Tab/CSV)**, **Modal Quét ảnh OCR**, chọn ảnh AI cho từng thẻ, và nhận dữ liệu `prefillData` từ AI Chatbot.
+- [x] **T3.8** 🔴 `[KHÓ — ⚠️ Đề xuất Model Mạnh/Pro]`: [Web] Xây dựng `SetEditorPage` (Tạo/Sửa bộ thẻ): thêm/xóa/kéo-thả thứ tự thẻ, chọn quyền xem (`Public/Private/Link-only`), **Import nhanh bằng Copy-Paste (Tab/CSV)**, **Modal Quét ảnh OCR**, chọn ảnh AI cho từng thẻ, và nhận dữ liệu `prefillData` từ AI Chatbot.
   - *Commit*: `feat(web-editor): build comprehensive SetEditorPage with OCR modal, bulk import and AI image picker`
 - [ ] **T3.9** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `SetDetailPage`: hiển thị thẻ lật xem trước, phát âm tự động **Text-to-Speech (`window.speechSynthesis`)**, gắn sao `★` thẻ khó, nút Clone bộ thẻ, Copy Share Link và bảng chọn các chế độ học/chơi game.
   - *Commit*: `feat(web-set-detail): build SetDetailPage with TTS pronunciation, star cards and share link`

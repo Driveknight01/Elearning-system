@@ -22,14 +22,17 @@ export default function AuthSplitLayout({ mode = 'login', children }) {
         />
         <Link
           to="/"
-          aria-label="SmartFlash Trang chủ"
-          className="absolute top-6 left-6 z-10 rounded-xl shadow-lg hover:scale-105 transition-transform"
+          aria-label="ELearner Trang chủ"
+          className="absolute top-6 left-6 z-10 inline-flex items-center gap-2.5 bg-white/95 backdrop-blur-sm px-3.5 py-2 rounded-xl shadow-lg hover:scale-105 transition-transform"
         >
           <img
             src={smartflashLogo}
-            alt="SmartFlash"
-            className="w-11 h-11 rounded-xl object-contain"
+            alt="ELearner"
+            className="w-7 h-7 object-contain"
           />
+          <span className="text-[19px] leading-none font-semibold tracking-[-0.01em] text-[#282E3E]">
+            ELearner
+          </span>
         </Link>
       </div>
 
@@ -40,11 +43,11 @@ export default function AuthSplitLayout({ mode = 'login', children }) {
           <Link to="/" className="lg:hidden inline-flex items-center gap-2.5">
             <img
               src={smartflashLogo}
-              alt="SmartFlash"
-              className="w-8 h-8 rounded-lg object-contain"
+              alt="ELearner"
+              className="w-7 h-7 object-contain"
             />
-            <span className="text-xl font-extrabold text-[#282E3E] tracking-tight">
-              SmartFlash
+            <span className="text-[20px] leading-none font-semibold tracking-[-0.01em] text-[#282E3E]">
+              ELearner
             </span>
           </Link>
 

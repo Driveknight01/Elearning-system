@@ -18,6 +18,7 @@ public class OcrExtractResponse {
 
     private String rawText;
     private List<OcrExtractedCardDto> cards;
+    private List<OcrTextBoxDto> boxes;
     private Double confidence;
     private String engine;
     private List<String> warnings;

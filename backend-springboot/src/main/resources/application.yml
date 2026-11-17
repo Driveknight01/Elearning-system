@@ -98,7 +98,7 @@ app:
   ai-service:
     base-url: ${AI_SERVICE_URL:http://localhost:8000}
     dkt-timeout-ms: 1500
-    ocr-timeout-ms: 15000
+    ocr-timeout-ms: 30000
     chat-timeout-ms: 20000
   media:
     pixabay-api-key: ${PIXABAY_API_KEY:}
