@@ -99,15 +99,23 @@
   - Tạo [MediaProperties.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/config/MediaProperties.java) (cấu hình `app.media.*` trong [application.yml](file:///D:/Elearning-system/backend-springboot/src/main/resources/application.yml)) và 5 DTOs trong `com.elearning.module.media.dto` (`MediaUploadResponse`, `StockImageItemDto`, `StockImageSearchResponse`, `AiImageGenerateRequest`, `AiImageGenerateResponse`).
   - Tạo [MediaService.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/media/service/MediaService.java) & [MediaController.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/media/controller/MediaController.java) hỗ trợ `POST /api/v1/media/upload` (lưu `/uploads/cards/**`), `GET /api/v1/media/stock-search` (Pixabay -> Unsplash -> Fallback an toàn), `POST /api/v1/media/ai-generate` (Pollinations, tùy chọn lưu URL vào `flashcards.image_url` có kiểm tra quyền sở hữu) cùng [MediaServiceTest.java](file:///D:/Elearning-system/backend-springboot/src/test/java/com/elearning/module/media/service/MediaServiceTest.java) & [MediaControllerIntegrationTest.java](file:///D:/Elearning-system/backend-springboot/src/test/java/com/elearning/module/media/controller/MediaControllerIntegrationTest.java).
 
+- **T3.7 — Hoàn thành `LandingExplorePage` & `LibraryPage` (`frontend-web`)**:
+  - Tạo 3 API clients: [flashcardApi.js](file:///D:/Elearning-system/frontend-web/src/api/flashcardApi.js), [folderApi.js](file:///D:/Elearning-system/frontend-web/src/api/folderApi.js) và [studyGroupApi.js](file:///D:/Elearning-system/frontend-web/src/api/studyGroupApi.js) khớp 100% endpoint/DTO từ T3.2–T3.4.
+  - Tạo bộ components thư viện dùng chung: [FlashcardSetCard.jsx](file:///D:/Elearning-system/frontend-web/src/components/library/FlashcardSetCard.jsx), [FolderModal.jsx](file:///D:/Elearning-system/frontend-web/src/components/library/FolderModal.jsx), [FolderDetailModal.jsx](file:///D:/Elearning-system/frontend-web/src/components/library/FolderDetailModal.jsx), [StudyGroupModals.jsx](file:///D:/Elearning-system/frontend-web/src/components/library/StudyGroupModals.jsx).
+  - Xây dựng [LandingExplorePage.jsx](file:///D:/Elearning-system/frontend-web/src/pages/LandingExplorePage.jsx) (`/explore` hỗ trợ Guest & User, tìm kiếm `?q=`, lọc danh mục, sắp xếp `newest/popular/rating`, lưu bộ thẻ) và [LibraryPage.jsx](file:///D:/Elearning-system/frontend-web/src/pages/LibraryPage.jsx) (`/library` 4 tabs: *Bộ thẻ của tôi, Đã lưu & Gần đây, Thư mục, Nhóm học* hỗ trợ `?tab=groups`), cập nhật routing trong [App.jsx](file:///D:/Elearning-system/frontend-web/src/App.jsx).
+
 ### 🔄 Đang thực hiện (In Progress)
 - Đang triển khai **Phase 3 (`T3.1` → `T3.12`)** trên nhánh `feat/phase-3-flashcard`.
 
 ### ⏭️ Kế tiếp (Next Up)
-- [ ] **T3.7** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `LandingExplorePage` (cho cả Guest và User) và `LibraryPage` (quản lý Bộ thẻ của tôi, Thư mục, Nhóm học).
+- [ ] **T3.8** 🔴 `[KHÓ — ⚠️ Đề xuất Model Mạnh/Pro]`: [Web] Xây dựng `SetEditorPage` (Tạo/Sửa bộ thẻ): thêm/xóa/kéo-thả thứ tự thẻ, chọn quyền xem (`Public/Private/Link-only`), **Import nhanh bằng Copy-Paste (Tab/CSV)**, **Modal Quét ảnh OCR**, chọn ảnh AI cho từng thẻ, và nhận dữ liệu `prefillData` từ AI Chatbot.
 
 ---
 
 ## 3. CHANGELOG (Nhật ký theo từng buổi làm việc)
+
+### [2026-11-17] — Buổi 5 (Cập nhật lần 7): Hoàn thành T3.7 (Web `LandingExplorePage` & `LibraryPage`)
+- Hoàn thành **T3.7** trên nhánh `feat/phase-3-flashcard`: Tạo `flashcardApi.js`, `folderApi.js`, `studyGroupApi.js`, các components `FlashcardSetCard`, `FolderModal`, `FolderDetailModal`, `StudyGroupModals`, xây dựng `LandingExplorePage` (`/explore`) và `LibraryPage` (`/library` với 4 tabs *Bộ thẻ của tôi, Đã lưu & Gần đây, Thư mục, Nhóm học*), cập nhật `App.jsx`. Đã kiểm chứng `npm.cmd run build` thành công (`built in 4.47s`).
 
 ### [2026-11-17] — Buổi 5 (Cập nhật lần 6): Hoàn thành T3.6 (`MediaController` — Upload, Stock Image Search & AI Mnemonic Image)
 - Hoàn thành **T3.6** trên nhánh `feat/phase-3-flashcard`: Triển khai `MediaController` + `MediaService` + `MediaProperties` (`/api/v1/media/upload`, `/stock-search`, `/ai-generate` với Pixabay/Unsplash/Pollinations & lưu URL vào `flashcards.image_url`), viết `MediaServiceTest` và `MediaControllerIntegrationTest`. Đã kiểm chứng biên dịch & chạy test xanh trong IntelliJ IDEA.

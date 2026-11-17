@@ -80,7 +80,7 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
   - *Commit*: `feat(ocr): implement ocr image-to-flashcards extraction pipeline in fastapi and springboot`
 - [x] **T3.6** 🟡 `[VỪA — Medium]`: [BE] Xây dựng `MediaController`: upload ảnh thẻ, tìm ảnh minh họa miễn phí theo từ khóa `Term` (Pixabay/Unsplash API) và tạo ảnh minh họa tự động bằng AI (`Pollinations/Imagen`) lưu URL vào thẻ.
   - *Commit*: `feat(media): implement stock image search and AI mnemonic image generation for cards`
-- [ ] **T3.7** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `LandingExplorePage` (cho cả Guest và User) và `LibraryPage` (quản lý Bộ thẻ của tôi, Thư mục, Nhóm học).
+- [x] **T3.7** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `LandingExplorePage` (cho cả Guest và User) và `LibraryPage` (quản lý Bộ thẻ của tôi, Thư mục, Nhóm học).
   - *Commit*: `feat(web-library): build explore landing page, personal library, folders and study groups ui`
 - [ ] **T3.8** 🔴 `[KHÓ — ⚠️ Đề xuất Model Mạnh/Pro]`: [Web] Xây dựng `SetEditorPage` (Tạo/Sửa bộ thẻ): thêm/xóa/kéo-thả thứ tự thẻ, chọn quyền xem (`Public/Private/Link-only`), **Import nhanh bằng Copy-Paste (Tab/CSV)**, **Modal Quét ảnh OCR**, chọn ảnh AI cho từng thẻ, và nhận dữ liệu `prefillData` từ AI Chatbot.
   - *Commit*: `feat(web-editor): build comprehensive SetEditorPage with OCR modal, bulk import and AI image picker`

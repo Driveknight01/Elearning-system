@@ -1,10 +1,12 @@
 import React, { useEffect } from 'react';
-import { Routes, Route, useSearchParams } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import HomePage from './pages/HomePage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import UserProfilePage from './pages/UserProfilePage';
 import SettingsPage from './pages/SettingsPage';
+import LandingExplorePage from './pages/LandingExplorePage';
+import LibraryPage from './pages/LibraryPage';
 import ProtectedRoute from './routes/ProtectedRoute';
 import MainLayout from './components/layout/MainLayout';
 import { useAuthStore } from './store/useAuthStore';
@@ -23,22 +25,6 @@ function RolePlaceholder({ title, description }) {
   );
 }
 
-function ExplorePlaceholder() {
-  const [searchParams] = useSearchParams();
-  const query = searchParams.get('q');
-
-  return (
-    <RolePlaceholder
-      title="Khám phá Bộ thẻ Công khai"
-      description={
-        query
-          ? `Kết quả tìm kiếm cho "${query}" sẽ được kích hoạt khi hoàn thiện module Bộ thẻ Flashcard ở Phase 3. Mẹo: Gõ @username trên thanh tìm kiếm để đi thẳng tới trang cá nhân!`
-          : 'Trang khám phá bộ thẻ cộng đồng theo danh mục sẽ hoàn thiện ở Phase 3.'
-      }
-    />
-  );
-}
-
 function App() {
   const { accessToken, user, fetchCurrentUser } = useAuthStore();
   useThemeStore();
@@ -53,10 +39,19 @@ function App() {
     <Routes>
       {/* Public / Guest Routes */}
       <Route path="/" element={<HomePage />} />
-      <Route path="/explore" element={<ExplorePlaceholder />} />
+      <Route path="/explore" element={<LandingExplorePage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/users/:username" element={<UserProfilePage />} />
+      <Route
+        path="/sets/:id"
+        element={
+          <RolePlaceholder
+            title="Chi tiết Bộ thẻ Flashcard"
+            description="Trang xem trước thẻ lật, phát âm TTS và chọn chế độ học sẽ hoàn thiện ở task T3.9."
+          />
+        }
+      />
 
       {/* Authenticated Learner / Teacher / Admin Routes */}
       <Route
@@ -72,9 +67,30 @@ function App() {
         path="/library"
         element={
           <ProtectedRoute allowedRoles={['USER', 'TEACHER', 'ADMIN']}>
+            <LibraryPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/sets/create"
+        element={
+          <ProtectedRoute allowedRoles={['USER', 'TEACHER', 'ADMIN']}>
             <RolePlaceholder
-              title="Thư viện cá nhân"
-              description="Khu vực dành cho người dùng đã đăng nhập (sẽ hoàn thiện ở Phase 3)."
+              title="Tạo Bộ thẻ Mới"
+              description="Trình soạn thảo bộ thẻ kèm Import Copy-Paste, quét OCR và ảnh AI sẽ hoàn thiện ở task T3.8."
+            />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/sets/:id/edit"
+        element={
+          <ProtectedRoute allowedRoles={['USER', 'TEACHER', 'ADMIN']}>
+            <RolePlaceholder
+              title="Chỉnh sửa Bộ thẻ"
+              description="Trình soạn thảo chỉnh sửa bộ thẻ sẽ hoàn thiện ở task T3.8."
             />
           </ProtectedRoute>
         }
