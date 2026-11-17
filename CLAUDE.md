@@ -108,15 +108,23 @@
   - Xây dựng [SetEditorPage.jsx](file:///D:/Elearning-system/frontend-web/src/pages/SetEditorPage.jsx) (`/sets/create` & `/sets/:id/edit` nhận `prefillData`), [CardEditorRow.jsx](file:///D:/Elearning-system/frontend-web/src/components/editor/CardEditorRow.jsx), [BulkImportModal.jsx](file:///D:/Elearning-system/frontend-web/src/components/editor/BulkImportModal.jsx), [AccessControlModal.jsx](file:///D:/Elearning-system/frontend-web/src/components/editor/AccessControlModal.jsx), [DeleteSetConfirmModal.jsx](file:///D:/Elearning-system/frontend-web/src/components/editor/DeleteSetConfirmModal.jsx), [LanguagePickerPopover.jsx](file:///D:/Elearning-system/frontend-web/src/components/editor/LanguagePickerPopover.jsx), [InlineCardImagePicker.jsx](file:///D:/Elearning-system/frontend-web/src/components/editor/InlineCardImagePicker.jsx), [bulkCardParser.js](file:///D:/Elearning-system/frontend-web/src/utils/bulkCardParser.js), [mediaApi.js](file:///D:/Elearning-system/frontend-web/src/api/mediaApi.js); hỗ trợ sticky top bar `Tạo một học phần mới` khi cuộn sâu (`stickyHeader={false}` trên [MainLayout.jsx](file:///D:/Elearning-system/frontend-web/src/components/layout/MainLayout.jsx)) và tự động lưu/khôi phục bản nháp tạm thời trong `localStorage` kèm toast góc dưới bên phải (`Tạo học phần mới` / `Tiếp tục sửa bản nháp`).
   - Hoàn thiện [OcrScanModal.jsx](file:///D:/Elearning-system/frontend-web/src/components/editor/OcrScanModal.jsx) (`Vuốt để chọn` với khung bound xanh dương từng từ + nét highlighter xanh lá liền mạch) kết nối pipeline hybrid **RapidOCR + Hough deskew + VietOCR** trong [ai-ml-service/app/ocr/service.py](file:///D:/Elearning-system/ai-ml-service/app/ocr/service.py) và [AiOcrClient.java](file:///D:/Elearning-system/backend-springboot/src/main/java/com/elearning/module/flashcard/service/AiOcrClient.java).
 
+- **T3.9 — Hoàn thành `SetDetailPage` (`frontend-web`)**:
+  - Tạo hook [useTextToSpeech.js](file:///D:/Elearning-system/frontend-web/src/hooks/useTextToSpeech.js) bọc `window.speechSynthesis` hỗ trợ tự động chọn giọng theo `termLang`/`defLang`, phát âm thủ công và **Tự động phát âm** khi chuyển/lật thẻ.
+  - Mở rộng [flashcardApi.js](file:///D:/Elearning-system/frontend-web/src/api/flashcardApi.js) với `getSetByShareToken`, `getInteraction`, `saveResumeState`, `rateSet`, `getSetRatings`, `starCard`, `unstarCard`, `getStarredCards`.
+  - Tạo [StudyModeSelector.jsx](file:///D:/Elearning-system/frontend-web/src/components/sets/StudyModeSelector.jsx) (8 chế độ học & minigame chuẩn Quizlet), [CardPreviewDeck.jsx](file:///D:/Elearning-system/frontend-web/src/components/sets/CardPreviewDeck.jsx) (thẻ lật 3D, phím tắt `Space`/`←`/`→`/`A`/`S`, trộn thẻ, gợi ý, gắn sao `★`), [SetDetailPage.jsx](file:///D:/Elearning-system/frontend-web/src/pages/SetDetailPage.jsx) (lưu, nhân bản Clone, sao chép Share Link, danh sách thuật ngữ lọc `Tất cả / Gắn sao`, đánh giá 1–5★) và gắn route `/sets/:id` & `/sets/share/:shareToken` trong [App.jsx](file:///D:/Elearning-system/frontend-web/src/App.jsx).
+
 ### 🔄 Đang thực hiện (In Progress)
 - Đang triển khai **Phase 3 (`T3.1` → `T3.12`)** trên nhánh `feat/phase-3-flashcard`.
 
 ### ⏭️ Kế tiếp (Next Up)
-- [ ] **T3.9** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `SetDetailPage`: hiển thị thẻ lật xem trước, phát âm tự động **Text-to-Speech (`window.speechSynthesis`)**, gắn sao `★` thẻ khó, nút Clone bộ thẻ, Copy Share Link và bảng chọn các chế độ học/chơi game.
+- [ ] **T3.10** 🟡 `[VỪA — Medium]`: [Android] Xây dựng `HomeFragment`, `SearchFragment` và `LibraryFragment` (hiển thị danh sách bộ thẻ, thư mục, nhóm học từ API).
 
 ---
 
 ## 3. CHANGELOG (Nhật ký theo từng buổi làm việc)
+
+### [2026-11-17] — Buổi 5 (Cập nhật lần 10): Hoàn thành T3.9 (`SetDetailPage` với 3D Flip Deck, TTS, Starred Cards, Clone & Share Link)
+- Hoàn thành **T3.9** trên nhánh `feat/phase-3-flashcard`: Tạo `useTextToSpeech.js`, `StudyModeSelector.jsx`, `CardPreviewDeck.jsx`, `SetDetailPage.jsx`, mở rộng `flashcardApi.js`, thêm 3D flip utilities vào `index.css` và cấu hình route `/sets/:id` & `/sets/share/:shareToken` trong `App.jsx`. Kiểm chứng `npm.cmd run build` thành công (`built in 13.67s`).
 
 ### [2026-11-17] — Buổi 5 (Cập nhật lần 9): Hoàn thành T3.8 (`SetEditorPage`, Sticky Header + Bản nháp tạm, và Pipeline OCR Tiếng Việt)
 - Hoàn thành **T3.8** trên nhánh `feat/phase-3-flashcard`: Hoàn thiện `SetEditorPage` (sticky `Tạo một học phần mới` khi cuộn sâu, tự động lưu & khôi phục bản nháp `localStorage` kèm toast góc dưới bên phải), `OcrScanModal` (`Vuốt để chọn` tô highlight nét liền + bound theo từng từ), nâng cấp OCR hybrid **RapidOCR + VietOCR** trong `ai-ml-service` & `AiOcrClient` (`backend-springboot`). Kiểm chứng `npm.cmd run build` thành công (`built in 7.97s`).

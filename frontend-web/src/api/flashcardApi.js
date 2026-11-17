@@ -28,6 +28,9 @@ export const flashcardApi = {
       params: token ? { token } : undefined,
     }),
 
+  getSetByShareToken: (shareToken) =>
+    axiosClient.get(`/flashcard-sets/share/${encodeURIComponent(shareToken)}`),
+
   createSet: (payload) => axiosClient.post('/flashcard-sets', payload),
 
   updateSet: (id, payload) => axiosClient.put(`/flashcard-sets/${id}`, payload),
@@ -47,6 +50,40 @@ export const flashcardApi = {
 
   unsaveSet: (id, token) =>
     axiosClient.delete(`/flashcard-sets/${id}/save`, {
+      params: token ? { token } : undefined,
+    }),
+
+  getInteraction: (id, token) =>
+    axiosClient.get(`/flashcard-sets/${id}/interaction`, {
+      params: token ? { token } : undefined,
+    }),
+
+  saveResumeState: (id, payload, token) =>
+    axiosClient.put(`/flashcard-sets/${id}/resume`, payload, {
+      params: token ? { token } : undefined,
+    }),
+
+  rateSet: (id, payload, token) =>
+    axiosClient.post(`/flashcard-sets/${id}/rate`, payload, {
+      params: token ? { token } : undefined,
+    }),
+
+  getSetRatings: (id, { page = 0, size = 10, token } = {}) => {
+    const params = { page, size };
+    if (token) params.token = token;
+    return axiosClient.get(`/flashcard-sets/${id}/ratings`, { params });
+  },
+
+  starCard: (id, cardId, token) =>
+    axiosClient.post(`/flashcard-sets/${id}/cards/${cardId}/star`, null, {
+      params: token ? { token } : undefined,
+    }),
+
+  unstarCard: (id, cardId) =>
+    axiosClient.delete(`/flashcard-sets/${id}/cards/${cardId}/star`),
+
+  getStarredCards: (id, token) =>
+    axiosClient.get(`/flashcard-sets/${id}/starred-cards`, {
       params: token ? { token } : undefined,
     }),
 

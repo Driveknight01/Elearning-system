@@ -8,6 +8,7 @@ import SettingsPage from './pages/SettingsPage';
 import LandingExplorePage from './pages/LandingExplorePage';
 import LibraryPage from './pages/LibraryPage';
 import SetEditorPage from './pages/SetEditorPage';
+import SetDetailPage from './pages/SetDetailPage';
 import ProtectedRoute from './routes/ProtectedRoute';
 import MainLayout from './components/layout/MainLayout';
 import { useAuthStore } from './store/useAuthStore';
@@ -44,15 +45,8 @@ function App() {
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/users/:username" element={<UserProfilePage />} />
-      <Route
-        path="/sets/:id"
-        element={
-          <RolePlaceholder
-            title="Chi tiết Bộ thẻ Flashcard"
-            description="Trang xem trước thẻ lật, phát âm TTS và chọn chế độ học sẽ hoàn thiện ở task T3.9."
-          />
-        }
-      />
+      <Route path="/sets/share/:shareToken" element={<SetDetailPage />} />
+      <Route path="/sets/:id" element={<SetDetailPage />} />
 
       {/* Authenticated Learner / Teacher / Admin Routes */}
       <Route

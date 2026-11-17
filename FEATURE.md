@@ -84,7 +84,7 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
   - *Commit*: `feat(web-library): build explore landing page, personal library, folders and study groups ui`
 - [x] **T3.8** 🔴 `[KHÓ — ⚠️ Đề xuất Model Mạnh/Pro]`: [Web] Xây dựng `SetEditorPage` (Tạo/Sửa bộ thẻ): thêm/xóa/kéo-thả thứ tự thẻ, chọn quyền xem (`Public/Private/Link-only`), **Import nhanh bằng Copy-Paste (Tab/CSV)**, **Modal Quét ảnh OCR**, chọn ảnh AI cho từng thẻ, và nhận dữ liệu `prefillData` từ AI Chatbot.
   - *Commit*: `feat(web-editor): build comprehensive SetEditorPage with OCR modal, bulk import and AI image picker`
-- [ ] **T3.9** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `SetDetailPage`: hiển thị thẻ lật xem trước, phát âm tự động **Text-to-Speech (`window.speechSynthesis`)**, gắn sao `★` thẻ khó, nút Clone bộ thẻ, Copy Share Link và bảng chọn các chế độ học/chơi game.
+- [x] **T3.9** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `SetDetailPage`: hiển thị thẻ lật xem trước, phát âm tự động **Text-to-Speech (`window.speechSynthesis`)**, gắn sao `★` thẻ khó, nút Clone bộ thẻ, Copy Share Link và bảng chọn các chế độ học/chơi game.
   - *Commit*: `feat(web-set-detail): build SetDetailPage with TTS pronunciation, star cards and share link`
 - [ ] **T3.10** 🟡 `[VỪA — Medium]`: [Android] Xây dựng `HomeFragment`, `SearchFragment` và `LibraryFragment` (hiển thị danh sách bộ thẻ, thư mục, nhóm học từ API).
   - *Commit*: `feat(android-library): implement Home, Search and Library fragments with RecyclerView adapters`

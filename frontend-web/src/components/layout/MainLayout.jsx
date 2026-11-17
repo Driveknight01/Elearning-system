@@ -26,7 +26,11 @@ import { useThemeStore } from '../../store/useThemeStore';
 import UserAvatar from '../common/UserAvatar';
 import smartflashLogo from '../../assets/smartflash-logo.png';
 
-export default function MainLayout({ children, hideSidebar = false, stickyHeader = true }) {
+export default function MainLayout({
+  children,
+  hideSidebar = false,
+  stickyHeader = true,
+}) {
   const navigate = useNavigate();
   const location = useLocation();
   const { isAuthenticated, user, logout } = useAuthStore();
