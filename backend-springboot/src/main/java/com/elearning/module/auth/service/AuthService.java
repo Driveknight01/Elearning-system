@@ -69,6 +69,14 @@ public class AuthService {
     private final OtpMailService otpMailService;
     private final GoogleOAuth2Verifier googleOAuth2Verifier;
 
+    @Transactional(readOnly = true)
+    public boolean checkEmailExists(String email) {
+        if (email == null || email.isBlank()) {
+            return false;
+        }
+        return userRepository.existsByEmailIgnoreCase(email.trim().toLowerCase());
+    }
+
     @Transactional
     public AuthResponse register(RegisterRequest request) {
         String normalizedEmail = request.getEmail().trim().toLowerCase();

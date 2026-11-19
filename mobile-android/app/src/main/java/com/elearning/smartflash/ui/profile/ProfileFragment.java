@@ -30,6 +30,7 @@ import com.elearning.smartflash.databinding.FragmentProfileBinding;
 import com.elearning.smartflash.ui.auth.GoogleSignInHelper;
 import com.elearning.smartflash.ui.auth.LoginActivity;
 import com.elearning.smartflash.ui.auth.RegisterActivity;
+import com.elearning.smartflash.ui.main.MainActivity;
 import com.elearning.smartflash.util.ProfileUtils;
 import com.elearning.smartflash.util.Resource;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
@@ -120,12 +121,87 @@ public class ProfileFragment extends Fragment {
             startActivity(new Intent(requireContext(), RegisterActivity.class));
         });
 
-        binding.btnChangeAvatar.setOnClickListener(v -> avatarPickerLauncher.launch("image/*"));
+        binding.btnProfileBack.setOnClickListener(v -> {
+            if (getActivity() instanceof MainActivity activity) {
+                activity.navigateToTab(R.id.nav_home);
+            }
+        });
+
+        binding.cardYourSettings.setOnClickListener(v ->
+                SettingsDialogHelper.show(
+                        requireContext(),
+                        currentProfile,
+                        tokenManager.getUser(),
+                        new SettingsDialogHelper.Callback() {
+                            @Override
+                            public void onEditProfile() {
+                                showEditProfileDialog();
+                            }
+
+                            @Override
+                            public void onChangePassword() {
+                                showChangePasswordDialog();
+                            }
+
+                            @Override
+                            public void onPrivacySettings() {
+                                showPrivacyDialog();
+                            }
+
+                            @Override
+                            public void onLogout() {
+                                performLogout();
+                            }
+                        }
+                )
+        );
+
+        binding.cardActivity.setOnClickListener(v ->
+                Toast.makeText(requireContext(), "Lịch sử hoạt động & thông báo sẽ đồng bộ ở Phase 8 (T8.8).", Toast.LENGTH_SHORT).show()
+        );
+
+        binding.tvAchievementsViewAll.setOnClickListener(v ->
+                Toast.makeText(requireContext(), "Bộ sưu tập huy hiệu thành tựu sẽ mở ở Phase 8 (T8.8).", Toast.LENGTH_SHORT).show()
+        );
+
+        binding.flProfileAvatarWrap.setOnClickListener(v -> openAvatarChooser());
+        binding.btnChangeAvatar.setOnClickListener(v -> openAvatarChooser());
         binding.rowPrivacySettings.setOnClickListener(v -> showPrivacyDialog());
         binding.rowEditProfile.setOnClickListener(v -> showEditProfileDialog());
         binding.rowChangePassword.setOnClickListener(v -> showChangePasswordDialog());
         binding.btnPreviewPublicProfile.setOnClickListener(v -> openPublicProfilePreview());
         binding.btnLogout.setOnClickListener(v -> performLogout());
+    }
+
+    private void openAvatarChooser() {
+        ChooseAvatarDialogHelper.show(requireContext(), new ChooseAvatarDialogHelper.Callback() {
+            @Override
+            public void onPickFromGallery() {
+                avatarPickerLauncher.launch("image/*");
+            }
+
+            @Override
+            public void onPresetConfirmed(android.net.Uri renderedPngUri) {
+                viewModel.uploadAvatar(renderedPngUri).observe(getViewLifecycleOwner(), res -> {
+                    if (res == null) return;
+                    switch (res.getStatus()) {
+                        case LOADING:
+                            binding.pbProfileLoading.setVisibility(View.VISIBLE);
+                            break;
+                        case SUCCESS:
+                            binding.pbProfileLoading.setVisibility(View.GONE);
+                            Toast.makeText(requireContext(),
+                                    res.getMessage() != null ? res.getMessage() : "Đã cập nhật ảnh đại diện!",
+                                    Toast.LENGTH_SHORT).show();
+                            break;
+                        case ERROR:
+                            binding.pbProfileLoading.setVisibility(View.GONE);
+                            Toast.makeText(requireContext(), res.getMessage(), Toast.LENGTH_LONG).show();
+                            break;
+                    }
+                });
+            }
+        });
     }
 
     private void refreshSessionView() {

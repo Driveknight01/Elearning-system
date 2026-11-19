@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="10dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:outlineAmbientShadowColor="#00000000"
+    android:outlineSpotShadowColor="#242E3856"
+    app:cardBackgroundColor="@color/sf_bg_surface"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="4dp"
+    app:cardPreventCornerOverlap="false"
+    app:rippleColor="#124255FF"
+    app:strokeColor="@color/sf_stroke_card"
+    app:strokeWidth="1dp"
+    tools:targetApi="p">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tv_class_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="Phrasal Verbs"
+            android:textColor="@color/sf_text_primary"
+            android:textSize="16.5sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_class_school"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="4dp"
+            android:fontFamily="sans-serif-medium"
+            android:text="ĐH Bách Khoa • Hà Nội"
+            android:textColor="@color/sf_text_secondary"
+            android:textSize="13.5sp"
+            android:textStyle="bold" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/bg_library_pill_inactive"
+                android:backgroundTint="@color/sf_bg_btn_soft"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:contentDescription="Học phần"
+                    android:src="@drawable/ic_nav_library"
+                    app:tint="@color/sf_text_primary" />
+
+                <TextView
+                    android:id="@+id/tv_class_sets_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="1 học phần"
+                    android:textColor="@color/sf_text_primary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:background="@drawable/bg_library_pill_inactive"
+                android:backgroundTint="@color/sf_bg_btn_soft"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="5dp">
+
+                <ImageView
+                    android:layout_width="14dp"
+                    android:layout_height="14dp"
+                    android:contentDescription="Thành viên"
+                    android:src="@drawable/ic_group"
+                    app:tint="@color/sf_text_primary" />
+
+                <TextView
+                    android:id="@+id/tv_class_members_count"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:fontFamily="sans-serif-medium"
+                    android:text="1 thành viên"
+                    android:textColor="@color/sf_text_primary"
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

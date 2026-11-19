@@ -30,6 +30,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AuthInputHelper.applyWhiteStatusBar(this);
         binding = ActivitySplashBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -44,13 +45,9 @@ public class SplashActivity extends AppCompatActivity {
             return;
         }
 
-        if (tokenManager.isGuestMode() && !tokenManager.isLoggedIn()) {
-            navigateToMain();
-            return;
-        }
-
         if (!tokenManager.isLoggedIn()) {
-            navigateToLogin();
+            tokenManager.setGuestMode(false);
+            navigateToWelcome();
             return;
         }
 
@@ -61,7 +58,7 @@ public class SplashActivity extends AppCompatActivity {
             if (Boolean.TRUE.equals(resource.getData())) {
                 navigateToMain();
             } else {
-                navigateToLogin();
+                navigateToWelcome();
             }
         });
     }
@@ -73,10 +70,10 @@ public class SplashActivity extends AppCompatActivity {
         finish();
     }
 
-    private void navigateToLogin() {
+    private void navigateToWelcome() {
         if (navigated) return;
         navigated = true;
-        startActivity(new Intent(this, LoginActivity.class));
+        startActivity(new Intent(this, RegisterActivity.class));
         finish();
     }
 }

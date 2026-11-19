@@ -1,236 +1,601 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/quizlet_bg"
-    android:fillViewport="true">
+    android:background="@color/sf_bg_screen"
+    android:orientation="vertical"
+    android:paddingTop="16dp">
 
+    <!-- Top Search Bar: Back Arrow + Pill Search Input -->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="20dp">
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp">
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Tìm kiếm"
-            android:textColor="@color/quizlet_text_dark"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+        <ImageButton
+            android:id="@+id/btn_search_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="-8dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/nav_home"
+            android:padding="12dp"
+            android:src="@drawable/ic_arrow_back" />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:text="Tra cứu trang cá nhân người dùng theo @username hoặc khám phá bộ thẻ"
-            android:textColor="@color/quizlet_text_muted"
-            android:textSize="13sp" />
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="4dp"
+            android:layout_weight="1"
+            android:background="@drawable/bg_search_pill"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingStart="16dp"
+            android:paddingEnd="8dp">
+
+            <EditText
+                android:id="@+id/et_search_query"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:fontFamily="sans-serif"
+                android:hint="Học phần, tài liệu, câu hỏi"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/sf_text_primary"
+                android:textColorHint="@color/sf_text_secondary"
+                android:textSize="15sp"
+                android:textStyle="bold" />
+
+            <ImageButton
+                android:id="@+id/btn_search_clear"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Xóa từ khóa"
+                android:padding="8dp"
+                android:src="@drawable/ic_close"
+                android:visibility="gone"
+                app:tint="@color/sf_text_primary" />
+
+            <ImageButton
+                android:id="@+id/btn_search_submit"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/nav_search"
+                android:padding="6dp"
+                android:src="@drawable/ic_nav_search"
+                app:tint="@color/sf_text_secondary" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- Loading & Feedback -->
+    <ProgressBar
+        android:id="@+id/pb_search_loading"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="24dp"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/tv_search_feedback"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:textColor="@color/sf_text_secondary"
+        android:textSize="14sp"
+        android:visibility="gone" />
+
+    <!-- Public Profile Result Card (when searching @username) -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_search_profile_result"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="18dp"
+        android:visibility="gone"
+        app:cardBackgroundColor="@color/sf_bg_surface"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="3dp"
+        app:strokeColor="@color/sf_stroke_card"
+        app:strokeWidth="1.2dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
+            android:orientation="vertical"
+            android:padding="18dp">
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/til_search_query"
-                style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="Nhập @username (vd: student01)"
-                app:boxBackgroundColor="@color/quizlet_card"
-                app:boxCornerRadiusBottomEnd="14dp"
-                app:boxCornerRadiusBottomStart="14dp"
-                app:boxCornerRadiusTopEnd="14dp"
-                app:boxCornerRadiusTopStart="14dp"
-                app:startIconDrawable="@drawable/ic_nav_search">
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/et_search_query"
-                    android:layout_width="match_parent"
+                <FrameLayout
+                    android:layout_width="52dp"
+                    android:layout_height="52dp"
+                    android:background="@drawable/bg_circle_avatar">
+
+                    <ImageView
+                        android:id="@+id/iv_result_avatar"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:contentDescription="@string/nav_profile"
+                        android:scaleType="centerCrop"
+                        android:visibility="gone" />
+
+                    <TextView
+                        android:id="@+id/tv_result_initials"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center"
+                        android:text="SF"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:imeOptions="actionSearch"
-                    android:inputType="text"
-                    android:maxLines="1" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:layout_marginStart="14dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_result_full_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/sf_text_primary"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/tv_result_meta"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/sf_text_secondary"
+                        android:textSize="13sp" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_result_bio"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:textColor="@color/sf_text_primary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/tv_result_tabs_summary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="@color/sf_text_secondary"
+                android:textSize="13sp" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_search_submit"
-                android:layout_width="wrap_content"
-                android:layout_height="54dp"
-                android:layout_marginStart="8dp"
-                android:backgroundTint="@color/quizlet_blue"
-                android:text="Tìm"
+                android:id="@+id/btn_open_public_profile_dialog"
+                style="@style/Widget.Material3.Button.UnelevatedButton"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_marginTop="14dp"
+                android:backgroundTint="@color/sf_bg_btn_soft"
+                android:text="Xem chi tiết trang cá nhân"
                 android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@color/sf_btn_soft_text"
                 android:textStyle="bold"
-                app:cornerRadius="14dp" />
+                app:cornerRadius="24dp" />
         </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-        <ProgressBar
-            android:id="@+id/pb_search_loading"
+    <!-- Typing Autocomplete Suggestions (Image 1) -->
+    <LinearLayout
+        android:id="@+id/ll_search_suggestions"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingHorizontal="16dp"
+        android:visibility="gone">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_search_suggestions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:nestedScrollingEnabled="false" />
+
+        <TextView
+            android:id="@+id/btn_suggestions_view_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="16dp"
-            android:visibility="gone" />
+            android:layout_marginTop="18dp"
+            android:background="?attr/selectableItemBackground"
+            android:fontFamily="sans-serif"
+            android:paddingHorizontal="16dp"
+            android:paddingVertical="10dp"
+            android:text="Xem tất cả kết quả"
+            android:textColor="@color/quizlet_blue"
+            android:textSize="15.5sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
-        <TextView
-            android:id="@+id/tv_search_feedback"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="14dp"
-            android:background="@color/quizlet_red_light"
-            android:padding="12dp"
-            android:textColor="@color/quizlet_red"
-            android:textSize="13sp"
-            android:textStyle="bold"
-            android:visibility="gone" />
+    <!-- Search Results Container (7 Tabs + All Results / Single Tab Lists) -->
+    <LinearLayout
+        android:id="@+id/ll_search_results_container"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:visibility="gone">
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/card_search_profile_result"
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tab_layout_search"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:visibility="gone"
-            app:cardBackgroundColor="@color/quizlet_card"
-            app:cardCornerRadius="18dp"
-            app:cardElevation="0dp"
-            app:strokeColor="@color/quizlet_border"
-            app:strokeWidth="1dp">
+            android:layout_height="46dp"
+            android:background="@color/sf_bg_screen"
+            app:tabIndicatorColor="@color/quizlet_blue"
+            app:tabIndicatorFullWidth="false"
+            app:tabIndicatorHeight="2.5dp"
+            app:tabMode="scrollable"
+            app:tabPaddingEnd="20dp"
+            app:tabPaddingStart="20dp"
+            app:tabRippleColor="#1F64748B"
+            app:tabSelectedTextColor="@color/sf_text_primary"
+            app:tabTextAppearance="@style/SmartFlash.SearchTabText"
+            app:tabTextColor="@color/sf_text_primary"
+            app:tabUnboundedRipple="false" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@color/sf_divider" />
+
+        <!-- Tab 0: Tất cả (All results) -->
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/scroll_search_all_results"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:padding="18dp">
+                android:paddingHorizontal="16dp"
+                android:paddingTop="18dp"
+                android:paddingBottom="28dp">
 
+                <TextView
+                    android:id="@+id/tv_all_results_empty"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:fontFamily="sans-serif-medium"
+                    android:gravity="center"
+                    android:lineSpacingExtra="4dp"
+                    android:paddingHorizontal="24dp"
+                    android:text="Không có kết quả cho tìm kiếm của bạn,\nvui lòng thử lại."
+                    android:textColor="@color/sf_text_secondary"
+                    android:textSize="17sp"
+                    android:textStyle="bold"
+                    android:visibility="gone" />
+
+                <!-- Section: Học phần -->
                 <LinearLayout
+                    android:id="@+id/ll_all_sets_header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
-                    <FrameLayout
-                        android:layout_width="56dp"
-                        android:layout_height="56dp">
-
-                        <TextView
-                            android:id="@+id/tv_result_initials"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:background="@drawable/bg_circle_avatar"
-                            android:gravity="center"
-                            android:text="SF"
-                            android:textColor="@color/white"
-                            android:textSize="18sp"
-                            android:textStyle="bold" />
-
-                        <ImageView
-                            android:id="@+id/iv_result_avatar"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:contentDescription="Avatar"
-                            android:scaleType="centerCrop"
-                            android:visibility="gone" />
-                    </FrameLayout>
-
-                    <LinearLayout
+                    <TextView
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="12dp"
                         android:layout_weight="1"
-                        android:orientation="vertical">
+                        android:fontFamily="sans-serif"
+                        android:text="Học phần"
+                        android:textColor="@color/sf_text_primary"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
 
-                        <TextView
-                            android:id="@+id/tv_result_full_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:textColor="@color/quizlet_text_dark"
-                            android:textSize="16sp"
-                            android:textStyle="bold" />
-
-                        <TextView
-                            android:id="@+id/tv_result_meta"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="2dp"
-                            android:textColor="@color/quizlet_text_muted"
-                            android:textSize="12sp" />
-                    </LinearLayout>
+                    <TextView
+                        android:id="@+id/btn_view_all_sets"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:fontFamily="sans-serif-medium"
+                        android:padding="6dp"
+                        android:text="Xem tất cả"
+                        android:textColor="@color/quizlet_blue"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
                 </LinearLayout>
 
-                <TextView
-                    android:id="@+id/tv_result_bio"
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_all_sets"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:textColor="@color/quizlet_text_muted"
-                    android:textSize="13sp"
-                    android:visibility="gone" />
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingHorizontal="2dp" />
 
-                <TextView
-                    android:id="@+id/tv_result_tabs_summary"
+                <!-- Section: Câu hỏi -->
+                <LinearLayout
+                    android:id="@+id/ll_all_questions_header"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="12dp"
-                    android:background="@color/quizlet_blue_light"
-                    android:padding="10dp"
-                    android:textColor="@color/quizlet_dark_blue"
-                    android:textSize="12sp" />
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
 
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/btn_open_public_profile_dialog"
-                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif"
+                        android:text="Câu hỏi"
+                        android:textColor="@color/sf_text_primary"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/btn_view_all_questions"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:fontFamily="sans-serif-medium"
+                        android:padding="6dp"
+                        android:text="Xem tất cả"
+                        android:textColor="@color/quizlet_blue"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_all_questions"
                     android:layout_width="match_parent"
-                    android:layout_height="44dp"
-                    android:layout_marginTop="12dp"
-                    android:text="Xem chi tiết 4 tab hồ sơ"
-                    android:textAllCaps="false"
-                    android:textColor="@color/quizlet_blue"
-                    android:textStyle="bold"
-                    app:cornerRadius="12dp"
-                    app:strokeColor="@color/quizlet_blue" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingHorizontal="2dp" />
 
-        <com.google.android.material.card.MaterialCardView
+                <!-- Section: Người dùng -->
+                <LinearLayout
+                    android:id="@+id/ll_all_users_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif"
+                        android:text="Người dùng"
+                        android:textColor="@color/sf_text_primary"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/btn_view_all_users"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:fontFamily="sans-serif-medium"
+                        android:padding="6dp"
+                        android:text="Xem tất cả"
+                        android:textColor="@color/quizlet_blue"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_all_users"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingHorizontal="2dp" />
+
+                <!-- Section: Lớp học -->
+                <LinearLayout
+                    android:id="@+id/ll_all_classes_header"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="sans-serif"
+                        android:text="Lớp học"
+                        android:textColor="@color/sf_text_primary"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:id="@+id/btn_view_all_classes"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="?attr/selectableItemBackground"
+                        android:fontFamily="sans-serif-medium"
+                        android:padding="6dp"
+                        android:text="Xem tất cả"
+                        android:textColor="@color/quizlet_blue"
+                        android:textSize="14sp"
+                        android:textStyle="bold" />
+                </LinearLayout>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rv_all_classes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:clipChildren="false"
+                    android:clipToPadding="false"
+                    android:nestedScrollingEnabled="false"
+                    android:paddingHorizontal="2dp" />
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <!-- Single Tab Container (Sets with Filter / Practice Tests / Study Guides / Questions / Users / Classes) -->
+        <LinearLayout
+            android:id="@+id/ll_search_single_tab_container"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            app:cardBackgroundColor="@color/quizlet_card"
-            app:cardCornerRadius="18dp"
-            app:cardElevation="0dp"
-            app:strokeColor="@color/quizlet_border"
-            app:strokeWidth="1dp">
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingHorizontal="16dp"
+            android:paddingTop="14dp"
+            android:visibility="gone">
 
-            <LinearLayout
+            <!-- Filter Pill Button (shown on Học phần tab - Image 4) -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_search_sets_filter"
+                style="@style/Widget.Material3.Button.OutlinedButton"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="18dp">
+                android:layout_height="48dp"
+                android:layout_marginBottom="14dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Bộ lọc"
+                android:textAllCaps="false"
+                android:textColor="@color/sf_text_secondary"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                app:cornerRadius="24dp"
+                app:icon="@drawable/ic_filter_lines"
+                app:iconGravity="textStart"
+                app:iconPadding="8dp"
+                app:iconTint="@color/sf_text_secondary"
+                app:strokeColor="@color/sf_stroke_card"
+                app:strokeWidth="1.2dp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Khám phá bộ thẻ công khai"
-                    android:textColor="@color/quizlet_text_dark"
-                    android:textSize="15sp"
-                    android:textStyle="bold" />
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_search_single_tab"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:clipChildren="false"
+                android:clipToPadding="false"
+                android:paddingHorizontal="2dp"
+                android:paddingBottom="24dp" />
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="Tính năng tìm kiếm toàn văn bộ thẻ công khai theo chủ đề, thẻ tag và môn học sẽ được nối API ở Task T3.10."
-                    android:textColor="@color/quizlet_text_muted"
-                    android:textSize="13sp" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
+            <TextView
+                android:id="@+id/tv_search_tab_empty"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:lineSpacingExtra="4dp"
+                android:paddingHorizontal="24dp"
+                android:paddingBottom="16dp"
+                android:text="Không có kết quả cho tìm kiếm của bạn,\nvui lòng thử lại."
+                android:textColor="@color/sf_text_secondary"
+                android:textSize="17sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+        </LinearLayout>
     </LinearLayout>
-</androidx.core.widget.NestedScrollView>
+
+    <!-- Empty State Center Tip -->
+    <LinearLayout
+        android:id="@+id/ll_search_empty_state"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:paddingHorizontal="36dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Nhập chủ đề hoặc từ khóa"
+            android:textColor="@color/sf_text_secondary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:text="Mẹo: Càng cụ thể, càng chính xác"
+            android:textColor="@color/sf_text_secondary"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Bottom Promo Banner -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_search_game_promo"
+        android:layout_width="match_parent"
+        android:layout_height="92dp"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginBottom="18dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:cardBackgroundColor="@color/sf_bg_btn_soft"
+        app:cardCornerRadius="18dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="0dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:layout_width="196dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="end"
+                android:contentDescription="ELearner Live hoặc Blast"
+                android:scaleType="fitXY"
+                android:src="@drawable/bg_search_promo_art" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|start"
+                android:layout_marginStart="20dp"
+                android:fontFamily="sans-serif"
+                android:lineSpacingExtra="2dp"
+                android:text="Dùng ELearner Live\nhoặc Blast"
+                android:textColor="@color/sf_text_primary"
+                android:textSize="17sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</LinearLayout>

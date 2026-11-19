@@ -3,91 +3,413 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/quizlet_bg"
+    android:background="@color/sf_bg_screen"
     android:orientation="vertical"
-    android:padding="20dp">
+    android:paddingTop="18dp">
 
-    <TextView
+    <!-- Header: "Thư viện" + "+" button (matching Images 1-4) -->
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Thư viện của bạn"
-        android:textColor="@color/quizlet_text_dark"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp">
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/tab_library_sections"
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif"
+            android:text="Thư viện"
+            android:textColor="@color/sf_text_primary"
+            android:textSize="26sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btn_library_add"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="-10dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Tạo mới"
+            android:padding="12dp"
+            android:src="@drawable/ic_nav_add"
+            app:tint="@color/sf_text_secondary" />
+    </LinearLayout>
+
+    <!-- 4 Horizontal Pill Tabs (excluding Expert solutions) -->
+    <HorizontalScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:background="@color/quizlet_card"
-        app:tabIndicatorColor="@color/quizlet_blue"
-        app:tabSelectedTextColor="@color/quizlet_blue"
-        app:tabTextColor="@color/quizlet_text_muted">
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Bộ thẻ" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Thư mục" />
-
-        <com.google.android.material.tabs.TabItem
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Lớp học" />
-    </com.google.android.material.tabs.TabLayout>
-
-    <com.google.android.material.card.MaterialCardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        app:cardBackgroundColor="@color/quizlet_card"
-        app:cardCornerRadius="18dp"
-        app:cardElevation="0dp"
-        app:strokeColor="@color/quizlet_border"
-        app:strokeWidth="1dp">
+        android:layout_marginTop="14dp"
+        android:clipToPadding="false"
+        android:paddingHorizontal="20dp"
+        android:scrollbars="none">
 
         <LinearLayout
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp">
+            android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tv_library_section_title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Bộ thẻ của bạn"
-                android:textColor="@color/quizlet_text_dark"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:id="@+id/pill_tab_sets"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_library_pill_active"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:paddingHorizontal="18dp"
+                android:text="Học phần"
+                android:textColor="@color/sf_text_primary"
+                android:textSize="14sp" />
 
             <TextView
-                android:id="@+id/tv_library_section_desc"
-                android:layout_width="match_parent"
+                android:id="@+id/pill_tab_classes"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_library_pill_inactive"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:paddingHorizontal="18dp"
+                android:text="Lớp học"
+                android:textColor="@color/sf_text_secondary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/pill_tab_folders"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginEnd="10dp"
+                android:background="@drawable/bg_library_pill_inactive"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:paddingHorizontal="18dp"
+                android:text="Thư mục"
+                android:textColor="@color/sf_text_secondary"
+                android:textSize="14sp" />
+
+            <TextView
+                android:id="@+id/pill_tab_tests"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:background="@drawable/bg_library_pill_inactive"
+                android:clickable="true"
+                android:focusable="true"
+                android:fontFamily="sans-serif-medium"
+                android:gravity="center"
+                android:paddingHorizontal="18dp"
+                android:text="Bài kiểm tra thử"
+                android:textColor="@color/sf_text_secondary"
+                android:textSize="14sp" />
+        </LinearLayout>
+    </HorizontalScrollView>
+
+    <!-- TAB 1 CONTENT: Flashcard Sets (matching Images 1 & 5) -->
+    <LinearLayout
+        android:id="@+id/ll_tab_sets_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="18dp">
+
+        <!-- Filter Dropdown Trigger ("Tất cả v") -->
+        <LinearLayout
+            android:id="@+id/btn_sets_filter"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:minHeight="36dp"
+            android:orientation="horizontal"
+            android:paddingEnd="12dp">
+
+            <TextView
+                android:id="@+id/tv_sets_filter_label"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="6dp"
-                android:text="Danh sách bộ thẻ đã tạo, bộ thẻ đã lưu và bộ thẻ học gần đây sẽ hiển thị tại đây sau khi hoàn tất Task T3.10."
-                android:textColor="@color/quizlet_text_muted"
+                android:fontFamily="sans-serif-medium"
+                android:text="Tất cả"
+                android:textColor="@color/sf_text_secondary"
+                android:textSize="14sp" />
+
+            <ImageView
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:layout_marginStart="6dp"
+                android:contentDescription="Lọc"
+                android:src="@drawable/ic_filter_lines" />
+        </LinearLayout>
+
+        <!-- Outlined Search Box -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/bg_library_search_box"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="14dp">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:contentDescription="@string/nav_search"
+                android:src="@drawable/ic_nav_search"
+                app:tint="@color/sf_text_secondary" />
+
+            <EditText
+                android:id="@+id/et_library_search"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="10dp"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:fontFamily="sans-serif-medium"
+                android:hint="Tìm kiếm"
+                android:imeOptions="actionSearch"
+                android:inputType="text"
+                android:maxLines="1"
+                android:textColor="@color/sf_text_primary"
+                android:textColorHint="@color/sf_text_secondary"
+                android:textSize="15sp" />
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/pb_library_sets"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="32dp"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_library_sets"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginTop="4dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingBottom="24dp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/ll_sets_empty_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_sets_section_time"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Gần đây"
+                android:textColor="@color/sf_text_secondary"
                 android:textSize="13sp" />
 
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn_library_login"
+            <!-- Empty state for Sets -->
+            <LinearLayout
+                android:id="@+id/ll_sets_empty"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:paddingHorizontal="20dp">
+
+                <ImageView
+                    android:layout_width="68dp"
+                    android:layout_height="68dp"
+                    android:contentDescription="Học phần"
+                    android:src="@drawable/ic_cards_stack" />
+
+                <TextView
+                    android:id="@+id/tv_sets_empty_message"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:fontFamily="sans-serif"
+                    android:gravity="center"
+                    android:text="Các học phần bạn tạo hoặc đã học sẽ hiển thị tại đây."
+                    android:textColor="@color/sf_text_primary"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- TAB 2 CONTENT: Classes -->
+    <LinearLayout
+        android:id="@+id/ll_tab_classes_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="12dp"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/pb_library_classes"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="32dp"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_library_classes"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingBottom="24dp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/ll_classes_empty"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|top"
+            android:orientation="vertical"
+            android:paddingHorizontal="12dp"
+            android:paddingTop="128dp">
+
+            <ImageView
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:contentDescription="Lớp học"
+                android:src="@drawable/ic_library_classes" />
+
+            <TextView
                 android:layout_width="wrap_content"
-                android:layout_height="44dp"
-                android:layout_marginTop="14dp"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:text="Các lớp học bạn tham gia sẽ hiển thị tại đây."
+                android:textColor="@color/sf_text_primary"
+                android:textSize="16.5sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- TAB 3 CONTENT: Folders -->
+    <LinearLayout
+        android:id="@+id/ll_tab_folders_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="12dp"
+        android:visibility="gone">
+
+        <ProgressBar
+            android:id="@+id/pb_library_folders"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="32dp"
+            android:visibility="gone" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_library_folders"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:clipToPadding="false"
+            android:paddingBottom="24dp"
+            android:visibility="gone" />
+
+        <LinearLayout
+            android:id="@+id/ll_folders_empty"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:gravity="center_horizontal|top"
+            android:orientation="vertical"
+            android:paddingHorizontal="12dp"
+            android:paddingTop="128dp">
+
+            <ImageView
+                android:layout_width="76dp"
+                android:layout_height="76dp"
+                android:contentDescription="Thư mục"
+                android:src="@drawable/ic_library_folder_empty" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:lineSpacingExtra="2dp"
+                android:text="Sắp xếp các bộ thẻ theo môn học,\ngiáo viên, khóa học, v.v."
+                android:textColor="@color/sf_text_primary"
+                android:textSize="16.5sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_library_create_folder"
+                android:layout_width="wrap_content"
+                android:layout_height="50dp"
+                android:layout_marginTop="22dp"
                 android:backgroundTint="@color/quizlet_blue"
-                android:text="@string/action_login"
+                android:fontFamily="sans-serif-medium"
+                android:paddingHorizontal="28dp"
+                android:text="Tạo thư mục"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
+                android:textSize="15.5sp"
                 android:textStyle="bold"
-                android:visibility="gone"
-                app:cornerRadius="12dp" />
+                app:cornerRadius="26dp" />
         </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
+
+    <!-- TAB 4 CONTENT: Practice Tests (exact same icon/text Y-position as Classes & Folders) -->
+    <LinearLayout
+        android:id="@+id/ll_tab_tests_content"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:gravity="center_horizontal|top"
+        android:orientation="vertical"
+        android:paddingHorizontal="32dp"
+        android:paddingTop="140dp"
+        android:visibility="gone">
+
+        <ImageView
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:contentDescription="Bài kiểm tra thử"
+            android:src="@drawable/ic_library_practice_test" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:fontFamily="sans-serif"
+            android:gravity="center"
+            android:lineSpacingExtra="2dp"
+            android:text="Các bài kiểm tra thử bạn làm sẽ hiển thị\ntại đây"
+            android:textColor="@color/sf_text_primary"
+            android:textSize="16.5sp"
+            android:textStyle="bold" />
+    </LinearLayout>
 
 </LinearLayout>

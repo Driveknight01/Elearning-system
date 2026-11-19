@@ -39,6 +39,26 @@ public class AuthRepository {
         this.tokenManager = TokenManager.getInstance(context);
     }
 
+    public LiveData<Resource<Boolean>> checkEmailExists(String email) {
+        MutableLiveData<Resource<Boolean>> result = new MutableLiveData<>(Resource.loading());
+        authApi.checkEmail(email).enqueue(new Callback<ApiResponse<Boolean>>() {
+            @Override
+            public void onResponse(@NonNull Call<ApiResponse<Boolean>> call, @NonNull Response<ApiResponse<Boolean>> response) {
+                if (response.isSuccessful() && response.body() != null && response.body().isSuccess()) {
+                    result.postValue(Resource.success(Boolean.TRUE.equals(response.body().getData())));
+                } else {
+                    result.postValue(Resource.error("Không thể kiểm tra email."));
+                }
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<ApiResponse<Boolean>> call, @NonNull Throwable t) {
+                result.postValue(Resource.error("Không thể kiểm tra email."));
+            }
+        });
+        return result;
+    }
+
     public LiveData<Resource<AuthResponseDto>> login(String identifier, String password) {
         MutableLiveData<Resource<AuthResponseDto>> result = new MutableLiveData<>(Resource.loading());
         LoginRequestDto request = new LoginRequestDto(identifier, password, DeviceUtils.getDeviceInfo());

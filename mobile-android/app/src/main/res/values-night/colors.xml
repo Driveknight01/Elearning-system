@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Dark Mode overrides matching Quizlet dark palette (#0A082D canvas, #282E4E cards) -->
+    <color name="quizlet_bg">#0A082D</color>
+    <color name="quizlet_card">#282E4E</color>
+    <color name="quizlet_border">#3E4870</color>
+    <color name="quizlet_text_dark">#FFFFFF</color>
+    <color name="quizlet_text_muted">#B0B8D1</color>
+
+    <color name="sf_bg_screen">#0A082D</color>
+    <color name="sf_bg_surface">#282E4E</color>
+    <color name="sf_bg_surface_alt">#333C5E</color>
+    <color name="sf_bg_surface_soft">#2E3558</color>
+    <color name="sf_bg_btn_soft">#3F4A73</color>
+    <color name="sf_text_primary">#FFFFFF</color>
+    <color name="sf_text_secondary">#B0B8D1</color>
+    <color name="sf_stroke_card">#3E4870</color>
+    <color name="sf_divider">#2E3856</color>
+    <color name="sf_home_top_status">#14195B</color>
+    <color name="sf_pill_active_border">#FFFFFF</color>
+    <color name="sf_pill_active_bg">#0A082D</color>
+    <color name="sf_pill_inactive_bg">#202140</color>
+    <color name="sf_nav_indicator">#202140</color>
+    <color name="sf_nav_active_icon">#FFFFFF</color>
+    <color name="sf_btn_soft_text">#FFFFFF</color>
+    <color name="sf_bg_streak_pill">#473528</color>
+
+    <!-- Create/Edit Set & Set Options tokens -->
+    <color name="sf_underline_idle">#3E4870</color>
+    <color name="sf_underline_focus">#6373FF</color>
+    <color name="sf_set_options_divider">#141942</color>
+    <color name="sf_delete_red">#FF725B</color>
+    <color name="sf_hint_light">#7B84A6</color>
+    <color name="sf_bg_folder_input">#2A3154</color>
+    <color name="sf_stroke_card_strong">#556294</color>
+</resources>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="176dp"
+    android:height="92dp"
+    android:viewportWidth="176"
+    android:viewportHeight="92">
+
+    <!-- Clean geometric pastel chevron -->
+    <path
+        android:fillColor="#CBD5FF"
+        android:pathData="M36,0 L176,0 L176,92 L36,92 L76,46 Z" />
+
+    <!-- Simple, clean Quizlet-style racing bars -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M62,25 L164,9 C166.5,8.6 168.5,10.2 168.5,12.5 C168.5,14.5 166.5,16 164,16.4 L62,32.4 C59.5,32.8 57.5,31.2 57.5,28.9 C57.5,26.9 59.5,25.4 62,25 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M62,45 L164,29 C166.5,28.6 168.5,30.2 168.5,32.5 C168.5,34.5 166.5,36 164,36.4 L62,52.4 C59.5,52.8 57.5,51.2 57.5,48.9 C57.5,46.9 59.5,45.4 62,45 Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M62,65 L164,49 C166.5,48.6 168.5,50.2 168.5,52.5 C168.5,54.5 166.5,56 164,56.4 L62,72.4 C59.5,72.8 57.5,71.2 57.5,68.9 C57.5,66.9 59.5,65.4 62,65 Z" />
+
+    <!-- Colored active bars -->
+    <path
+        android:fillColor="#7C3AED"
+        android:pathData="M62,25 L128,14.6 C130.5,14.2 132.5,15.8 132.5,18.1 C132.5,20.1 130.5,21.6 128,22 L62,32.4 C59.5,32.8 57.5,31.2 57.5,28.9 C57.5,26.9 59.5,25.4 62,25 Z" />
+    <path
+        android:fillColor="#4255FF"
+        android:pathData="M62,45 L142,32.5 C144.5,32.1 146.5,33.7 146.5,36 C146.5,38 144.5,39.5 142,39.9 L62,52.4 C59.5,52.8 57.5,51.2 57.5,48.9 C57.5,46.9 59.5,45.4 62,45 Z" />
+    <path
+        android:fillColor="#F59E0B"
+        android:pathData="M62,65 L114,56.8 C116.5,56.4 118.5,58 118.5,60.3 C118.5,62.3 116.5,63.8 114,64.2 L62,72.4 C59.5,72.8 57.5,71.2 57.5,68.9 C57.5,66.9 59.5,65.4 62,65 Z" />
+
+    <!-- Clean minimal circular nodes -->
+    <path android:fillColor="#FFFFFF" android:pathData="M128,18.5m-8.5,0a8.5,8.5 0,1 1,17 0a8.5,8.5 0,1 1,-17 0" />
+    <path android:fillColor="#7C3AED" android:pathData="M128,18.5m-6,0a6,6 0,1 1,12 0a6,6 0,1 1,-12 0" />
+
+    <path android:fillColor="#FFFFFF" android:pathData="M142,36m-8.5,0a8.5,8.5 0,1 1,17 0a8.5,8.5 0,1 1,-17 0" />
+    <path android:fillColor="#4255FF" android:pathData="M142,36m-6,0a6,6 0,1 1,12 0a6,6 0,1 1,-12 0" />
+
+    <path android:fillColor="#FFFFFF" android:pathData="M114,60.5m-8.5,0a8.5,8.5 0,1 1,17 0a8.5,8.5 0,1 1,-17 0" />
+    <path android:fillColor="#F59E0B" android:pathData="M114,60.5m-6,0a6,6 0,1 1,12 0a6,6 0,1 1,-12 0" />
+</vector>

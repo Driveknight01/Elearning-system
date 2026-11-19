@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/bg_home_top_gradient"
+    android:gravity="center"
+    android:orientation="vertical"
+    android:padding="28dp">
+
+    <ImageView
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:contentDescription="AI Chatbot"
+        android:src="@drawable/ic_nav_ai_sparkle" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-medium"
+        android:gravity="center"
+        android:text="Trợ lý học tập AI (Q-Chat)"
+        android:textColor="@color/sf_text_primary"
+        android:textSize="22sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:gravity="center"
+        android:lineSpacingExtra="3dp"
+        android:text="Hỏi đáp ngữ cảnh, giải thích thuật ngữ và tự động tạo bộ thẻ Flashcard thông minh sẽ được kết nối ở Phase 4 (Task T4.4)."
+        android:textColor="@color/sf_text_secondary"
+        android:textSize="14sp" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_ai_go_home"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginTop="22dp"
+        android:backgroundTint="@color/quizlet_blue"
+        android:fontFamily="sans-serif-medium"
+        android:paddingHorizontal="24dp"
+        android:text="Quay về Trang chủ"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        app:cornerRadius="24dp" />
+
+</LinearLayout>

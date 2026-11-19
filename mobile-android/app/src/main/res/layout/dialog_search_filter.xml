@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet_white"
+    android:orientation="vertical"
+    android:paddingBottom="24dp">
+
+    <!-- Drag Handle -->
+    <View
+        android:layout_width="42dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:background="#94A3B8" />
+
+    <!-- Header: X + Filters + Reset -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp">
+
+        <ImageButton
+            android:id="@+id/btn_filter_close"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Đóng"
+            android:padding="10dp"
+            android:src="@drawable/ic_close"
+            app:tint="@color/sf_text_secondary" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif"
+            android:text="Bộ lọc"
+            android:textColor="@color/sf_text_primary"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btn_filter_reset"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="?attr/selectableItemBackground"
+            android:fontFamily="sans-serif-medium"
+            android:padding="10dp"
+            android:text="Đặt lại"
+            android:textColor="@color/quizlet_blue"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:overScrollMode="never">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Section 1: NUMBER OF TERMS -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/sf_bg_surface_soft"
+                android:fontFamily="sans-serif"
+                android:letterSpacing="0.04"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"
+                android:text="SỐ LƯỢNG THUẬT NGỮ"
+                android:textColor="@color/sf_text_secondary"
+                android:textSize="12.5sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/rg_filter_terms"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="6dp">
+
+                <RadioButton
+                    android:id="@+id/rb_terms_all"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:checked="true"
+                    android:paddingStart="12dp"
+                    android:text="Tất cả"
+                    android:textColor="@color/sf_text_primary"
+                    android:textSize="15sp"
+                    app:buttonTint="@color/quizlet_blue" />
+
+                <RadioButton
+                    android:id="@+id/rb_terms_lt20"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:paddingStart="12dp"
+                    android:text="Dưới 20 thuật ngữ"
+                    android:textColor="@color/sf_text_primary"
+                    android:textSize="15sp"
+                    app:buttonTint="@color/quizlet_blue" />
+
+                <RadioButton
+                    android:id="@+id/rb_terms_20_49"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:paddingStart="12dp"
+                    android:text="20–49 thuật ngữ"
+                    android:textColor="@color/sf_text_primary"
+                    android:textSize="15sp"
+                    app:buttonTint="@color/quizlet_blue" />
+
+                <RadioButton
+                    android:id="@+id/rb_terms_50plus"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:paddingStart="12dp"
+                    android:text="Trên 50 thuật ngữ"
+                    android:textColor="@color/sf_text_primary"
+                    android:textSize="15sp"
+                    app:buttonTint="@color/quizlet_blue" />
+            </RadioGroup>
+
+            <!-- Section 2: CREATOR TYPE -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/sf_bg_surface_soft"
+                android:fontFamily="sans-serif"
+                android:letterSpacing="0.04"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"
+                android:text="LOẠI NGƯỜI TẠO"
+                android:textColor="@color/sf_text_secondary"
+                android:textSize="12.5sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/rg_filter_creator"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="6dp">
+
+                <RadioButton
+                    android:id="@+id/rb_creator_all"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:checked="true"
+                    android:paddingStart="12dp"
+                    android:text="Tất cả người dùng"
+                    android:textColor="@color/sf_text_primary"
+                    android:textSize="15sp"
+                    app:buttonTint="@color/quizlet_blue" />
+
+                <RadioButton
+                    android:id="@+id/rb_creator_plus"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:paddingStart="12dp"
+                    android:text="Người dùng Plus"
+                    android:textColor="@color/sf_text_primary"
+                    android:textSize="15sp"
+                    app:buttonTint="@color/quizlet_blue" />
+
+                <RadioButton
+                    android:id="@+id/rb_creator_teachers"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:paddingStart="12dp"
+                    android:text="Giáo viên"
+                    android:textColor="@color/sf_text_primary"
+                    android:textSize="15sp"
+                    app:buttonTint="@color/quizlet_blue" />
+
+                <RadioButton
+                    android:id="@+id/rb_creator_verified"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:paddingStart="12dp"
+                    android:text="Tác giả đã xác minh"
+                    android:textColor="@color/sf_text_primary"
+                    android:textSize="15sp"
+                    app:buttonTint="@color/quizlet_blue" />
+            </RadioGroup>
+
+            <!-- Section 3: CONTENT TYPE -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/sf_bg_surface_soft"
+                android:fontFamily="sans-serif"
+                android:letterSpacing="0.04"
+                android:paddingHorizontal="20dp"
+                android:paddingVertical="10dp"
+                android:text="LOẠI NỘI DUNG"
+                android:textColor="@color/sf_text_secondary"
+                android:textSize="12.5sp"
+                android:textStyle="bold" />
+
+            <RadioGroup
+                android:id="@+id/rg_filter_content"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="6dp">
+
+                <RadioButton
+                    android:id="@+id/rb_content_all"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:checked="true"
+                    android:paddingStart="12dp"
+                    android:text="Tất cả"
+                    android:textColor="@color/sf_text_primary"
+                    android:textSize="15sp"
+                    app:buttonTint="@color/quizlet_blue" />
+
+                <RadioButton
+                    android:id="@+id/rb_content_images"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:paddingStart="12dp"
+                    android:text="Có hình ảnh"
+                    android:textColor="@color/sf_text_primary"
+                    android:textSize="15sp"
+                    app:buttonTint="@color/quizlet_blue" />
+
+                <RadioButton
+                    android:id="@+id/rb_content_diagrams"
+                    android:layout_width="match_parent"
+                    android:layout_height="46dp"
+                    android:paddingStart="12dp"
+                    android:text="Sơ đồ"
+                    android:textColor="@color/sf_text_primary"
+                    android:textSize="15sp"
+                    app:buttonTint="@color/quizlet_blue" />
+            </RadioGroup>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

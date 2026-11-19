@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="12dp"
+    android:clickable="true"
+    android:focusable="true"
+    android:outlineAmbientShadowColor="#00000000"
+    android:outlineSpotShadowColor="#242E3856"
+    app:cardBackgroundColor="@color/sf_bg_surface"
+    app:cardCornerRadius="18dp"
+    app:cardElevation="4dp"
+    app:cardPreventCornerOverlap="false"
+    app:rippleColor="#124255FF"
+    app:strokeColor="@color/sf_stroke_card"
+    app:strokeWidth="1dp"
+    tools:targetApi="p">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:minHeight="152dp"
+        android:orientation="vertical"
+        android:paddingHorizontal="18dp"
+        android:paddingVertical="20dp">
+
+        <TextView
+            android:id="@+id/tv_question_subject"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="Tiếng Anh"
+            android:textColor="@color/sf_text_primary"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tv_question_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:ellipsize="end"
+            android:lineSpacingExtra="3dp"
+            android:maxLines="3"
+            android:text="What is the phrasal verb for 'hate'?"
+            android:textColor="@color/sf_text_primary"
+            android:textSize="14.5sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="22dp"
+            android:background="@drawable/bg_library_pill_inactive"
+            android:backgroundTint="@color/sf_bg_btn_soft"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="10dp"
+            android:paddingVertical="5dp">
+
+            <ImageView
+                android:layout_width="14dp"
+                android:layout_height="14dp"
+                android:contentDescription="Đã xác minh"
+                android:src="@drawable/ic_verified"
+                app:tint="@color/sf_text_primary" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="6dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="Lời giải đã xác minh"
+                android:textColor="@color/sf_text_primary"
+                android:textSize="12sp"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

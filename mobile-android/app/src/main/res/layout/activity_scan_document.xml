@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/quizlet_bg"
+    android:orientation="vertical">
+
+    <!-- Top Bar: X | Vuốt để chọn | THÊM THẺ -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@color/sf_bg_surface"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="8dp">
+
+        <ImageButton
+            android:id="@+id/btn_close"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Close"
+            android:src="@drawable/ic_close"
+            app:tint="@color/sf_text_secondary" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_weight="1"
+            android:text="Vuốt để chọn"
+            android:textColor="@color/sf_text_primary"
+            android:textSize="19sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/btn_add_card"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="?attr/selectableItemBackground"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center"
+            android:letterSpacing="0.04"
+            android:paddingHorizontal="12dp"
+            android:text="THÊM THẺ"
+            android:textColor="@color/quizlet_blue"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Textbox block matching Create Set card style -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/sf_bg_surface"
+        android:orientation="vertical"
+        android:paddingHorizontal="18dp"
+        android:paddingTop="10dp"
+        android:paddingBottom="16dp">
+
+        <!-- TERM -->
+        <EditText
+            android:id="@+id/et_term"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:hint="Thuật ngữ"
+            android:imeOptions="actionNext"
+            android:inputType="textMultiLine|textCapSentences"
+            android:maxLines="3"
+            android:paddingVertical="6dp"
+            android:textColor="@color/sf_text_primary"
+            android:textColorHint="@color/sf_hint_light"
+            android:textSize="16sp" />
+
+        <View
+            android:id="@+id/view_term_underline"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:background="@color/sf_underline_idle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:letterSpacing="0.06"
+            android:text="TERM"
+            android:textColor="@color/sf_text_secondary"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+
+        <!-- DEFINITION -->
+        <EditText
+            android:id="@+id/et_definition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:background="@null"
+            android:hint="Định nghĩa"
+            android:inputType="textMultiLine|textCapSentences"
+            android:maxLines="3"
+            android:paddingVertical="6dp"
+            android:textColor="@color/sf_text_primary"
+            android:textColorHint="@color/sf_hint_light"
+            android:textSize="16sp" />
+
+        <View
+            android:id="@+id/view_def_underline"
+            android:layout_width="match_parent"
+            android:layout_height="1.5dp"
+            android:background="@color/sf_underline_idle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:letterSpacing="0.06"
+            android:text="DEFINITION"
+            android:textColor="@color/sf_text_secondary"
+            android:textSize="11sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/sf_stroke_card" />
+
+    <!-- Bottom Canvas Area -->
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/quizlet_bg">
+
+        <!-- Empty state: 2 home-style pill buttons side by side -->
+        <LinearLayout
+            android:id="@+id/layout_empty_actions"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingHorizontal="24dp">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_take_photo"
+                style="@style/Widget.Material3.Button.UnelevatedButton"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginEnd="8dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/quizlet_blue"
+                android:fontFamily="sans-serif-medium"
+                android:text="Chụp ảnh"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:cornerRadius="26dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_pick_gallery"
+                style="@style/Widget.Material3.Button.UnelevatedButton"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:backgroundTint="@color/sf_bg_btn_soft"
+                android:fontFamily="sans-serif-medium"
+                android:text="Chọn từ máy"
+                android:textAllCaps="false"
+                android:textColor="@color/sf_btn_soft_text"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:cornerRadius="26dp" />
+        </LinearLayout>
+
+        <!-- Image + OCR Word Bounding Boxes & Swipe Highlight Overlay -->
+        <com.elearning.smartflash.ui.set.OcrHighlightImageView
+            android:id="@+id/ocr_image_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="12dp"
+            android:visibility="gone" />
+
+        <ProgressBar
+            android:id="@+id/progress_ocr"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center"
+            android:indeterminateTint="@color/quizlet_blue"
+            android:visibility="gone" />
+
+        <!-- Bottom floating pill to change image or finish -->
+        <LinearLayout
+            android:id="@+id/layout_bottom_controls"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|center_horizontal"
+            android:layout_marginBottom="16dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="gone">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_change_image"
+                style="@style/Widget.Material3.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:layout_marginEnd="8dp"
+                android:backgroundTint="@color/sf_bg_surface"
+                android:fontFamily="sans-serif-medium"
+                android:paddingHorizontal="18dp"
+                android:text="Đổi ảnh"
+                android:textAllCaps="false"
+                android:textColor="@color/sf_text_primary"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:cornerRadius="22dp"
+                app:strokeColor="@color/sf_stroke_card"
+                app:strokeWidth="1dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_done_scan"
+                style="@style/Widget.Material3.Button.UnelevatedButton"
+                android:layout_width="wrap_content"
+                android:layout_height="44dp"
+                android:backgroundTint="@color/quizlet_blue"
+                android:fontFamily="sans-serif-medium"
+                android:paddingHorizontal="20dp"
+                android:text="Xong"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:cornerRadius="22dp"
+                android:visibility="gone" />
+        </LinearLayout>
+
+    </FrameLayout>
+
+</LinearLayout>

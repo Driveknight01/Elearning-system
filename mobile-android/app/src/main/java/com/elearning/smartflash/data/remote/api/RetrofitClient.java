@@ -25,6 +25,9 @@ public class RetrofitClient {
     private final Retrofit retrofit;
     private final AuthApiService authApiService;
     private final UserApiService userApiService;
+    private final FlashcardSetApiService flashcardSetApiService;
+    private final FolderApiService folderApiService;
+    private final StudyGroupApiService studyGroupApiService;
 
     private RetrofitClient(Context context) {
         TokenManager tokenManager = TokenManager.getInstance(context);
@@ -70,6 +73,9 @@ public class RetrofitClient {
 
         this.authApiService = this.retrofit.create(AuthApiService.class);
         this.userApiService = this.retrofit.create(UserApiService.class);
+        this.flashcardSetApiService = this.retrofit.create(FlashcardSetApiService.class);
+        this.folderApiService = this.retrofit.create(FolderApiService.class);
+        this.studyGroupApiService = this.retrofit.create(StudyGroupApiService.class);
     }
 
     public static RetrofitClient getInstance(Context context) {
@@ -89,6 +95,18 @@ public class RetrofitClient {
 
     public UserApiService getUserApi() {
         return userApiService;
+    }
+
+    public FlashcardSetApiService getFlashcardSetApi() {
+        return flashcardSetApiService;
+    }
+
+    public StudyGroupApiService getStudyGroupApi() {
+        return studyGroupApiService;
+    }
+
+    public FolderApiService getFolderApi() {
+        return folderApiService;
     }
 
     public <T> T createService(Class<T> serviceClass) {

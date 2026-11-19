@@ -15,11 +15,15 @@ import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.POST;
+import retrofit2.http.Query;
 
 /**
  * Retrofit2 service definitions for authentication and session endpoints.
  */
 public interface AuthApiService {
+
+    @GET("auth/check-email")
+    Call<ApiResponse<Boolean>> checkEmail(@Query("email") String email);
 
     @POST("auth/register")
     Call<ApiResponse<AuthResponseDto>> register(@Body RegisterRequestDto request);

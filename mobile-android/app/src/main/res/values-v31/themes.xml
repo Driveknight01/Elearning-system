@@ -1,0 +1,8 @@
+<resources>
+    <style name="Theme.SmartFlash.Splash" parent="Theme.SmartFlash">
+        <item name="android:statusBarColor">@color/white</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowSplashScreenBackground">@color/white</item>
+        <item name="android:windowSplashScreenAnimatedIcon">@drawable/ic_splash_empty</item>
+    </style>
+</resources>

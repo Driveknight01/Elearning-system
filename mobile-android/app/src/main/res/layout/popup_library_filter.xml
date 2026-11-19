@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="220dp"
+    android:layout_height="wrap_content"
+    app:cardBackgroundColor="@color/sf_bg_surface"
+    app:cardCornerRadius="14dp"
+    app:cardElevation="6dp"
+    app:strokeColor="@color/sf_stroke_card"
+    app:strokeWidth="1dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingVertical="8dp">
+
+        <LinearLayout
+            android:id="@+id/opt_filter_all"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="18dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:text="Tất cả"
+                android:textColor="@color/sf_text_secondary"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/iv_check_all"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:contentDescription="Đã chọn"
+                android:src="@drawable/ic_check_blue"
+                app:tint="@color/sf_text_secondary" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/opt_filter_created"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="18dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:text="Đã tạo"
+                android:textColor="@color/sf_text_secondary"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/iv_check_created"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:contentDescription="Đã chọn"
+                android:src="@drawable/ic_check_blue"
+                android:visibility="gone"
+                app:tint="@color/sf_text_secondary" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/opt_filter_studied"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="18dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:text="Đã học"
+                android:textColor="@color/sf_text_secondary"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/iv_check_studied"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:contentDescription="Đã chọn"
+                android:src="@drawable/ic_check_blue"
+                android:visibility="gone"
+                app:tint="@color/sf_text_secondary" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/opt_filter_downloaded"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="18dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="sans-serif-medium"
+                android:text="Đã tải về"
+                android:textColor="@color/sf_text_secondary"
+                android:textSize="15sp" />
+
+            <ImageView
+                android:id="@+id/iv_check_downloaded"
+                android:layout_width="18dp"
+                android:layout_height="18dp"
+                android:contentDescription="Đã chọn"
+                android:src="@drawable/ic_check_blue"
+                android:visibility="gone"
+                app:tint="@color/sf_text_secondary" />
+        </LinearLayout>
+    </LinearLayout>
+</com.google.android.material.card.MaterialCardView>

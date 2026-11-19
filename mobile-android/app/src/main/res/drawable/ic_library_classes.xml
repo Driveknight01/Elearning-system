@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="72dp"
+    android:height="72dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <!-- Back person (lighter sky blue) -->
+    <path
+        android:fillColor="#93E2FE"
+        android:pathData="M16.5,11c1.38,0 2.5,-1.12 2.5,-2.5S17.88,6 16.5,6 14,7.12 14,8.5s1.12,2.5 2.5,2.5zM16.5,12.5c-1.83,0 -5.5,0.92 -5.5,2.75V17h11v-1.75c0,-1.83 -3.67,-2.75 -5.5,-2.75z" />
+    <!-- Front person (vibrant sky blue) -->
+    <path
+        android:fillColor="#38BDF8"
+        android:pathData="M9.5,11.5c1.93,0 3.5,-1.57 3.5,-3.5S11.43,4.5 9.5,4.5 6,6.07 6,8s1.57,3.5 3.5,3.5zM9.5,13.5c-2.33,0 -7,1.17 -7,3.5V19h14v-2c0,-2.33 -4.67,-3.5 -7,-3.5z" />
+</vector>

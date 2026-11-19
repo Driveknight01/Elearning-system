@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="Theme.SmartFlash" parent="Theme.Material3.DayNight.NoActionBar">
+        <item name="colorPrimary">@color/quizlet_blue</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:colorBackground">@color/sf_bg_screen</item>
+        <item name="colorSurface">@color/sf_bg_surface</item>
+        <item name="colorOnSurface">@color/sf_text_primary</item>
+        <item name="elevationOverlayEnabled">false</item>
+        <item name="android:statusBarColor">@color/sf_bg_screen</item>
+        <item name="android:navigationBarColor">@color/sf_bg_screen</item>
+        <item name="android:windowLightStatusBar">false</item>
+    </style>
+
+    <style name="SmartFlash.BottomNavIndicator" parent="Widget.Material3.BottomNavigationView.ActiveIndicator">
+        <item name="android:color">@color/sf_nav_indicator</item>
+    </style>
+</resources>

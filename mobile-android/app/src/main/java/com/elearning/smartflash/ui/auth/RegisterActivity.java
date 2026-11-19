@@ -2,8 +2,6 @@ package com.elearning.smartflash.ui.auth;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.TextUtils;
-import android.util.Patterns;
 import android.view.View;
 import android.widget.Toast;
 
@@ -12,25 +10,20 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.elearning.smartflash.R;
+import com.elearning.smartflash.data.local.prefs.TokenManager;
 import com.elearning.smartflash.databinding.ActivityRegisterBinding;
 import com.elearning.smartflash.ui.main.MainActivity;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.material.textfield.TextInputEditText;
-
-import java.util.regex.Pattern;
 
 /**
- * Quizlet-style registration screen supporting role choice (USER / TEACHER)
- * and unified Google Sign-In.
+ * Quizlet-style sign-up landing screen (Image 1) offering Google Sign-In
+ * and Email registration (routing to CreateAccountActivity).
  */
 public class RegisterActivity extends AppCompatActivity {
 
-    private static final Pattern USERNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9._-]{3,50}$");
-
     private ActivityRegisterBinding binding;
     private AuthViewModel authViewModel;
-    private String selectedRole = "USER";
+    private TokenManager tokenManager;
 
     private final ActivityResultLauncher<Intent> googleSignInLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result ->
@@ -50,94 +43,27 @@ public class RegisterActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AuthInputHelper.applyWhiteStatusBar(this);
         binding = ActivityRegisterBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        tokenManager = TokenManager.getInstance(this);
         authViewModel = new ViewModelProvider(this).get(AuthViewModel.class);
 
         setupListeners();
-        updateRoleCards();
     }
 
     private void setupListeners() {
+        binding.btnGoogleRegister.setOnClickListener(v -> startGoogleSignIn());
+
+        binding.btnEmailRegister.setOnClickListener(v ->
+                startActivity(new Intent(this, CreateAccountActivity.class))
+        );
+
         binding.tabGoLogin.setOnClickListener(v -> {
             startActivity(new Intent(this, LoginActivity.class));
             finish();
         });
-
-        binding.cardRoleUser.setOnClickListener(v -> {
-            selectedRole = "USER";
-            updateRoleCards();
-        });
-
-        binding.cardRoleTeacher.setOnClickListener(v -> {
-            selectedRole = "TEACHER";
-            updateRoleCards();
-        });
-
-        binding.btnRegister.setOnClickListener(v -> attemptRegister());
-        binding.btnGoogleRegister.setOnClickListener(v -> startGoogleSignIn());
-    }
-
-    private void updateRoleCards() {
-        boolean isLearner = "USER".equals(selectedRole);
-        binding.cardRoleUser.setBackgroundResource(
-                isLearner ? R.drawable.bg_role_card_selected : R.drawable.bg_role_card_unselected
-        );
-        binding.cardRoleTeacher.setBackgroundResource(
-                !isLearner ? R.drawable.bg_role_card_selected : R.drawable.bg_role_card_unselected
-        );
-    }
-
-    private void attemptRegister() {
-        hideErrorBanner();
-        binding.tilFullName.setError(null);
-        binding.tilUsername.setError(null);
-        binding.tilEmail.setError(null);
-        binding.tilPassword.setError(null);
-
-        String fullName = getTrimmedText(binding.etFullName);
-        String username = getTrimmedText(binding.etUsername);
-        String email = getTrimmedText(binding.etEmail);
-        String password = binding.etPassword.getText() != null
-                ? binding.etPassword.getText().toString()
-                : "";
-
-        if (TextUtils.isEmpty(fullName)) {
-            binding.tilFullName.setError("Họ và tên không được để trống");
-            return;
-        }
-        if (!USERNAME_PATTERN.matcher(username).matches()) {
-            binding.tilUsername.setError("Username 3–50 ký tự (chữ, số, ., _, -)");
-            return;
-        }
-        if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-            binding.tilEmail.setError("Email không đúng định dạng");
-            return;
-        }
-        if (password.length() < 6) {
-            binding.tilPassword.setError("Mật khẩu phải từ 6 ký tự trở lên");
-            return;
-        }
-
-        authViewModel.register(username, email, password, fullName, selectedRole)
-                .observe(this, resource -> {
-                    if (resource == null) return;
-                    switch (resource.getStatus()) {
-                        case LOADING:
-                            setLoading(true);
-                            break;
-                        case SUCCESS:
-                            setLoading(false);
-                            Toast.makeText(this, "Đăng ký tài khoản thành công!", Toast.LENGTH_SHORT).show();
-                            goToMain();
-                            break;
-                        case ERROR:
-                            setLoading(false);
-                            showErrorBanner(resource.getMessage());
-                            break;
-                    }
-                });
     }
 
     private void startGoogleSignIn() {
@@ -173,8 +99,8 @@ public class RegisterActivity extends AppCompatActivity {
     }
 
     private void setLoading(boolean loading) {
-        binding.btnRegister.setEnabled(!loading);
         binding.btnGoogleRegister.setEnabled(!loading);
+        binding.btnEmailRegister.setEnabled(!loading);
         binding.pbRegisterLoading.setVisibility(loading ? View.VISIBLE : View.GONE);
     }
 
@@ -192,9 +118,5 @@ public class RegisterActivity extends AppCompatActivity {
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
         finish();
-    }
-
-    private static String getTrimmedText(TextInputEditText editText) {
-        return editText.getText() != null ? editText.getText().toString().trim() : "";
     }
 }

@@ -26,6 +26,10 @@ public class AuthViewModel extends AndroidViewModel {
         return authRepository.verifySession();
     }
 
+    public LiveData<Resource<Boolean>> checkEmailExists(String email) {
+        return authRepository.checkEmailExists(email);
+    }
+
     public LiveData<Resource<AuthResponseDto>> login(String identifier, String password) {
         return authRepository.login(identifier, password);
     }

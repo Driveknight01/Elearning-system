@@ -5,15 +5,15 @@
         android:icon="@drawable/ic_nav_home"
         android:title="@string/nav_home" />
     <item
-        android:id="@+id/nav_search"
-        android:icon="@drawable/ic_nav_search"
-        android:title="@string/nav_search" />
+        android:id="@+id/nav_create"
+        android:icon="@drawable/ic_nav_add"
+        android:title="Tạo mới" />
     <item
         android:id="@+id/nav_library"
         android:icon="@drawable/ic_nav_library"
         android:title="@string/nav_library" />
     <item
-        android:id="@+id/nav_profile"
-        android:icon="@drawable/ic_nav_profile"
-        android:title="@string/nav_profile" />
+        android:id="@+id/nav_ai_chat"
+        android:icon="@drawable/ic_nav_ai_sparkle"
+        android:title="AI Chat" />
 </menu>

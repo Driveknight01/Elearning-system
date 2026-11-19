@@ -1,8 +1,12 @@
 package com.elearning.smartflash.ui.auth;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Patterns;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,6 +59,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        AuthInputHelper.applyWhiteStatusBar(this);
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -70,26 +75,67 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setupListeners() {
+        binding.btnBack.setOnClickListener(v -> {
+            startActivity(new Intent(this, RegisterActivity.class));
+            finish();
+        });
+
         binding.tabGoRegister.setOnClickListener(v -> {
             startActivity(new Intent(this, RegisterActivity.class));
             finish();
         });
 
+        AuthInputHelper.bindStateStyling(binding.flIdentifierBox, binding.tilIdentifier, binding.etIdentifier, binding.tvIdentifierError);
+        AuthInputHelper.bindStateStyling(binding.flPasswordBox, binding.tilPassword, binding.etPassword, binding.tvPasswordError);
+
+        TextWatcher watcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                AuthInputHelper.clearError(binding.flIdentifierBox, binding.tilIdentifier, binding.etIdentifier, binding.tvIdentifierError);
+                AuthInputHelper.clearError(binding.flPasswordBox, binding.tilPassword, binding.etPassword, binding.tvPasswordError);
+                updateLoginButtonState();
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        };
+        binding.etIdentifier.addTextChangedListener(watcher);
+        binding.etPassword.addTextChangedListener(watcher);
+        updateLoginButtonState();
+
         binding.btnLogin.setOnClickListener(v -> attemptLogin());
         binding.btnGoogleLogin.setOnClickListener(v -> startGoogleSignIn());
-        binding.tvForgotPassword.setOnClickListener(v -> showForgotPasswordDialog());
-
-        binding.tvContinueGuest.setOnClickListener(v -> {
-            tokenManager.clearSession();
-            tokenManager.setGuestMode(true);
-            goToMain();
+        binding.tvForgotPassword.setOnClickListener(v -> {
+            Intent intent = new Intent(this, ResetPasswordActivity.class);
+            intent.putExtra(ResetPasswordActivity.EXTRA_EMAIL, getTrimmedText(binding.etIdentifier));
+            startActivity(intent);
         });
+    }
+
+    private void updateLoginButtonState() {
+        boolean ready = !TextUtils.isEmpty(getTrimmedText(binding.etIdentifier))
+                && binding.etPassword.getText() != null
+                && !TextUtils.isEmpty(binding.etPassword.getText().toString());
+        if (ready) {
+            binding.btnLogin.setBackgroundTintList(
+                    ColorStateList.valueOf(ContextCompat.getColor(this, R.color.quizlet_blue))
+            );
+            binding.btnLogin.setTextColor(Color.WHITE);
+        } else {
+            binding.btnLogin.setBackgroundTintList(
+                    ColorStateList.valueOf(Color.parseColor("#F4F4F9"))
+            );
+            binding.btnLogin.setTextColor(Color.parseColor("#C8CEDE"));
+        }
     }
 
     private void attemptLogin() {
         hideErrorBanner();
-        binding.tilIdentifier.setError(null);
-        binding.tilPassword.setError(null);
+        AuthInputHelper.clearError(binding.flIdentifierBox, binding.tilIdentifier, binding.etIdentifier, binding.tvIdentifierError);
+        AuthInputHelper.clearError(binding.flPasswordBox, binding.tilPassword, binding.etPassword, binding.tvPasswordError);
 
         String identifier = getTrimmedText(binding.etIdentifier);
         String password = binding.etPassword.getText() != null
@@ -97,11 +143,18 @@ public class LoginActivity extends AppCompatActivity {
                 : "";
 
         if (TextUtils.isEmpty(identifier)) {
-            binding.tilIdentifier.setError("Vui lòng nhập Email hoặc tên đăng nhập");
+            AuthInputHelper.showError(binding.flIdentifierBox, binding.tilIdentifier, binding.etIdentifier, binding.tvIdentifierError,
+                    "Vui lòng nhập Email hoặc tên đăng nhập.");
             return;
         }
         if (TextUtils.isEmpty(password)) {
-            binding.tilPassword.setError("Vui lòng nhập mật khẩu");
+            AuthInputHelper.showError(binding.flPasswordBox, binding.tilPassword, binding.etPassword, binding.tvPasswordError,
+                    "Vui lòng nhập mật khẩu.");
+            return;
+        }
+        if (password.length() < 6) {
+            AuthInputHelper.showError(binding.flPasswordBox, binding.tilPassword, binding.etPassword, binding.tvPasswordError,
+                    getString(R.string.error_password_min));
             return;
         }
 

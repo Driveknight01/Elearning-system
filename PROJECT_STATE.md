@@ -113,15 +113,24 @@
   - Mở rộng [flashcardApi.js](file:///D:/Elearning-system/frontend-web/src/api/flashcardApi.js) với `getSetByShareToken`, `getInteraction`, `saveResumeState`, `rateSet`, `getSetRatings`, `starCard`, `unstarCard`, `getStarredCards`.
   - Tạo [StudyModeSelector.jsx](file:///D:/Elearning-system/frontend-web/src/components/sets/StudyModeSelector.jsx) (8 chế độ học & minigame chuẩn Quizlet), [CardPreviewDeck.jsx](file:///D:/Elearning-system/frontend-web/src/components/sets/CardPreviewDeck.jsx) (thẻ lật 3D, phím tắt `Space`/`←`/`→`/`A`/`S`, trộn thẻ, gợi ý, gắn sao `★`), [SetDetailPage.jsx](file:///D:/Elearning-system/frontend-web/src/pages/SetDetailPage.jsx) (lưu, nhân bản Clone, sao chép Share Link, danh sách thuật ngữ lọc `Tất cả / Gắn sao`, đánh giá 1–5★) và gắn route `/sets/:id` & `/sets/share/:shareToken` trong [App.jsx](file:///D:/Elearning-system/frontend-web/src/App.jsx).
 
+- **T3.10 — Hoàn thành `HomeFragment`, `SearchFragment`, `LibraryFragment`, `FolderDetailActivity` & Dark Mode (`mobile-android`)**:
+  - Hoàn thiện **Light/Dark Mode** toàn app (`ThemeManager.java`, `values/colors.xml`, `values-night/colors.xml`, `values-night/themes.xml`, đồng bộ thanh điều hướng hệ thống & `SettingsDialogHelper`).
+  - Xây dựng [SearchFragment.java](file:///D:/Elearning-system/mobile-android/app/src/main/java/com/elearning/smartflash/ui/search/SearchFragment.java) (gợi ý khi gõ `SearchSuggestionAdapter`, 7 tab kết quả, Bottom Sheet Bộ lọc, nối API `GET /api/v1/flashcard-sets/search` & tra cứu `@username`).
+  - Xây dựng [LibraryFragment.java](file:///D:/Elearning-system/mobile-android/app/src/main/java/com/elearning/smartflash/ui/library/LibraryFragment.java) nối API thật `/flashcard-sets/my`, `/folders/my`, `/study-groups/my`, và xây dựng [FolderDetailActivity.java](file:///D:/Elearning-system/mobile-android/app/src/main/java/com/elearning/smartflash/ui/folder/FolderDetailActivity.java) (xem chi tiết thư mục, thêm/gỡ học phần vào thư mục qua `/folders/{id}/sets/{setId}`, tạo tag, sửa/chia sẻ/xóa thư mục).
+  - *Nợ kỹ thuật*: Giao diện Active Learner + nối API tiến độ học thật & `/flashcard-sets/explore` trên [HomeFragment.java](file:///D:/Elearning-system/mobile-android/app/src/main/java/com/elearning/smartflash/ui/home/HomeFragment.java) (cùng Web `HomePage`) sẽ được nối lại sau khi hoàn thành Phase 5 có dữ liệu học thật.
+
 ### 🔄 Đang thực hiện (In Progress)
 - Đang triển khai **Phase 3 (`T3.1` → `T3.12`)** trên nhánh `feat/phase-3-flashcard`.
 
 ### ⏭️ Kế tiếp (Next Up)
-- [ ] **T3.10** 🟡 `[VỪA — Medium]`: [Android] Xây dựng `HomeFragment`, `SearchFragment` và `LibraryFragment` (hiển thị danh sách bộ thẻ, thư mục, nhóm học từ API).
+- [ ] **T3.11** 🔴 `[KHÓ — ⚠️ Đề xuất Model Mạnh/Pro]`: [Android] Xây dựng `CreateEditSetActivity` và `OcrScannerActivity` (tích hợp **CameraX** chụp ảnh tài liệu/sách, gửi ảnh lên API OCR và tự động đổ danh sách cặp `Term - Definition` vào `RecyclerView` để chỉnh sửa & lưu).
 
 ---
 
 ## 3. CHANGELOG (Nhật ký theo từng buổi làm việc)
+
+### [2026-11-19] — Buổi 6: Hoàn thành T3.10 (Android `Home`, `Search`, `Library`, `FolderDetail` & Dark Mode)
+- Hoàn thành **T3.10** trên nhánh `feat/phase-3-flashcard`: Triển khai hệ thống Light/Dark Mode toàn app (`ThemeManager`), giao diện Tìm kiếm 7 tab + Autocomplete + Bộ lọc nối API `/flashcard-sets/search`, Thư viện nối API `/my`, `/folders/my`, `/study-groups/my`, và `FolderDetailActivity` (thêm/gỡ học phần vào thư mục, tạo tag, sửa/xóa thư mục). Ghi nhận 1 đầu việc nợ kỹ thuật: nối dữ liệu học thật cho `HomeFragment` sau Phase 5.
 
 ### [2026-11-17] — Buổi 5 (Cập nhật lần 10): Hoàn thành T3.9 (`SetDetailPage` với 3D Flip Deck, TTS, Starred Cards, Clone & Share Link)
 - Hoàn thành **T3.9** trên nhánh `feat/phase-3-flashcard`: Tạo `useTextToSpeech.js`, `StudyModeSelector.jsx`, `CardPreviewDeck.jsx`, `SetDetailPage.jsx`, mở rộng `flashcardApi.js`, thêm 3D flip utilities vào `index.css` và cấu hình route `/sets/:id` & `/sets/share/:shareToken` trong `App.jsx`. Kiểm chứng `npm.cmd run build` thành công (`built in 13.67s`).

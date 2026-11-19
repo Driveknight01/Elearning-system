@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/quizlet_bg">
+    android:background="@color/sf_bg_screen">
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/fragment_container"
@@ -18,7 +18,7 @@
         android:id="@+id/nav_divider"
         android:layout_width="0dp"
         android:layout_height="1dp"
-        android:background="@color/quizlet_border"
+        android:background="@color/sf_divider"
         app:layout_constraintBottom_toTopOf="@+id/bottom_nav"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
@@ -26,13 +26,13 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/quizlet_card"
+        android:layout_height="72dp"
+        android:background="@color/sf_bg_screen"
         app:elevation="0dp"
-        app:itemActiveIndicatorStyle="@style/Widget.Material3.BottomNavigationView.ActiveIndicator"
+        app:itemActiveIndicatorStyle="@style/SmartFlash.BottomNavIndicator"
+        app:itemIconSize="26dp"
         app:itemIconTint="@color/selector_bottom_nav"
-        app:itemTextColor="@color/selector_bottom_nav"
-        app:labelVisibilityMode="labeled"
+        app:labelVisibilityMode="unlabeled"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

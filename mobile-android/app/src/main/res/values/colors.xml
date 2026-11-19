@@ -19,4 +19,32 @@
     <color name="quizlet_purple">#9333EA</color>
     <color name="quizlet_purple_light">#F5F3FF</color>
     <color name="white">#FFFFFF</color>
+
+    <!-- Semantic Light/Night theme tokens (SmartFlash) -->
+    <color name="sf_bg_screen">#FFFFFF</color>
+    <color name="sf_bg_surface">#FFFFFF</color>
+    <color name="sf_bg_surface_alt">#F3F4F8</color>
+    <color name="sf_bg_surface_soft">#F6F7FB</color>
+    <color name="sf_bg_btn_soft">#EEF0FF</color>
+    <color name="sf_text_primary">#282E3E</color>
+    <color name="sf_text_secondary">#586380</color>
+    <color name="sf_stroke_card">#E8ECF4</color>
+    <color name="sf_divider">#F1F3F8</color>
+    <color name="sf_home_top_status">#E8EEFF</color>
+    <color name="sf_pill_active_border">#2E3856</color>
+    <color name="sf_pill_active_bg">#FFFFFF</color>
+    <color name="sf_pill_inactive_bg">#F3F4F8</color>
+    <color name="sf_nav_indicator">#EBECEF</color>
+    <color name="sf_nav_active_icon">#4255FF</color>
+    <color name="sf_btn_soft_text">#4255FF</color>
+    <color name="sf_bg_streak_pill">#FFF3E6</color>
+
+    <!-- Create/Edit Set & Set Options tokens -->
+    <color name="sf_underline_idle">#CBD5E1</color>
+    <color name="sf_underline_focus">#1A1785</color>
+    <color name="sf_set_options_divider">#F3F4F8</color>
+    <color name="sf_delete_red">#B91C1C</color>
+    <color name="sf_hint_light">#B8BFC9</color>
+    <color name="sf_bg_folder_input">#F7F8FC</color>
+    <color name="sf_stroke_card_strong">#B8C0D2</color>
 </resources>

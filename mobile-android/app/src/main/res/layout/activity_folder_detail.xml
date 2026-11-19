@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/sf_bg_screen"
+    android:orientation="vertical">
+
+    <!-- Top Bar: Back on left, + and 3-dots on right (Image 1) -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="10dp">
+
+        <ImageButton
+            android:id="@+id/btn_folder_back"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Quay lại"
+            android:padding="12dp"
+            android:src="@drawable/ic_arrow_back" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/btn_folder_top_add"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Thêm tài liệu học"
+            android:padding="12dp"
+            android:src="@drawable/ic_nav_add"
+            app:tint="@color/sf_text_secondary" />
+
+        <ImageButton
+            android:id="@+id/btn_folder_more"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Tùy chọn"
+            android:padding="12dp"
+            android:src="@drawable/ic_more_vert" />
+    </LinearLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="20dp"
+            android:paddingBottom="28dp">
+
+            <!-- Centered Folder Icon & Title (Image 1) -->
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="56dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="28dp"
+                app:cardBackgroundColor="@color/sf_bg_surface_soft"
+                app:cardCornerRadius="14dp"
+                app:cardElevation="0dp"
+                app:strokeWidth="0dp">
+
+                <ImageView
+                    android:layout_width="28dp"
+                    android:layout_height="28dp"
+                    android:layout_gravity="center"
+                    android:contentDescription="Thư mục"
+                    android:src="@drawable/ic_folder_outline"
+                    app:tint="@color/sf_text_primary" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/tv_folder_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="14dp"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:text="Thư mục"
+                android:textColor="@color/sf_text_primary"
+                android:textSize="28sp"
+                android:textStyle="bold" />
+
+            <!-- Horizontal Tag Pills Row: All + user tags + "+ New tag" (Image 1) -->
+            <HorizontalScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="28dp"
+                android:scrollbars="none">
+
+                <LinearLayout
+                    android:id="@+id/ll_folder_tags_row"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal" />
+            </HorizontalScrollView>
+
+            <ProgressBar
+                android:id="@+id/pb_folder_loading"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="36dp"
+                android:visibility="gone" />
+
+            <!-- Empty State Card (Image 1) -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_folder_empty"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:visibility="gone"
+                app:cardBackgroundColor="@color/sf_bg_surface_soft"
+                app:cardCornerRadius="22dp"
+                app:cardElevation="0dp"
+                app:strokeColor="@color/sf_stroke_card"
+                app:strokeWidth="1dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical"
+                    android:paddingHorizontal="28dp"
+                    android:paddingVertical="34dp">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:contentDescription="Thẻ"
+                            android:src="@drawable/ic_cards_stack" />
+
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:layout_marginHorizontal="10dp"
+                            android:contentDescription="AI"
+                            android:src="@drawable/ic_nav_ai_sparkle" />
+
+                        <ImageView
+                            android:layout_width="36dp"
+                            android:layout_height="36dp"
+                            android:contentDescription="Kiểm tra"
+                            android:src="@drawable/ic_library_practice_test" />
+                    </LinearLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="18dp"
+                        android:fontFamily="sans-serif"
+                        android:gravity="center"
+                        android:lineSpacingExtra="2dp"
+                        android:text="Hãy bắt đầu xây dựng\nthư mục của bạn"
+                        android:textColor="@color/sf_text_primary"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_folder_add_materials"
+                        style="@style/Widget.Material3.Button.UnelevatedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="24dp"
+                        android:backgroundTint="@color/quizlet_blue"
+                        android:fontFamily="sans-serif"
+                        android:text="Thêm tài liệu học"
+                        android:textAllCaps="false"
+                        android:textColor="@color/white"
+                        android:textSize="15.5sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="26dp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_folder_generate_ai"
+                        style="@style/Widget.Material3.Button.UnelevatedButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="52dp"
+                        android:layout_marginTop="10dp"
+                        android:backgroundTint="@color/sf_bg_btn_soft"
+                        android:fontFamily="sans-serif"
+                        android:text="Tạo bằng AI"
+                        android:textAllCaps="false"
+                        android:textColor="@color/sf_btn_soft_text"
+                        android:textSize="15.5sp"
+                        android:textStyle="bold"
+                        app:cornerRadius="26dp"
+                        app:icon="@drawable/ic_nav_ai_sparkle"
+                        app:iconGravity="textStart"
+                        app:iconPadding="8dp"
+                        app:iconTint="@null" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Populated Sets RecyclerView -->
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_folder_sets"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:nestedScrollingEnabled="false"
+                android:visibility="gone" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</LinearLayout>

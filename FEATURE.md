@@ -86,7 +86,7 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
   - *Commit*: `feat(web-editor): build comprehensive SetEditorPage with OCR modal, bulk import and AI image picker`
 - [x] **T3.9** 🟡 `[VỪA — Medium]`: [Web] Xây dựng `SetDetailPage`: hiển thị thẻ lật xem trước, phát âm tự động **Text-to-Speech (`window.speechSynthesis`)**, gắn sao `★` thẻ khó, nút Clone bộ thẻ, Copy Share Link và bảng chọn các chế độ học/chơi game.
   - *Commit*: `feat(web-set-detail): build SetDetailPage with TTS pronunciation, star cards and share link`
-- [ ] **T3.10** 🟡 `[VỪA — Medium]`: [Android] Xây dựng `HomeFragment`, `SearchFragment` và `LibraryFragment` (hiển thị danh sách bộ thẻ, thư mục, nhóm học từ API).
+- [x] **T3.10** 🟡 `[VỪA — Medium]`: [Android] Xây dựng `HomeFragment`, `SearchFragment` và `LibraryFragment` (hiển thị danh sách bộ thẻ, thư mục, nhóm học từ API). *(Nợ kỹ thuật: nối dữ liệu tiến độ học thật & `/explore` trên `HomeFragment` sẽ hoàn thiện sau khi có dữ liệu học từ Phase 5).*
   - *Commit*: `feat(android-library): implement Home, Search and Library fragments with RecyclerView adapters`
 - [ ] **T3.11** 🔴 `[KHÓ — ⚠️ Đề xuất Model Mạnh/Pro]`: [Android] Xây dựng `CreateEditSetActivity` và `OcrScannerActivity` (tích hợp **CameraX** chụp ảnh tài liệu/sách, gửi ảnh lên API OCR và tự động đổ danh sách cặp `Term - Definition` vào `RecyclerView` để chỉnh sửa & lưu).
   - *Commit*: `feat(android-editor): implement CreateEditSetActivity and CameraX OcrScannerActivity`
