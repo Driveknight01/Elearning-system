@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/fl_card_flip_container"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/transparent"
+    android:clipChildren="false"
+    android:clipToPadding="false"
+    android:paddingHorizontal="6dp"
+    android:paddingVertical="4dp">
+
+    <!-- FRONT FACE (Term) -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_face_front"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:cardBackgroundColor="@color/sf_bg_surface"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="18dp">
+
+            <ImageButton
+                android:id="@+id/btn_front_speak"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Phát âm thuật ngữ"
+                android:padding="6dp"
+                android:src="@drawable/ic_volume_up"
+                app:tint="@color/sf_text_secondary" />
+
+            <TextView
+                android:id="@+id/tv_front_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:breakStrategy="balanced"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:lineSpacingMultiplier="1.15"
+                android:maxLines="5"
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/sf_text_primary"
+                android:textSize="22sp"
+                android:textStyle="normal" />
+
+            <ImageButton
+                android:id="@+id/btn_front_fullscreen"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Mở toàn màn hình"
+                android:padding="7dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_fullscreen"
+                app:tint="@color/sf_text_secondary" />
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <!-- BACK FACE (Definition) -->
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/card_face_back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:alpha="0"
+        app:cardBackgroundColor="@color/sf_bg_surface"
+        app:cardCornerRadius="20dp"
+        app:cardElevation="0dp"
+        app:strokeWidth="0dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="18dp">
+
+            <ImageButton
+                android:id="@+id/btn_back_speak"
+                android:layout_width="36dp"
+                android:layout_height="36dp"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Phát âm định nghĩa"
+                android:padding="6dp"
+                android:src="@drawable/ic_volume_up"
+                app:tint="@color/sf_text_secondary" />
+
+            <TextView
+                android:id="@+id/tv_back_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:breakStrategy="balanced"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif"
+                android:gravity="center"
+                android:lineSpacingMultiplier="1.15"
+                android:maxLines="5"
+                android:paddingHorizontal="12dp"
+                android:textColor="@color/sf_text_primary"
+                android:textSize="21sp"
+                android:textStyle="normal" />
+
+            <ImageButton
+                android:id="@+id/btn_back_fullscreen"
+                android:layout_width="42dp"
+                android:layout_height="42dp"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentBottom="true"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="Mở toàn màn hình"
+                android:padding="7dp"
+                android:scaleType="fitCenter"
+                android:src="@drawable/ic_fullscreen"
+                app:tint="@color/sf_text_secondary" />
+        </RelativeLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+</FrameLayout>

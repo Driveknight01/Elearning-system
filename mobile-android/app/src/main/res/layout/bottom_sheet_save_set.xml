@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_bottom_sheet_white"
+    android:orientation="vertical"
+    android:paddingHorizontal="20dp"
+    android:paddingTop="12dp"
+    android:paddingBottom="28dp">
+
+    <View
+        android:layout_width="40dp"
+        android:layout_height="4dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="22dp"
+        android:background="@drawable/bg_pill_blue"
+        android:backgroundTint="@color/sf_hint_light" />
+
+    <!-- New Folder -->
+    <LinearLayout
+        android:id="@+id/row_save_new_folder"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:background="@drawable/bg_save_sheet_item"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp">
+
+        <ImageView
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:contentDescription="Thư mục mới"
+            android:src="@drawable/ic_add_white"
+            app:tint="@color/sf_text_secondary" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text="Thư mục mới"
+            android:textColor="@color/sf_text_primary"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Save to Library toggle -->
+    <LinearLayout
+        android:id="@+id/row_save_to_library"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_save_sheet_item"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="16dp">
+
+        <ImageView
+            android:id="@+id/iv_save_library_icon"
+            android:layout_width="22dp"
+            android:layout_height="22dp"
+            android:contentDescription="Lưu học phần"
+            android:src="@drawable/ic_circle_outline"
+            app:tint="@color/sf_text_secondary" />
+
+        <TextView
+            android:id="@+id/tv_save_library_label"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="14dp"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:text="Lưu vào thư viện"
+            android:textColor="@color/sf_text_primary"
+            android:textSize="15sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:layout_width="18dp"
+            android:layout_height="18dp"
+            android:contentDescription="Chọn"
+            android:src="@drawable/ic_chevron_right"
+            app:tint="@color/sf_text_secondary" />
+    </LinearLayout>
+
+    <!-- Dynamic Folder List -->
+    <LinearLayout
+        android:id="@+id/ll_save_folders_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
+</LinearLayout>

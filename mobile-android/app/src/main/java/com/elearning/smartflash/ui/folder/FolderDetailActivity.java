@@ -43,6 +43,7 @@ import com.elearning.smartflash.data.remote.dto.UserSummaryDto;
 import com.elearning.smartflash.databinding.ActivityFolderDetailBinding;
 import com.elearning.smartflash.ui.library.LibrarySetAdapter;
 import com.elearning.smartflash.ui.set.CreateEditSetActivity;
+import com.elearning.smartflash.ui.set.SetDetailActivity;
 import com.elearning.smartflash.util.ThemeManager;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.button.MaterialButton;
@@ -123,11 +124,15 @@ public class FolderDetailActivity extends AppCompatActivity {
         Long currentUserId = user != null ? user.getId() : null;
         setAdapter = new LibrarySetAdapter(currentUserId, set -> {
             if (set.getId() == null) return;
-            String[] options = {"Mở / Chỉnh sửa học phần", "Gỡ khỏi thư mục"};
+            String[] options = {"Mở học phần", "Chỉnh sửa học phần", "Gỡ khỏi thư mục"};
             new MaterialAlertDialogBuilder(this)
                     .setTitle(set.getTitle())
                     .setItems(options, (d, which) -> {
                         if (which == 0) {
+                            Intent intent = new Intent(this, SetDetailActivity.class);
+                            intent.putExtra(SetDetailActivity.EXTRA_SET_ID, set.getId());
+                            startActivity(intent);
+                        } else if (which == 1) {
                             Intent intent = new Intent(this, CreateEditSetActivity.class);
                             intent.putExtra(CreateEditSetActivity.EXTRA_SET_ID, set.getId());
                             createSetLauncher.launch(intent);

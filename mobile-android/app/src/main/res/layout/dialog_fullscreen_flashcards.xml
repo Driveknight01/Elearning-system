@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/quizlet_bg"
+    android:orientation="vertical">
+
+    <!-- Top Bar -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="12dp">
+
+        <ImageButton
+            android:id="@+id/btn_fs_close"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Đóng"
+            android:src="@drawable/ic_close"
+            app:tint="@color/sf_text_primary" />
+
+        <TextView
+            android:id="@+id/tv_fs_counter"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="sans-serif-medium"
+            android:gravity="center"
+            android:text="1 / 10"
+            android:textColor="@color/sf_text_primary"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/btn_fs_auto_tts"
+            android:layout_width="42dp"
+            android:layout_height="42dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="Tự động phát âm"
+            android:src="@drawable/ic_volume_up"
+            app:tint="@color/sf_text_secondary" />
+    </LinearLayout>
+
+    <!-- Progress Bar -->
+    <ProgressBar
+        android:id="@+id/pb_fs_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="match_parent"
+        android:layout_height="3dp"
+        android:progressTint="@color/quizlet_blue" />
+
+    <!-- Learning / Known Counters -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingHorizontal="20dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="8dp">
+
+        <TextView
+            android:id="@+id/tv_fs_learning_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_streak_pill"
+            android:fontFamily="sans-serif-medium"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="5dp"
+            android:text="0  Chưa thuộc"
+            android:textColor="@color/quizlet_amber_dark"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_weight="1" />
+
+        <TextView
+            android:id="@+id/tv_fs_known_badge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_trivia_option_correct"
+            android:fontFamily="sans-serif-medium"
+            android:paddingHorizontal="12dp"
+            android:paddingVertical="5dp"
+            android:text="Đã thuộc  0"
+            android:textColor="@color/quizlet_green"
+            android:textSize="13sp"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Center Swipeable & Flippable Card Container -->
+    <FrameLayout
+        android:id="@+id/fl_fs_stage"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        android:paddingHorizontal="20dp"
+        android:paddingVertical="12dp">
+
+        <!-- Card Wrapper (moves & rotates on drag + flips on rotationX) -->
+        <FrameLayout
+            android:id="@+id/fl_fs_card"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false">
+
+            <!-- FRONT -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_fs_front"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:cardBackgroundColor="@color/sf_bg_surface"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="3dp"
+                app:strokeColor="@color/sf_stroke_card"
+                app:strokeWidth="1dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="22dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="Thuật ngữ"
+                        android:textColor="@color/sf_hint_light"
+                        android:textSize="12sp" />
+
+                    <ImageButton
+                        android:id="@+id/btn_fs_front_speak"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Phát âm"
+                        android:src="@drawable/ic_volume_up"
+                        app:tint="@color/sf_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tv_fs_front_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:breakStrategy="balanced"
+                        android:fontFamily="sans-serif"
+                        android:gravity="center"
+                        android:lineSpacingMultiplier="1.2"
+                        android:paddingHorizontal="12dp"
+                        android:textColor="@color/sf_text_primary"
+                        android:textSize="26sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
+                        android:text="Chạm để lật • Vuốt trái/phải để đánh dấu"
+                        android:textColor="@color/sf_hint_light"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- BACK -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/card_fs_back"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:alpha="0"
+                app:cardBackgroundColor="@color/sf_bg_surface"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="3dp"
+                app:strokeColor="@color/sf_stroke_card"
+                app:strokeWidth="1dp">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="22dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:fontFamily="sans-serif-medium"
+                        android:text="Định nghĩa"
+                        android:textColor="@color/sf_hint_light"
+                        android:textSize="12sp" />
+
+                    <ImageButton
+                        android:id="@+id/btn_fs_back_speak"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:contentDescription="Phát âm"
+                        android:src="@drawable/ic_volume_up"
+                        app:tint="@color/sf_text_secondary" />
+
+                    <TextView
+                        android:id="@+id/tv_fs_back_text"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:breakStrategy="balanced"
+                        android:fontFamily="sans-serif-medium"
+                        android:gravity="center"
+                        android:lineSpacingMultiplier="1.2"
+                        android:paddingHorizontal="12dp"
+                        android:textColor="@color/sf_text_primary"
+                        android:textSize="24sp" />
+                </RelativeLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Swipe Status Stamp Overlay -->
+            <TextView
+                android:id="@+id/tv_fs_swipe_stamp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|center_horizontal"
+                android:layout_marginTop="24dp"
+                android:alpha="0"
+                android:background="@drawable/bg_pill_blue"
+                android:fontFamily="sans-serif-medium"
+                android:paddingHorizontal="16dp"
+                android:paddingVertical="6dp"
+                android:text="ĐÃ THUỘC"
+                android:textColor="@color/white"
+                android:textSize="14sp"
+                android:textStyle="bold" />
+        </FrameLayout>
+
+        <!-- Summary View when finished -->
+        <LinearLayout
+            android:id="@+id/ll_fs_summary"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="24dp"
+            android:visibility="gone">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-medium"
+                android:text="Hoàn thành lượt ôn!"
+                android:textColor="@color/sf_text_primary"
+                android:textSize="22sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/tv_fs_summary_stats"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:textColor="@color/sf_text_secondary"
+                android:textSize="15sp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_fs_retry_unknown"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="24dp"
+                android:backgroundTint="@color/quizlet_blue"
+                android:text="Học lại các thẻ chưa thuộc"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:cornerRadius="999dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_fs_restart_all"
+                style="@style/Widget.Material3.Button.OutlinedButton"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginTop="10dp"
+                android:text="Ôn lại tất cả thẻ"
+                android:textAllCaps="false"
+                android:textSize="15sp"
+                app:cornerRadius="999dp" />
+        </LinearLayout>
+    </FrameLayout>
+
+    <!-- Bottom Action Buttons (Chưa thuộc / Hoàn tác / Đã thuộc) -->
+    <LinearLayout
+        android:id="@+id/ll_fs_bottom_actions"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:paddingHorizontal="24dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="22dp">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_fs_mark_learning"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginEnd="10dp"
+            android:layout_weight="1"
+            android:text="Chưa thuộc"
+            android:textAllCaps="false"
+            android:textColor="@color/quizlet_amber_dark"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:cornerRadius="999dp"
+            app:icon="@drawable/ic_close"
+            app:iconTint="@color/quizlet_amber_dark"
+            app:strokeColor="@color/quizlet_amber_dark" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_fs_mark_known"
+            android:layout_width="0dp"
+            android:layout_height="52dp"
+            android:layout_marginStart="10dp"
+            android:layout_weight="1"
+            android:backgroundTint="@color/quizlet_green"
+            android:text="Đã thuộc"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:cornerRadius="999dp"
+            app:icon="@drawable/ic_check"
+            app:iconTint="@color/white" />
+    </LinearLayout>
+
+</LinearLayout>

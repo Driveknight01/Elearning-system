@@ -33,6 +33,27 @@ public class FlashcardSetDetailDto {
     @SerializedName("cardCount")
     private Integer cardCount;
 
+    @SerializedName("viewCount")
+    private Integer viewCount;
+
+    @SerializedName("cloneCount")
+    private Integer cloneCount;
+
+    @SerializedName("avgRating")
+    private Double avgRating;
+
+    @SerializedName("ratingCount")
+    private Integer ratingCount;
+
+    @SerializedName("ownerView")
+    private boolean ownerView;
+
+    @SerializedName("tags")
+    private List<String> tags;
+
+    @SerializedName("owner")
+    private SetSummaryDto.OwnerSummaryDto owner;
+
     @SerializedName("cards")
     private List<FlashcardItemDto> cards;
 
@@ -66,6 +87,34 @@ public class FlashcardSetDetailDto {
 
     public Integer getCardCount() {
         return cardCount;
+    }
+
+    public Integer getViewCount() {
+        return viewCount;
+    }
+
+    public Integer getCloneCount() {
+        return cloneCount;
+    }
+
+    public Double getAvgRating() {
+        return avgRating;
+    }
+
+    public Integer getRatingCount() {
+        return ratingCount;
+    }
+
+    public boolean isOwnerView() {
+        return ownerView;
+    }
+
+    public List<String> getTags() {
+        return tags;
+    }
+
+    public SetSummaryDto.OwnerSummaryDto getOwner() {
+        return owner;
     }
 
     public List<FlashcardItemDto> getCards() {

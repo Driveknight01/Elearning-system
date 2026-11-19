@@ -18,3 +18,11 @@ Tài liệu này ghi nhận các hạng mục còn hạn chế hoặc tạm hoã
 ## 2. Phase 3 — Mobile Android & Web (`T3.10`: Trang chủ Active Learner)
 - **Vấn đề**: Giao diện Active Learner và việc nối API tiến độ học thật + `/flashcard-sets/explore` trên [HomeFragment.java](file:///d:/Elearning-system/mobile-android/app/src/main/java/com/elearning/smartflash/ui/home/HomeFragment.java) (cùng Web `HomePage`) tạm hoãn.
 - **Hướng xử lý dự kiến**: Hoàn thiện sau khi xong **Phase 5** (có dữ liệu học tập thật từ FSRS/DKT).
+
+---
+
+## 3. Phase 3 — Mobile Android (`T3.12`: Phát âm đa ngôn ngữ cho thẻ)
+- **Vấn đề**: [TtsHelper.java](file:///d:/Elearning-system/mobile-android/app/src/main/java/com/elearning/smartflash/util/TtsHelper.java) hiện mới tối ưu giọng đọc cho **tiếng Anh** (Free Dictionary API + Google TTS) và **tiếng Việt** (tự động chuyển chuỗi ASCII không dấu từ `vi` sang `en`); các ngôn ngữ khác (Nhật, Hàn, Trung, Pháp, Đức, Nga...) chưa có nhận diện tự động theo ký tự/ngôn ngữ và chưa có giọng Neural TTS đồng nhất qua server (`edge-tts`).
+- **Hướng xử lý dự kiến**:
+  - Bổ sung nhận diện tự động theo bảng mã Unicode (CJK, Hangul, Kana, Cyrillic...) trong `detectEffectiveShortLang()` để đọc đúng ngôn ngữ ngay cả khi bộ thẻ không khai báo chuẩn `termLang`/`defLang`.
+  - Tích hợp endpoint Neural TTS (`edge-tts`) trên `ai-ml-service` + cache `.mp3` ở Backend để phát âm tự nhiên cho mọi ngôn ngữ.

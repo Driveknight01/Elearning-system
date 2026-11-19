@@ -90,7 +90,7 @@ Tài liệu này chia nhỏ toàn bộ dự án thành **88 Task nguyên tử (A
   - *Commit*: `feat(android-library): implement Home, Search and Library fragments with RecyclerView adapters`
 - [x] **T3.11** 🔴 `[KHÓ — ⚠️ Đề xuất Model Mạnh/Pro]`: [Android] Xây dựng `CreateEditSetActivity` và `OcrScannerActivity` (tích hợp **CameraX** chụp ảnh tài liệu/sách, gửi ảnh lên API OCR và tự động đổ danh sách cặp `Term - Definition` vào `RecyclerView` để chỉnh sửa & lưu).
   - *Commit*: `feat(android-editor): implement CreateEditSetActivity and CameraX OcrScannerActivity`
-- [ ] **T3.12** 🟡 `[VỪA — Medium]`: [Android] Xây dựng `SetDetailActivity` tích hợp `android.speech.tts.TextToSpeech` phát âm thuật ngữ/định nghĩa, gắn sao thẻ khó, chia sẻ link và điều hướng sang các chế độ học.
+- [x] **T3.12** 🟡 `[VỪA — Medium]`: [Android] Xây dựng `SetDetailActivity` tích hợp `android.speech.tts.TextToSpeech` phát âm thuật ngữ/định nghĩa, gắn sao thẻ khó, chia sẻ link và điều hướng sang các chế độ học.
   - *Commit*: `feat(android-set-detail): implement SetDetailActivity with Android TTS and share options`
 
 ---

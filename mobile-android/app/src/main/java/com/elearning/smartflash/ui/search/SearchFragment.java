@@ -1,6 +1,7 @@
 package com.elearning.smartflash.ui.search;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.os.Bundle;
@@ -36,6 +37,7 @@ import com.elearning.smartflash.databinding.FragmentSearchBinding;
 import com.elearning.smartflash.ui.main.MainActivity;
 import com.elearning.smartflash.ui.profile.ProfileViewModel;
 import com.elearning.smartflash.ui.profile.PublicProfileDialogHelper;
+import com.elearning.smartflash.ui.set.SetDetailActivity;
 import com.elearning.smartflash.ui.search.SearchResultModels.ClassItem;
 import com.elearning.smartflash.ui.search.SearchResultModels.QuestionItem;
 import com.elearning.smartflash.ui.search.SearchResultModels.SetItem;
@@ -212,12 +214,12 @@ public class SearchFragment extends Fragment {
         SearchSetAdapter.OnSetActionListener setListener = new SearchSetAdapter.OnSetActionListener() {
             @Override
             public void onPreview(SetItem item) {
-                Toast.makeText(requireContext(), "Xem trước: " + item.title, Toast.LENGTH_SHORT).show();
+                openSetDetail(item);
             }
 
             @Override
             public void onStudy(SetItem item) {
-                Toast.makeText(requireContext(), "Mở học phần \"" + item.title + "\" sẽ nối ở T3.12.", Toast.LENGTH_SHORT).show();
+                openSetDetail(item);
             }
         };
 
@@ -781,6 +783,16 @@ public class SearchFragment extends Fragment {
         if (imm != null) {
             imm.hideSoftInputFromWindow(binding.etSearchQuery.getWindowToken(), 0);
         }
+    }
+
+    private void openSetDetail(SetItem item) {
+        if (item == null || item.id <= 0) {
+            Toast.makeText(requireContext(), "Học phần mẫu chưa có ID trên máy chủ", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        Intent intent = new Intent(requireContext(), SetDetailActivity.class);
+        intent.putExtra(SetDetailActivity.EXTRA_SET_ID, item.id);
+        startActivity(intent);
     }
 
     @Override

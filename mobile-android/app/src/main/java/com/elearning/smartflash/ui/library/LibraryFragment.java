@@ -36,7 +36,7 @@ import com.elearning.smartflash.databinding.FragmentLibraryBinding;
 import com.elearning.smartflash.ui.folder.CreateFolderActivity;
 import com.elearning.smartflash.ui.folder.FolderDetailActivity;
 import com.elearning.smartflash.ui.main.MainActivity;
-import com.elearning.smartflash.ui.set.CreateEditSetActivity;
+import com.elearning.smartflash.ui.set.SetDetailActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -116,8 +116,8 @@ public class LibraryFragment extends Fragment {
     private void setupLists() {
         setAdapter = new LibrarySetAdapter(currentUserId, set -> {
             if (set.getId() != null) {
-                Intent intent = new Intent(requireContext(), CreateEditSetActivity.class);
-                intent.putExtra(CreateEditSetActivity.EXTRA_SET_ID, set.getId());
+                Intent intent = new Intent(requireContext(), SetDetailActivity.class);
+                intent.putExtra(SetDetailActivity.EXTRA_SET_ID, set.getId());
                 startActivity(intent);
             }
         });

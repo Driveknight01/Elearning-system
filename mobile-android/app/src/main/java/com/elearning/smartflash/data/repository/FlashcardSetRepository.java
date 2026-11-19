@@ -7,9 +7,13 @@ import androidx.annotation.NonNull;
 import com.elearning.smartflash.data.remote.api.FlashcardSetApiService;
 import com.elearning.smartflash.data.remote.api.RetrofitClient;
 import com.elearning.smartflash.data.remote.dto.ApiResponse;
+import com.elearning.smartflash.data.remote.dto.CloneSetRequestDto;
 import com.elearning.smartflash.data.remote.dto.CreateFlashcardSetRequestDto;
 import com.elearning.smartflash.data.remote.dto.FlashcardSetDetailDto;
 import com.elearning.smartflash.data.remote.dto.OcrExtractResponseDto;
+import com.elearning.smartflash.data.remote.dto.RateSetRequestDto;
+import com.elearning.smartflash.data.remote.dto.SetInteractionDto;
+import com.elearning.smartflash.data.remote.dto.StarredCardsDto;
 
 import org.json.JSONObject;
 
@@ -44,7 +48,47 @@ public class FlashcardSetRepository {
     }
 
     public void getSetDetail(long setId, ResultCallback<FlashcardSetDetailDto> callback) {
-        apiService.getSetDetail(setId).enqueue(wrapCallback(callback));
+        getSetDetail(setId, null, callback);
+    }
+
+    public void getSetDetail(long setId, String shareToken, ResultCallback<FlashcardSetDetailDto> callback) {
+        apiService.getSetDetail(setId, shareToken).enqueue(wrapCallback(callback));
+    }
+
+    public void getSetByShareToken(String shareToken, ResultCallback<FlashcardSetDetailDto> callback) {
+        apiService.getSetByShareToken(shareToken).enqueue(wrapCallback(callback));
+    }
+
+    public void cloneSet(long setId, String shareToken, CloneSetRequestDto request, ResultCallback<FlashcardSetDetailDto> callback) {
+        apiService.cloneSet(setId, shareToken, request != null ? request : new CloneSetRequestDto(null, null))
+                .enqueue(wrapCallback(callback));
+    }
+
+    public void saveSet(long setId, String shareToken, boolean save, ResultCallback<SetInteractionDto> callback) {
+        Call<ApiResponse<SetInteractionDto>> call = save
+                ? apiService.saveSet(setId, shareToken)
+                : apiService.unsaveSet(setId, shareToken);
+        call.enqueue(wrapCallback(callback));
+    }
+
+    public void getInteraction(long setId, String shareToken, ResultCallback<SetInteractionDto> callback) {
+        apiService.getInteraction(setId, shareToken).enqueue(wrapCallback(callback));
+    }
+
+    public void rateSet(long setId, String shareToken, int rating, String comment, ResultCallback<SetInteractionDto> callback) {
+        apiService.rateSet(setId, shareToken, new RateSetRequestDto(rating, comment))
+                .enqueue(wrapCallback(callback));
+    }
+
+    public void toggleStarCard(long setId, long cardId, String shareToken, boolean star, ResultCallback<Void> callback) {
+        Call<ApiResponse<Void>> call = star
+                ? apiService.starCard(setId, cardId, shareToken)
+                : apiService.unstarCard(setId, cardId);
+        call.enqueue(wrapVoidCallback(callback));
+    }
+
+    public void getStarredCards(long setId, String shareToken, ResultCallback<StarredCardsDto> callback) {
+        apiService.getStarredCards(setId, shareToken).enqueue(wrapCallback(callback));
     }
 
     public void updateSet(long setId, CreateFlashcardSetRequestDto request, ResultCallback<FlashcardSetDetailDto> callback) {
@@ -52,7 +96,11 @@ public class FlashcardSetRepository {
     }
 
     public void deleteSet(long setId, ResultCallback<Void> callback) {
-        apiService.deleteSet(setId).enqueue(new Callback<>() {
+        apiService.deleteSet(setId).enqueue(wrapVoidCallback(callback));
+    }
+
+    private Callback<ApiResponse<Void>> wrapVoidCallback(ResultCallback<Void> callback) {
+        return new Callback<>() {
             @Override
             public void onResponse(@NonNull Call<ApiResponse<Void>> call,
                                    @NonNull Response<ApiResponse<Void>> response) {
@@ -67,7 +115,7 @@ public class FlashcardSetRepository {
             public void onFailure(@NonNull Call<ApiResponse<Void>> call, @NonNull Throwable t) {
                 callback.onError(t.getMessage() != null ? t.getMessage() : "Lỗi kết nối máy chủ");
             }
-        });
+        };
     }
 
     public void extractOcrCards(File imageFile, String sourceLang, String targetLang,

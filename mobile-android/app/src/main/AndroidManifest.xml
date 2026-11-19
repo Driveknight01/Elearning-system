@@ -9,6 +9,12 @@
         android:name="android.hardware.camera"
         android:required="false" />
 
+    <queries>
+        <intent>
+            <action android:name="android.intent.action.TTS_SERVICE" />
+        </intent>
+    </queries>
+
     <application
         android:name=".SmartFlashApp"
         android:allowBackup="true"
@@ -57,6 +63,10 @@
             android:name=".ui.set.CreateEditSetActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize" />
+
+        <activity
+            android:name=".ui.set.SetDetailActivity"
+            android:exported="false" />
 
         <activity
             android:name=".ui.set.SetOptionsActivity"
