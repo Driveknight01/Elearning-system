@@ -1,7 +1,11 @@
 package com.elearning.smartflash.ui.set;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.ResultReceiver;
 import android.view.GestureDetector;
 import android.view.HapticFeedbackConstants;
 import android.view.MotionEvent;
@@ -23,14 +27,27 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.elearning.smartflash.R;
+import com.elearning.smartflash.data.remote.api.RetrofitClient;
+import com.elearning.smartflash.data.remote.dto.ApiResponse;
+import com.elearning.smartflash.data.remote.dto.MediaUploadResponseDto;
 import com.elearning.smartflash.databinding.ActivityCreateEditSetBinding;
+import com.elearning.smartflash.util.ProfileUtils;
 import com.elearning.smartflash.util.ThemeManager;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.io.ByteArrayOutputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * Quizlet-style Create / Edit Flashcard Set screen matching the mobile reference design.
@@ -46,6 +63,16 @@ public class CreateEditSetActivity extends AppCompatActivity implements Flashcar
     private LinearLayoutManager layoutManager;
     private ItemTouchHelper itemTouchHelper;
     private int pendingInsertAfterCardIndex = -1;
+    private int pendingImageCardIndex = -1;
+
+    private final ActivityResultLauncher<String> cardImagePickerLauncher =
+            registerForActivityResult(new ActivityResultContracts.GetContent(), uri -> {
+                if (uri != null && pendingImageCardIndex >= 0
+                        && pendingImageCardIndex < viewModel.getCards().size()) {
+                    uploadCardImageFromUri(pendingImageCardIndex, uri);
+                }
+                pendingImageCardIndex = -1;
+            });
 
     private final ActivityResultLauncher<Intent> optionsLauncher =
             registerForActivityResult(new ActivityResultContracts.StartActivityForResult(), result -> {
@@ -406,7 +433,25 @@ public class CreateEditSetActivity extends AppCompatActivity implements Flashcar
 
     @Override
     public void onScanDocumentClicked() {
-        scanDocumentLauncher.launch(new Intent(this, ScanDocumentActivity.class));
+        Intent intent = new Intent(this, ScanDocumentActivity.class);
+        intent.putExtra(ScanDocumentActivity.EXTRA_TERM_LANG, viewModel.getTermLang());
+        intent.putExtra(ScanDocumentActivity.EXTRA_DEF_LANG, viewModel.getDefLang());
+        intent.putExtra(ScanDocumentActivity.EXTRA_LIVE_RECEIVER, new ResultReceiver(
+                new Handler(Looper.getMainLooper())) {
+            @Override
+            protected void onReceiveResult(int resultCode, Bundle resultData) {
+                if (resultCode == RESULT_OK && resultData != null) {
+                    ArrayList<String> terms = resultData.getStringArrayList(
+                            ScanDocumentActivity.EXTRA_SCANNED_TERMS);
+                    ArrayList<String> defs = resultData.getStringArrayList(
+                            ScanDocumentActivity.EXTRA_SCANNED_DEFS);
+                    if (terms != null && defs != null && !terms.isEmpty()) {
+                        mergeScannedCards(terms, defs);
+                    }
+                }
+            }
+        });
+        scanDocumentLauncher.launch(intent);
     }
 
     private void mergeScannedCards(List<String> terms, List<String> defs) {
@@ -466,6 +511,29 @@ public class CreateEditSetActivity extends AppCompatActivity implements Flashcar
             return;
         }
         EditableCardItem card = viewModel.getCards().get(cardIndex);
+        boolean hasImage = card.getImageUrl() != null && !card.getImageUrl().trim().isEmpty();
+        String[] options = hasImage
+                ? new String[]{"Chọn ảnh từ máy", "Nhập URL ảnh", "Xóa ảnh"}
+                : new String[]{"Chọn ảnh từ máy", "Nhập URL ảnh"};
+
+        new MaterialAlertDialogBuilder(this)
+                .setTitle("Ảnh minh họa thẻ")
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) {
+                        pendingImageCardIndex = cardIndex;
+                        cardImagePickerLauncher.launch("image/*");
+                    } else if (which == 1) {
+                        showCardImageUrlDialog(cardIndex, card);
+                    } else if (which == 2) {
+                        card.setImageUrl(null);
+                        adapter.notifyItemChanged(cardIndex + 1);
+                    }
+                })
+                .setNegativeButton("Hủy", null)
+                .show();
+    }
+
+    private void showCardImageUrlDialog(int cardIndex, EditableCardItem card) {
         EditText input = new EditText(this);
         input.setHint("https://example.com/image.jpg");
         if (card.getImageUrl() != null) {
@@ -475,19 +543,58 @@ public class CreateEditSetActivity extends AppCompatActivity implements Flashcar
         input.setPadding(pad, pad / 2, pad, pad / 2);
 
         new MaterialAlertDialogBuilder(this)
-                .setTitle("Card image URL")
+                .setTitle("Nhập URL ảnh")
                 .setView(input)
-                .setPositiveButton("Apply", (dialog, which) -> {
+                .setPositiveButton("Áp dụng", (dialog, which) -> {
                     String url = input.getText().toString().trim();
                     card.setImageUrl(url.isEmpty() ? null : url);
                     adapter.notifyItemChanged(cardIndex + 1);
                 })
-                .setNeutralButton("Remove", (dialog, which) -> {
-                    card.setImageUrl(null);
-                    adapter.notifyItemChanged(cardIndex + 1);
-                })
-                .setNegativeButton("Cancel", null)
+                .setNegativeButton("Hủy", null)
                 .show();
+    }
+
+    private void uploadCardImageFromUri(int cardIndex, Uri uri) {
+        try (InputStream is = getContentResolver().openInputStream(uri)) {
+            if (is == null) return;
+            ByteArrayOutputStream buffer = new ByteArrayOutputStream();
+            byte[] chunk = new byte[4096];
+            int n;
+            while ((n = is.read(chunk)) != -1) {
+                buffer.write(chunk, 0, n);
+            }
+            byte[] bytes = buffer.toByteArray();
+            RequestBody body = RequestBody.create(bytes, MediaType.parse("image/jpeg"));
+            MultipartBody.Part part = MultipartBody.Part.createFormData(
+                    "file", "card_" + System.currentTimeMillis() + ".jpg", body);
+
+            Toast.makeText(this, "Đang tải ảnh lên...", Toast.LENGTH_SHORT).show();
+            RetrofitClient.getInstance(this).getMediaApi().uploadCardImage(part).enqueue(new Callback<>() {
+                @Override
+                public void onResponse(@NonNull Call<ApiResponse<MediaUploadResponseDto>> call,
+                                       @NonNull Response<ApiResponse<MediaUploadResponseDto>> response) {
+                    if (response.isSuccessful() && response.body() != null
+                            && response.body().isSuccess() && response.body().getData() != null) {
+                        String resolved = ProfileUtils.resolveImageUrl(response.body().getData().getUrl());
+                        if (cardIndex >= 0 && cardIndex < viewModel.getCards().size()) {
+                            viewModel.getCards().get(cardIndex).setImageUrl(resolved);
+                            adapter.notifyItemChanged(cardIndex + 1);
+                            Toast.makeText(CreateEditSetActivity.this, "Đã gắn ảnh cho thẻ", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(CreateEditSetActivity.this, "Tải ảnh thất bại", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<ApiResponse<MediaUploadResponseDto>> call, @NonNull Throwable t) {
+                    Toast.makeText(CreateEditSetActivity.this,
+                            "Lỗi tải ảnh: " + t.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+        } catch (Exception e) {
+            Toast.makeText(this, "Không đọc được tệp ảnh", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override

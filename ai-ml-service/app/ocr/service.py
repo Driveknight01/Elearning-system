@@ -9,7 +9,7 @@ import httpx
 from fastapi import HTTPException, UploadFile, status
 
 from app.core.config import settings
-from app.ocr.card_parser import parse_cards_from_text, parse_llm_json_payload
+from app.ocr.card_parser import parse_cards_from_boxes, parse_cards_from_text, parse_llm_json_payload
 from app.ocr.schemas import ExtractedCardItem, OcrExtractResponse, OcrTextBox
 
 logger = logging.getLogger(__name__)
@@ -863,7 +863,9 @@ async def process_ocr_extraction(
     if rapid_result is not None:
         rapid_text, rapid_boxes = rapid_result
         cards, parse_warnings = parse_cards_from_text(rapid_text) if rapid_text else ([], [])
-        if not rapid_text:
+        if not cards and rapid_boxes:
+            cards = parse_cards_from_boxes(rapid_boxes)
+        if not rapid_text and not cards:
             warnings.append("Không phát hiện văn bản rõ ràng trong ảnh.")
         elif not cards:
             warnings.extend(parse_warnings)

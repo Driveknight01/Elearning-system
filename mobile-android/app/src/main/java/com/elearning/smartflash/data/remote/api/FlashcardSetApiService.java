@@ -3,20 +3,25 @@ package com.elearning.smartflash.data.remote.api;
 import com.elearning.smartflash.data.remote.dto.ApiResponse;
 import com.elearning.smartflash.data.remote.dto.CreateFlashcardSetRequestDto;
 import com.elearning.smartflash.data.remote.dto.FlashcardSetDetailDto;
+import com.elearning.smartflash.data.remote.dto.OcrExtractResponseDto;
 import com.elearning.smartflash.data.remote.dto.PageResponseDto;
 import com.elearning.smartflash.data.remote.dto.SetSummaryDto;
 
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.DELETE;
 import retrofit2.http.GET;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.PUT;
+import retrofit2.http.Part;
 import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 /**
- * Retrofit2 service for creating, listing, searching, updating, and deleting flashcard sets.
+ * Retrofit2 service for creating, listing, searching, updating, deleting, and OCR-extracting flashcard sets.
  */
 public interface FlashcardSetApiService {
 
@@ -49,4 +54,12 @@ public interface FlashcardSetApiService {
 
     @DELETE("flashcard-sets/{id}")
     Call<ApiResponse<Void>> deleteSet(@Path("id") long setId);
+
+    @Multipart
+    @POST("flashcard-sets/ocr-extract")
+    Call<ApiResponse<OcrExtractResponseDto>> extractOcrCards(
+            @Part MultipartBody.Part file,
+            @Part("sourceLang") RequestBody sourceLang,
+            @Part("targetLang") RequestBody targetLang
+    );
 }

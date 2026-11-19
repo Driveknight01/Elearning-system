@@ -7,6 +7,7 @@ import com.elearning.module.user.dto.MyProfileResponse;
 import com.elearning.module.user.dto.PublicProfileResponse;
 import com.elearning.module.user.dto.UpdatePrivacyRequest;
 import com.elearning.module.user.dto.UpdateProfileRequest;
+import com.elearning.module.user.dto.UserSearchItemResponse;
 import com.elearning.module.user.service.UserService;
 import com.elearning.security.UserPrincipal;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 /**
  * REST endpoints for managing personal profile, avatar, password, and granular tab privacy.
@@ -83,6 +86,16 @@ public class UserController {
     ) {
         MyProfileResponse updated = userService.updatePrivacy(currentUser.getId(), request);
         return ResponseEntity.ok(ApiResponse.success("Cập nhật quyền riêng tư thành công", updated));
+    }
+
+    @GetMapping("/search")
+    @Operation(summary = "Tìm kiếm người dùng công khai theo username hoặc họ tên")
+    public ResponseEntity<ApiResponse<List<UserSearchItemResponse>>> searchPublicUsers(
+            @RequestParam(required = false) String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "20") int size
+    ) {
+        return ResponseEntity.ok(ApiResponse.success(userService.searchPublicUsers(keyword, page, size)));
     }
 
     @GetMapping("/profile/{username}")

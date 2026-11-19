@@ -3,12 +3,15 @@ package com.elearning.module.user.service;
 import com.elearning.common.exception.AppException;
 import com.elearning.common.exception.ErrorCode;
 import com.elearning.common.service.LocalStorageService;
+import com.elearning.module.flashcard.entity.Visibility;
+import com.elearning.module.flashcard.repository.FlashcardSetRepository;
 import com.elearning.module.user.dto.AvatarUploadResponse;
 import com.elearning.module.user.dto.ChangePasswordRequest;
 import com.elearning.module.user.dto.MyProfileResponse;
 import com.elearning.module.user.dto.PublicProfileResponse;
 import com.elearning.module.user.dto.UpdatePrivacyRequest;
 import com.elearning.module.user.dto.UpdateProfileRequest;
+import com.elearning.module.user.dto.UserSearchItemResponse;
 import com.elearning.module.user.entity.ProfilePrivacyConfig;
 import com.elearning.module.user.entity.ProfileVisibility;
 import com.elearning.module.user.entity.Role;
@@ -18,12 +21,14 @@ import com.elearning.module.user.repository.UserRepository;
 import com.elearning.module.user.repository.UserStreakRepository;
 import com.elearning.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,6 +44,7 @@ public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final LocalStorageService localStorageService;
     private final ProfileTabDataLoader profileTabDataLoader;
+    private final FlashcardSetRepository flashcardSetRepository;
 
     @Transactional(readOnly = true)
     public MyProfileResponse getMyProfile(Long userId) {
@@ -198,6 +204,31 @@ public class UserService {
                 .classes(classes)
                 .achievements(achievements)
                 .build();
+    }
+
+    @Transactional(readOnly = true)
+    public List<UserSearchItemResponse> searchPublicUsers(String keyword, int page, int size) {
+        if (!StringUtils.hasText(keyword)) {
+            return Collections.emptyList();
+        }
+        String trimmed = keyword.trim();
+        int safePage = Math.max(0, page);
+        int safeSize = Math.min(Math.max(1, size), 50);
+        return userRepository.searchPublicUsers(trimmed, PageRequest.of(safePage, safeSize))
+                .getContent()
+                .stream()
+                .map(u -> UserSearchItemResponse.builder()
+                        .id(u.getId())
+                        .username(u.getUsername())
+                        .fullName(u.getFullName())
+                        .avatarUrl(u.getAvatarUrl())
+                        .role(u.getRole())
+                        .verifiedTeacher(u.isVerifiedTeacher())
+                        .setCount(flashcardSetRepository.countByOwnerIdAndVisibilityAndDeletedAtIsNull(
+                                u.getId(), Visibility.PUBLIC))
+                        .classCount(0L)
+                        .build())
+                .toList();
     }
 
     private User getActiveUserById(Long userId) {

@@ -7,6 +7,9 @@ import com.elearning.smartflash.data.remote.dto.MyProfileDto;
 import com.elearning.smartflash.data.remote.dto.PublicProfileDto;
 import com.elearning.smartflash.data.remote.dto.UpdatePrivacyRequestDto;
 import com.elearning.smartflash.data.remote.dto.UpdateProfileRequestDto;
+import com.elearning.smartflash.data.remote.dto.UserSearchItemDto;
+
+import java.util.List;
 
 import okhttp3.MultipartBody;
 import retrofit2.Call;
@@ -17,6 +20,7 @@ import retrofit2.http.POST;
 import retrofit2.http.PUT;
 import retrofit2.http.Part;
 import retrofit2.http.Path;
+import retrofit2.http.Query;
 
 /**
  * Retrofit2 service definitions for user profile, avatar upload, password change,
@@ -39,6 +43,13 @@ public interface UserApiService {
 
     @PUT("users/me/privacy")
     Call<ApiResponse<MyProfileDto>> updatePrivacy(@Body UpdatePrivacyRequestDto request);
+
+    @GET("users/search")
+    Call<ApiResponse<List<UserSearchItemDto>>> searchPublicUsers(
+            @Query("keyword") String keyword,
+            @Query("page") int page,
+            @Query("size") int size
+    );
 
     @GET("users/profile/{username}")
     Call<ApiResponse<PublicProfileDto>> getPublicProfile(@Path("username") String username);

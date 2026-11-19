@@ -9,8 +9,15 @@ import com.elearning.smartflash.data.remote.api.RetrofitClient;
 import com.elearning.smartflash.data.remote.dto.ApiResponse;
 import com.elearning.smartflash.data.remote.dto.CreateFlashcardSetRequestDto;
 import com.elearning.smartflash.data.remote.dto.FlashcardSetDetailDto;
+import com.elearning.smartflash.data.remote.dto.OcrExtractResponseDto;
 
 import org.json.JSONObject;
+
+import java.io.File;
+
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -61,6 +68,19 @@ public class FlashcardSetRepository {
                 callback.onError(t.getMessage() != null ? t.getMessage() : "Lỗi kết nối máy chủ");
             }
         });
+    }
+
+    public void extractOcrCards(File imageFile, String sourceLang, String targetLang,
+                                ResultCallback<OcrExtractResponseDto> callback) {
+        RequestBody fileBody = RequestBody.create(imageFile, MediaType.parse("image/jpeg"));
+        MultipartBody.Part part = MultipartBody.Part.createFormData("file", imageFile.getName(), fileBody);
+        RequestBody srcPart = sourceLang != null && !sourceLang.isEmpty()
+                ? RequestBody.create(sourceLang, MediaType.parse("text/plain"))
+                : null;
+        RequestBody dstPart = targetLang != null && !targetLang.isEmpty()
+                ? RequestBody.create(targetLang, MediaType.parse("text/plain"))
+                : null;
+        apiService.extractOcrCards(part, srcPart, dstPart).enqueue(wrapCallback(callback));
     }
 
     private <T> Callback<ApiResponse<T>> wrapCallback(ResultCallback<T> callback) {

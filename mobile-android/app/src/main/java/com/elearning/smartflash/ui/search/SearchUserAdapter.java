@@ -2,14 +2,18 @@ package com.elearning.smartflash.ui.search;
 
 import android.content.res.ColorStateList;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.elearning.smartflash.databinding.ItemSearchUserCardBinding;
 import com.elearning.smartflash.ui.search.SearchResultModels.UserItem;
+import com.elearning.smartflash.util.ProfileUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,13 +68,24 @@ public class SearchUserAdapter extends RecyclerView.Adapter<SearchUserAdapter.Us
         holder.binding.tvUserName.setText(item.username);
         holder.binding.tvUserMeta.setText(item.setCount + " học phần • " + item.classCount + " lớp học");
 
-        String emoji = PRESET_EMOJIS[position % PRESET_EMOJIS.length];
-        String bgHex = PRESET_BG_HEXES[position % PRESET_BG_HEXES.length];
-        holder.binding.tvUserAvatar.setText(emoji);
-        holder.binding.tvUserAvatar.setTextSize(22f);
-        holder.binding.tvUserAvatar.setBackgroundTintList(
-                ColorStateList.valueOf(Color.parseColor(bgHex))
-        );
+        if (!TextUtils.isEmpty(item.avatarUrl)) {
+            holder.binding.ivUserAvatar.setVisibility(View.VISIBLE);
+            holder.binding.tvUserAvatar.setVisibility(View.GONE);
+            Glide.with(holder.itemView.getContext())
+                    .load(ProfileUtils.resolveImageUrl(item.avatarUrl))
+                    .centerCrop()
+                    .into(holder.binding.ivUserAvatar);
+        } else {
+            holder.binding.ivUserAvatar.setVisibility(View.GONE);
+            holder.binding.tvUserAvatar.setVisibility(View.VISIBLE);
+            String emoji = PRESET_EMOJIS[position % PRESET_EMOJIS.length];
+            String bgHex = PRESET_BG_HEXES[position % PRESET_BG_HEXES.length];
+            holder.binding.tvUserAvatar.setText(emoji);
+            holder.binding.tvUserAvatar.setTextSize(22f);
+            holder.binding.tvUserAvatar.setBackgroundTintList(
+                    ColorStateList.valueOf(Color.parseColor(bgHex))
+            );
+        }
 
         holder.binding.getRoot().setOnClickListener(v -> {
             if (listener != null) listener.onUserClick(item);

@@ -27,6 +27,7 @@ public class RetrofitClient {
     private final UserApiService userApiService;
     private final FlashcardSetApiService flashcardSetApiService;
     private final FolderApiService folderApiService;
+    private final MediaApiService mediaApiService;
     private final StudyGroupApiService studyGroupApiService;
 
     private RetrofitClient(Context context) {
@@ -76,6 +77,7 @@ public class RetrofitClient {
         this.flashcardSetApiService = this.retrofit.create(FlashcardSetApiService.class);
         this.folderApiService = this.retrofit.create(FolderApiService.class);
         this.studyGroupApiService = this.retrofit.create(StudyGroupApiService.class);
+        this.mediaApiService = this.retrofit.create(MediaApiService.class);
     }
 
     public static RetrofitClient getInstance(Context context) {
@@ -107,6 +109,10 @@ public class RetrofitClient {
 
     public FolderApiService getFolderApi() {
         return folderApiService;
+    }
+
+    public MediaApiService getMediaApi() {
+        return mediaApiService;
     }
 
     public <T> T createService(Class<T> serviceClass) {

@@ -66,6 +66,7 @@ public class SecurityConfig {
                                 "/api/v1/flashcard-sets/**",
                                 "/api/v1/folders/**",
                                 "/api/v1/categories/**",
+                                "/api/v1/users/search",
                                 "/api/v1/users/profile/**",
                                 "/api/v1/games/leaderboard/**"
                         ).permitAll()

@@ -48,12 +48,14 @@ public final class SearchResultModels {
 
     public static class UserItem {
         public final String username;
+        public final String avatarUrl;
         public final int setCount;
         public final int classCount;
         public final String avatarHex;
 
-        public UserItem(String username, int setCount, int classCount, String avatarHex) {
+        public UserItem(String username, String avatarUrl, int setCount, int classCount, String avatarHex) {
             this.username = username;
+            this.avatarUrl = avatarUrl;
             this.setCount = setCount;
             this.classCount = classCount;
             this.avatarHex = avatarHex;

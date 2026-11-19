@@ -24,6 +24,8 @@ public interface FlashcardSetRepository extends JpaRepository<FlashcardSet, Long
 
     Page<FlashcardSet> findAllByOwnerIdAndDeletedAtIsNullOrderByUpdatedAtDesc(Long ownerId, Pageable pageable);
 
+    long countByOwnerIdAndVisibilityAndDeletedAtIsNull(Long ownerId, Visibility visibility);
+
     Page<FlashcardSet> findAllByVisibilityAndModerationStatusAndDeletedAtIsNull(
             Visibility visibility,
             ModerationStatus moderationStatus,

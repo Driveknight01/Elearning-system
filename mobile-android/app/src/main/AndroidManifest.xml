@@ -73,6 +73,10 @@
             android:windowSoftInputMode="adjustResize" />
 
         <activity
+            android:name=".ui.set.OcrCameraActivity"
+            android:exported="false" />
+
+        <activity
             android:name=".ui.folder.CreateFolderActivity"
             android:exported="false"
             android:windowSoftInputMode="adjustResize|stateVisible" />

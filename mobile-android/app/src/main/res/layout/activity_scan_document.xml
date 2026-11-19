@@ -194,13 +194,14 @@
             android:indeterminateTint="@color/quizlet_blue"
             android:visibility="gone" />
 
-        <!-- Bottom floating pill to change image or finish -->
+        <!-- Bottom floating 2 large buttons: Đổi ảnh | Lưu thẻ (or Nhập N thẻ when auto-detected) -->
         <LinearLayout
             android:id="@+id/layout_bottom_controls"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_horizontal"
-            android:layout_marginBottom="16dp"
+            android:layout_gravity="bottom"
+            android:layout_marginHorizontal="20dp"
+            android:layout_marginBottom="18dp"
             android:gravity="center"
             android:orientation="horizontal"
             android:visibility="gone">
@@ -208,36 +209,37 @@
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_change_image"
                 style="@style/Widget.Material3.Button.UnelevatedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="44dp"
-                android:layout_marginEnd="8dp"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_weight="1"
                 android:backgroundTint="@color/sf_bg_surface"
                 android:fontFamily="sans-serif-medium"
-                android:paddingHorizontal="18dp"
+                android:maxLines="1"
                 android:text="Đổi ảnh"
                 android:textAllCaps="false"
                 android:textColor="@color/sf_text_primary"
-                android:textSize="14sp"
+                android:textSize="15.5sp"
                 android:textStyle="bold"
-                app:cornerRadius="22dp"
+                app:cornerRadius="26dp"
                 app:strokeColor="@color/sf_stroke_card"
                 app:strokeWidth="1dp" />
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/btn_done_scan"
                 style="@style/Widget.Material3.Button.UnelevatedButton"
-                android:layout_width="wrap_content"
-                android:layout_height="44dp"
+                android:layout_width="0dp"
+                android:layout_height="52dp"
+                android:layout_marginStart="12dp"
+                android:layout_weight="1"
                 android:backgroundTint="@color/quizlet_blue"
                 android:fontFamily="sans-serif-medium"
-                android:paddingHorizontal="20dp"
-                android:text="Xong"
+                android:maxLines="1"
+                android:text="Lưu thẻ"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="15.5sp"
                 android:textStyle="bold"
-                app:cornerRadius="22dp"
-                android:visibility="gone" />
+                app:cornerRadius="26dp" />
         </LinearLayout>
 
     </FrameLayout>

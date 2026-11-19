@@ -25,11 +25,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import com.elearning.smartflash.R;
 import com.elearning.smartflash.data.remote.api.FlashcardSetApiService;
 import com.elearning.smartflash.data.remote.api.RetrofitClient;
+import com.elearning.smartflash.data.remote.api.UserApiService;
 import com.elearning.smartflash.data.remote.dto.ApiResponse;
 import com.elearning.smartflash.data.remote.dto.PageResponseDto;
 import com.elearning.smartflash.data.remote.dto.ProfilePrivacyConfigDto;
 import com.elearning.smartflash.data.remote.dto.PublicProfileDto;
 import com.elearning.smartflash.data.remote.dto.SetSummaryDto;
+import com.elearning.smartflash.data.remote.dto.UserSearchItemDto;
 import com.elearning.smartflash.databinding.FragmentSearchBinding;
 import com.elearning.smartflash.ui.main.MainActivity;
 import com.elearning.smartflash.ui.profile.ProfileViewModel;
@@ -69,6 +71,7 @@ public class SearchFragment extends Fragment {
     private FragmentSearchBinding binding;
     private ProfileViewModel profileViewModel;
     private FlashcardSetApiService flashcardSetApiService;
+    private UserApiService userApiService;
     private PublicProfileDto lastLoadedProfile;
     private ViewTreeObserver.OnGlobalLayoutListener keyboardLayoutListener;
     private int baseBottomPadding;
@@ -112,6 +115,7 @@ public class SearchFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         profileViewModel = new ViewModelProvider(this).get(ProfileViewModel.class);
         flashcardSetApiService = RetrofitClient.getInstance(requireContext()).getFlashcardSetApi();
+        userApiService = RetrofitClient.getInstance(requireContext()).getUserApi();
 
         baseBottomPadding = view.getPaddingBottom();
         keyboardLayoutListener = () -> adjustForKeyboard(view);
@@ -221,9 +225,7 @@ public class SearchFragment extends Fragment {
         allQuestionsAdapter = new SearchQuestionAdapter(item ->
                 Toast.makeText(requireContext(), "Xem câu hỏi: " + item.subject, Toast.LENGTH_SHORT).show()
         );
-        allUsersAdapter = new SearchUserAdapter(item ->
-                Toast.makeText(requireContext(), "Trang cá nhân: @" + item.username, Toast.LENGTH_SHORT).show()
-        );
+        allUsersAdapter = new SearchUserAdapter(item -> openPublicUserProfile(item.username));
         allClassesAdapter = new SearchClassAdapter(item ->
                 Toast.makeText(requireContext(), "Xem lớp học: " + item.title, Toast.LENGTH_SHORT).show()
         );
@@ -232,9 +234,7 @@ public class SearchFragment extends Fragment {
         singleQuestionsAdapter = new SearchQuestionAdapter(item ->
                 Toast.makeText(requireContext(), "Xem câu hỏi: " + item.subject, Toast.LENGTH_SHORT).show()
         );
-        singleUsersAdapter = new SearchUserAdapter(item ->
-                Toast.makeText(requireContext(), "Trang cá nhân: @" + item.username, Toast.LENGTH_SHORT).show()
-        );
+        singleUsersAdapter = new SearchUserAdapter(item -> openPublicUserProfile(item.username));
         singleClassesAdapter = new SearchClassAdapter(item ->
                 Toast.makeText(requireContext(), "Xem lớp học: " + item.title, Toast.LENGTH_SHORT).show()
         );
@@ -322,6 +322,7 @@ public class SearchFragment extends Fragment {
         }
 
         searchPublicSetsFromApi(raw);
+        searchUsersFromApi(raw);
     }
 
     private void showSuggestionsForQuery(String query) {
@@ -442,28 +443,99 @@ public class SearchFragment extends Fragment {
         currentClasses.clear();
 
         boolean hasSets = !currentSets.isEmpty();
+        boolean hasUsers = !currentUsers.isEmpty();
         binding.llAllSetsHeader.setVisibility(hasSets ? View.VISIBLE : View.GONE);
         binding.rvAllSets.setVisibility(hasSets ? View.VISIBLE : View.GONE);
         binding.llAllQuestionsHeader.setVisibility(View.GONE);
         binding.rvAllQuestions.setVisibility(View.GONE);
-        binding.llAllUsersHeader.setVisibility(View.GONE);
-        binding.rvAllUsers.setVisibility(View.GONE);
+        binding.llAllUsersHeader.setVisibility(hasUsers ? View.VISIBLE : View.GONE);
+        binding.rvAllUsers.setVisibility(hasUsers ? View.VISIBLE : View.GONE);
         binding.llAllClassesHeader.setVisibility(View.GONE);
         binding.rvAllClasses.setVisibility(View.GONE);
 
-        binding.tvAllResultsEmpty.setVisibility(hasSets ? View.GONE : View.VISIBLE);
-        if (!hasSets) {
+        boolean hasAny = hasSets || hasUsers;
+        binding.tvAllResultsEmpty.setVisibility(hasAny ? View.GONE : View.VISIBLE);
+        if (!hasAny) {
             binding.tvAllResultsEmpty.setText("Không có kết quả cho tìm kiếm của bạn,\nvui lòng thử lại.");
         }
 
         allSetsAdapter.submitList(currentSets.subList(0, Math.min(3, currentSets.size())));
         allQuestionsAdapter.submitList(currentQuestions);
-        allUsersAdapter.submitList(currentUsers);
+        allUsersAdapter.submitList(currentUsers.subList(0, Math.min(3, currentUsers.size())));
         allClassesAdapter.submitList(currentClasses);
 
         binding.llSearchResultsContainer.setVisibility(View.VISIBLE);
         selectTab(0);
         renderActiveTab();
+    }
+
+    private void searchUsersFromApi(String query) {
+        if (binding == null) return;
+        userApiService.searchPublicUsers(query, 0, 20)
+                .enqueue(new Callback<ApiResponse<List<UserSearchItemDto>>>() {
+                    @Override
+                    public void onResponse(
+                            @NonNull Call<ApiResponse<List<UserSearchItemDto>>> call,
+                            @NonNull Response<ApiResponse<List<UserSearchItemDto>>> response
+                    ) {
+                        if (binding == null) return;
+                        if (response.isSuccessful()
+                                && response.body() != null
+                                && response.body().isSuccess()
+                                && response.body().getData() != null) {
+                            bindUserSearchResults(response.body().getData());
+                        }
+                    }
+
+                    @Override
+                    public void onFailure(
+                            @NonNull Call<ApiResponse<List<UserSearchItemDto>>> call,
+                            @NonNull Throwable t
+                    ) {
+                        // Keep sets results intact if user search fails silently
+                    }
+                });
+    }
+
+    private void bindUserSearchResults(List<UserSearchItemDto> users) {
+        currentUsers.clear();
+        if (users != null) {
+            for (UserSearchItemDto dto : users) {
+                String username = !TextUtils.isEmpty(dto.getUsername()) ? dto.getUsername() : "user";
+                int paletteIdx = Math.abs(username.hashCode()) % AVATAR_PALETTE.length;
+                currentUsers.add(new UserItem(
+                        username,
+                        dto.getAvatarUrl(),
+                        (int) dto.getSetCount(),
+                        (int) dto.getClassCount(),
+                        AVATAR_PALETTE[paletteIdx]
+                ));
+            }
+        }
+
+        boolean hasUsers = !currentUsers.isEmpty();
+        binding.llAllUsersHeader.setVisibility(hasUsers ? View.VISIBLE : View.GONE);
+        binding.rvAllUsers.setVisibility(hasUsers ? View.VISIBLE : View.GONE);
+        allUsersAdapter.submitList(currentUsers.subList(0, Math.min(3, currentUsers.size())));
+        singleUsersAdapter.submitList(currentUsers);
+
+        boolean hasAny = !currentSets.isEmpty() || hasUsers;
+        binding.tvAllResultsEmpty.setVisibility(hasAny ? View.GONE : View.VISIBLE);
+        if (activeTabIndex == 5) {
+            renderActiveTab();
+        }
+    }
+
+    private void openPublicUserProfile(String username) {
+        if (TextUtils.isEmpty(username)) return;
+        profileViewModel.getPublicProfile(username).observe(getViewLifecycleOwner(), res -> {
+            if (res != null && res.getStatus() == com.elearning.smartflash.util.Resource.Status.SUCCESS
+                    && res.getData() != null) {
+                PublicProfileDialogHelper.show(requireContext(), res.getData());
+            } else if (res != null && res.getStatus() == com.elearning.smartflash.util.Resource.Status.ERROR) {
+                Toast.makeText(requireContext(), res.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void renderActiveTab() {
